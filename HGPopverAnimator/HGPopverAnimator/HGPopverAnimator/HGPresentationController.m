@@ -15,7 +15,6 @@
 {
     if (!_coverView) {
         self.coverView = [[UIView alloc]init];
-        self.coverView.tag=1000;
         self.coverView.frame=[UIScreen mainScreen].bounds;
         self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
         [self.coverView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(close)]];

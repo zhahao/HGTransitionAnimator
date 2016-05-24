@@ -18,7 +18,7 @@
 @property (nonatomic, copy) complatedBlcok   showComplatedBlcok;
 @property (nonatomic, copy) complatedBlcok   dismissComplatedBlcok;
 @end
-
+static const char   *HGPresentationControllerKey="HGPresentationController";
 @implementation HGPopverAnimator
 -(void)animatorWithShowComplated:(complatedBlcok)showComplated dismissComplated:(complatedBlcok)dismissComplated
 {
@@ -53,6 +53,7 @@
     if ([presented.presentedViewController.transitioningDelegate isKindOfClass:[self class]]){
         pc.firstPresent=NO;
     }
+    objc_setAssociatedObject(self, &HGPresentationControllerKey, pc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     return pc;
 
 }
@@ -90,7 +91,7 @@
         __weak UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
         if (_animateStyle==HGPopverAnimatorCustomStyle) { // 自定义
             if (_fromViewAnimateBlcok){
-                UIView *coverView=[fromView.superview viewWithTag:1000];
+                UIView *coverView=[self getPresentationControllerCoverView];
                 [UIView animateWithDuration:weakSelf.duration animations:^{
                     _fromViewAnimateBlcok(fromView,weakSelf.duration +0.00001);
                     coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
@@ -175,6 +176,11 @@
             [transitionContext completeTransition:YES];
         }];
     }
+}
+- (UIView *)getPresentationControllerCoverView
+{
+    HGPresentationController *pc=objc_getAssociatedObject(self, &HGPresentationControllerKey);
+    return pc.coverView;
 }
 @end
 
