@@ -10,28 +10,50 @@
 #import "OneViewController.h"
 #import "HGPopverAnimator.h"
 #import "HGPresentationController.h"
-@interface ViewController ()
-@property (nonatomic, strong) HGPopverAnimator*popverAnimator;
+#import "UIViewController+HGPopver.h"
+@interface ViewController ()<HGPopverAnimatorDelegate>
+@property (nonatomic, strong) OneViewController*toCtrl;
+@property (nonatomic, assign) CGRect presentFrame;
 @end
 
 @implementation ViewController
-- (HGPopverAnimator*)popverAnimator
-{
-    if (!_popverAnimator) {
-        self.popverAnimator = [[HGPopverAnimator alloc]init];
-        self.popverAnimator.presentFrame=CGRectMake(0, kScreenHeight*0.5, kScreenWidth, kScreenHeight*0.5);
-        self.popverAnimator.animateStyle=HGPopverAnimatorFromRightStyle;
-    }
-    return _popverAnimator;
-}
 - (void)viewDidLoad {
     [super viewDidLoad];
-}
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
+    
     OneViewController *toCtrl=[[OneViewController alloc]init];
-    toCtrl.modalPresentationStyle=UIModalPresentationCustom;
-    toCtrl.transitioningDelegate=self.popverAnimator;
-    [self presentViewController:toCtrl animated:YES completion:nil];
+    self.toCtrl=toCtrl;
+    
+    CGRect presentFrame=CGRectMake(100, 100, 100, 100);
+    self.presentFrame=presentFrame;
+}
+- (IBAction)fromLeftStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+- (IBAction)horizontalScaleStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+- (IBAction)verticalScaleStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+- (IBAction)FromTopStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+- (IBAction)fromBottomStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+- (IBAction)fromRightStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+- (IBAction)customStyle{
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorCustomStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+}
+#pragma mark -HGPopverAnimatorDelegate
+-(void)popverAnimateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration
+{
+    NSLog(@"%f",duration);
+}
+-(void)popverAnimateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration
+{
+    NSLog(@"%f",duration);
 }
 @end

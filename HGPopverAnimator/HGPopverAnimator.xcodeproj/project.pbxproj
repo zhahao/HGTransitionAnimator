@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6680AC421CF5C031000B0977 /* UIViewController+HGPopver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6680AC411CF5C031000B0977 /* UIViewController+HGPopver.m */; };
 		66EC01541CF4833A007B4661 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC01531CF4833A007B4661 /* main.m */; };
 		66EC015D1CF4833A007B4661 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66EC015B1CF4833A007B4661 /* Main.storyboard */; };
 		66EC015F1CF4833A007B4661 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66EC015E1CF4833A007B4661 /* Assets.xcassets */; };
@@ -21,6 +22,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6680AC401CF5C031000B0977 /* UIViewController+HGPopver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+HGPopver.h"; sourceTree = "<group>"; };
+		6680AC411CF5C031000B0977 /* UIViewController+HGPopver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+HGPopver.m"; sourceTree = "<group>"; };
+		6680AC431CF5DF1B000B0977 /* HGPopverAnimatorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGPopverAnimatorDelegate.h; sourceTree = "<group>"; };
 		66EC014F1CF4833A007B4661 /* HGPopverAnimator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGPopverAnimator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EC01531CF4833A007B4661 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		66EC015C1CF4833A007B4661 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -105,8 +109,11 @@
 			children = (
 				66EC016D1CF483E3007B4661 /* HGPopverAnimator.h */,
 				66EC016E1CF483E3007B4661 /* HGPopverAnimator.m */,
+				6680AC431CF5DF1B000B0977 /* HGPopverAnimatorDelegate.h */,
 				66EC016F1CF483E3007B4661 /* HGPresentationController.h */,
 				66EC01701CF483E3007B4661 /* HGPresentationController.m */,
+				6680AC401CF5C031000B0977 /* UIViewController+HGPopver.h */,
+				6680AC411CF5C031000B0977 /* UIViewController+HGPopver.m */,
 			);
 			path = HGPopverAnimator;
 			sourceTree = "<group>";
@@ -195,6 +202,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66EC017F1CF48476007B4661 /* OneViewController.m in Sources */,
+				6680AC421CF5C031000B0977 /* UIViewController+HGPopver.m in Sources */,
 				66EC01781CF483E3007B4661 /* HGPresentationController.m in Sources */,
 				66EC01771CF483E3007B4661 /* HGPopverAnimator.m in Sources */,
 				66EC01761CF483E3007B4661 /* ViewController.m in Sources */,
@@ -264,7 +272,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -302,7 +310,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -314,7 +322,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = HGPopverAnimator/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.9P4TH4J3B9.superclass.HGPopverAnimator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -326,7 +334,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = HGPopverAnimator/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.9P4TH4J3B9.superclass.HGPopverAnimator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -352,6 +360,7 @@
 				66EC01681CF4833A007B4661 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

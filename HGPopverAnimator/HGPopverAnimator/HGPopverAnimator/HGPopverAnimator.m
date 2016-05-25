@@ -20,23 +20,6 @@
 @end
 static const char   *HGPresentationControllerKey="HGPresentationController";
 @implementation HGPopverAnimator
--(void)animatorWithShowComplated:(complatedBlcok)showComplated dismissComplated:(complatedBlcok)dismissComplated
-{
-    if (showComplated!=NULL)              _showComplatedBlcok=[showComplated copy];
-    if (dismissComplated!=NULL)           _dismissComplatedBlcok=[dismissComplated copy];
-}
--(void)setToViewAnimateTransition:(toViewAnimateBlcok)toViewAnimateBlcok showComplated:(complatedBlcok)complated
-{
-    NSAssert(toViewAnimateBlcok!=NULL,@"必须要实现转场动画");
-    if (toViewAnimateBlcok!=NULL)          _toViewAnimateBlcok=[toViewAnimateBlcok copy];
-    if (complated!=NULL)                   _showComplatedBlcok=[complated copy];
-}
--(void)setFromViewAnimateTransition:(fromViewAnimateBlcok)fromViewAnimateBlcok dismissComplated:(complatedBlcok)complated
-{
-    NSAssert(fromViewAnimateBlcok!=NULL,@"必须要实现转场动画");
-    if (fromViewAnimateBlcok!=NULL)        _fromViewAnimateBlcok=[fromViewAnimateBlcok copy];
-    if (complated!=NULL)                   _dismissComplatedBlcok=[complated copy];
-}
 -(instancetype)init
 {
     if (self=[super init]) {
@@ -48,25 +31,35 @@ static const char   *HGPresentationControllerKey="HGPresentationController";
 }
 -(UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(UIViewController *)presenting sourceViewController:(UIViewController *)source
 {
-    HGPresentationController *pc=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
-    pc.presentFrame=self.presentFrame;
-    if ([presented.presentedViewController.transitioningDelegate isKindOfClass:[self class]]){
-        pc.firstPresent=NO;
+    HGPresentationController*pc=nil;
+    if ([self getPresentationController]) {
+        pc=[self getPresentationController];
+    }else{
+        pc=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
+        pc.presentFrame=self.presentFrame;
+        if ([presented.presentedViewController.transitioningDelegate isKindOfClass:[self class]]){
+            pc.firstPresent=NO;
+        }
+        objc_setAssociatedObject(self, &HGPresentationControllerKey, pc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
     }
-    objc_setAssociatedObject(self, &HGPresentationControllerKey, pc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     return pc;
 
 }
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
 {
     self.willPresent=YES;
-    if (_showComplatedBlcok!=NULL) _showComplatedBlcok();
+    if (_delegate&&[_delegate respondsToSelector:@selector(popverAnimationControllerForPresentedController:)]) {
+        [self.delegate popverAnimationControllerForPresentedController:source];
+    }
     return self;
 }
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
     self.willPresent=NO;
-    if (_dismissComplatedBlcok!=NULL) _dismissComplatedBlcok();
+    if (_delegate&&[_delegate respondsToSelector:@selector(popverAnimationControllerForDismissedController:)]) {
+        [self.delegate popverAnimationControllerForDismissedController:dismissed];
+    }
     return self;
 }
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
@@ -75,33 +68,32 @@ static const char   *HGPresentationControllerKey="HGPresentationController";
 }
 -(void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    __weak typeof(self) weakSelf=self;
     if (_willPresent) {
-        __weak UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
+         UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
         [[transitionContext containerView] addSubview:toView];
         if (_animateStyle==HGPopverAnimatorCustomStyle) { // 自定义
-            if (_toViewAnimateBlcok){
-                _toViewAnimateBlcok(toView,weakSelf.duration);
+            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimateTransitionToView:duration:)], @"请实现animateTransitionToView:duration:代理方法");
+                [self.delegate popverAnimateTransitionToView:toView duration:_pushDuration];
                 [transitionContext completeTransition:YES];
-            }
         }else{
             [self setupPushAnimator:toView context:transitionContext];
         }
     }else{
         __weak UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
         if (_animateStyle==HGPopverAnimatorCustomStyle) { // 自定义
-            if (_fromViewAnimateBlcok){
-                UIView *coverView=[self getPresentationControllerCoverView];
-                [UIView animateWithDuration:weakSelf.duration animations:^{
-                    _fromViewAnimateBlcok(fromView,weakSelf.duration +0.00001);
+            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimateTransitionFromView:duration:)], @"animateTransitionFromView:duration:代理方法");
+                [_delegate popverAnimateTransitionFromView:fromView duration:_popDuration];
+                UIView *coverView=[fromView.superview viewWithTag:1000];
+                objc_getAssociatedObject(self, &HGPresentationControllerKey);
+                [UIView animateWithDuration:_popDuration animations:^{
+                    _fromViewAnimateBlcok(fromView,self.duration +0.00001);
                     coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
                 } completion:^(BOOL finished) {
                     [transitionContext completeTransition:YES];
                 }];
-            }
         }else{
             UIView *coverView=[fromView.superview viewWithTag:1000];
-            [UIView animateWithDuration:weakSelf.duration animations:^{
+            [UIView animateWithDuration:self.duration animations:^{
                 coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
             } completion:^(BOOL finished) {
                 [transitionContext completeTransition:YES];
@@ -182,5 +174,10 @@ static const char   *HGPresentationControllerKey="HGPresentationController";
     HGPresentationController *pc=objc_getAssociatedObject(self, &HGPresentationControllerKey);
     return pc.coverView;
 }
+- (HGPresentationController *)getPresentationController
+{
+    return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
+}
+
 @end
 
