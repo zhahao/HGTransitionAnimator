@@ -19,22 +19,18 @@ typedef NS_ENUM(NSInteger,HGPopverAnimatorStyle)
 
 };
 NS_ASSUME_NONNULL_BEGIN
-typedef void (^toViewAnimateBlcok)(UIView * toView,NSTimeInterval duration);
-typedef void (^fromViewAnimateBlcok)(UIView * fromView,NSTimeInterval duration);
-typedef void (^complatedBlcok)();
-
 @interface HGPopverAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, assign) CGRect presentFrame;//<- 弹出视图的的frame
 @property (nonatomic, assign,nullable) id<HGPopverAnimatorDelegate> delegate;
 @property (nonatomic, assign) HGPopverAnimatorStyle animateStyle;//<- push样式
 @property (nonatomic, weak) UIView *relateView;//<-参照的View
-@property (nonatomic, assign) BOOL animated;
+@property (nonatomic, assign) BOOL animated;//<- 是否动画
 
 @property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间 deflaut=0.25s
 @property (nonatomic, assign) NSTimeInterval pushDuration;//<- push动画时间 deflaut=0.25s
 @property (nonatomic, assign) NSTimeInterval popDuration;//<- pop动画时间 deflaut=0.25s
 @property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
-@property (nonatomic, assign) BOOL fullScreen;
+@property (nonatomic, assign) BOOL fullScreen;// <-全屏
 NS_ASSUME_NONNULL_END
 @end

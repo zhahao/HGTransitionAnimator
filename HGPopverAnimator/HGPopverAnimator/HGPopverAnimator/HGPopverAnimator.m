@@ -13,10 +13,6 @@
 
 @interface  HGPopverAnimator()
 @property (nonatomic, assign) BOOL  willPresent;
-@property (nonatomic, copy) toViewAnimateBlcok toViewAnimateBlcok;
-@property (nonatomic, copy) fromViewAnimateBlcok fromViewAnimateBlcok;
-@property (nonatomic, copy) complatedBlcok   showComplatedBlcok;
-@property (nonatomic, copy) complatedBlcok   dismissComplatedBlcok;
 @end
 static const char   *HGPresentationControllerKey="HGPresentationController";
 @implementation HGPopverAnimator
@@ -86,7 +82,6 @@ static const char   *HGPresentationControllerKey="HGPresentationController";
                 UIView *coverView=[fromView.superview viewWithTag:1000];
                 objc_getAssociatedObject(self, &HGPresentationControllerKey);
                 [UIView animateWithDuration:_popDuration animations:^{
-                    _fromViewAnimateBlcok(fromView,self.duration +0.00001);
                     coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
                 } completion:^(BOOL finished) {
                     [transitionContext completeTransition:YES];
