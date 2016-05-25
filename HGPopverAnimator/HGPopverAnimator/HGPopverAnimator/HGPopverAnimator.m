@@ -23,7 +23,7 @@ static const char   *HGPresentationControllerKey="HGPresentationController";
 -(instancetype)init
 {
     if (self=[super init]) {
-        _duration=0.25;
+        _duration=_animated? 0.25:0;
         _popDuration=_duration;
         _pushDuration=_duration;
     }

@@ -8,8 +8,6 @@
 
 #import "ViewController.h"
 #import "OneViewController.h"
-#import "HGPopverAnimator.h"
-#import "HGPresentationController.h"
 #import "UIViewController+HGPopver.h"
 @interface ViewController ()<HGPopverAnimatorDelegate>
 @property (nonatomic, strong) OneViewController*toCtrl;
@@ -30,19 +28,19 @@
     [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
 }
 - (IBAction)horizontalScaleStyle{
-    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorHorizontalScaleStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
 }
 - (IBAction)verticalScaleStyle{
-    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorVerticalScaleStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
 }
 - (IBAction)FromTopStyle{
-    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromTopStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
 }
 - (IBAction)fromBottomStyle{
-    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromBottomStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
 }
 - (IBAction)fromRightStyle{
-    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorFromRightStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
 }
 - (IBAction)customStyle{
     [self presentViewController:self.toCtrl animateStyle:HGPopverAnimatorCustomStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
