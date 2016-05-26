@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "OneViewController.h"
 #import "UIViewController+HGPopver.h"
+#import "HGPresentationController.h"
 @interface ViewController ()<HGPopverAnimatorDelegate>
 @property (nonatomic, strong) OneViewController*toCtrl;
 @property (nonatomic, assign) CGRect presentFrame;
@@ -21,7 +22,7 @@
     OneViewController *toCtrl=[[OneViewController alloc]init];
     self.toCtrl=toCtrl;
     
-    CGRect presentFrame=CGRectMake(100, 100, 100, 100);
+    CGRect presentFrame=CGRectMake(0, kScreenHeight*0.5, kScreenWidth, kScreenHeight*0.5);
     self.presentFrame=presentFrame;
 }
 - (IBAction)fromLeftStyle{

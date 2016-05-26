@@ -11,23 +11,22 @@
 #import <objc/runtime.h>
 
 static NSString *const HGPopverAnimatorKey=@"HGPopverAnimatorKey";
-
 @implementation UIViewController (HGPopver)
 -(void)presentViewController:(UIViewController *)viewControllerToPresent animateStyle:(HGPopverAnimatorStyle)style delegate:(id<HGPopverAnimatorDelegate>)delegate presentFrame:(CGRect)presentFrame relateView:(UIView *)relateView animated:(BOOL)flag
 {
     if (relateView==nil) relateView=self.view;
     objc_setAssociatedObject(self, &HGPopverAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    HGPopverAnimator *pa=[[HGPopverAnimator alloc]init];
-    pa.delegate=delegate;
-    pa.animateStyle=style;
-    pa.relateView=relateView;
-    pa.animated=flag;
-    pa.presentFrame=presentFrame;
-    pa.fullScreen=CGRectEqualToRect(self.view.frame, relateView.frame);
-    objc_setAssociatedObject(self, &HGPopverAnimatorKey, pa, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    BOOL fullScreen=CGRectEqualToRect(self.view.frame, relateView.frame);
+    HGPopverAnimator *popver=[[HGPopverAnimator alloc]initWithAnimateStyle:style relateView:relateView presentFrame:presentFrame delegate:delegate fullScreen:fullScreen animated:flag];
+    objc_setAssociatedObject(self, &HGPopverAnimatorKey, popver, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     viewControllerToPresent.modalPresentationStyle=UIModalPresentationCustom;
-    viewControllerToPresent.transitioningDelegate=pa;
-
+    viewControllerToPresent.transitioningDelegate=popver;
     [self presentViewController:viewControllerToPresent animated:flag completion:nil];
+}
+
+- (void)dismissViewControllerPopver
+{
+    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+
 }
 @end

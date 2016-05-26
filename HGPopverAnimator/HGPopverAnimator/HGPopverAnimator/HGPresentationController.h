@@ -17,4 +17,8 @@
 @property (nonatomic, assign,getter=isFirstPresent) BOOL firstPresent;
 @property (nonatomic, strong) UIColor *backgroundColor;
 
+@property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间 deflaut=0.25s
+@property (nonatomic, assign) NSTimeInterval pushDuration;//<- push动画时间 deflaut=0.25s
+@property (nonatomic, assign) NSTimeInterval popDuration;//<- pop动画时间 deflaut=0.25s
+
 @end

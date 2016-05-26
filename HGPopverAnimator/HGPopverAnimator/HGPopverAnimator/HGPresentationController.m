@@ -8,42 +8,42 @@
 
 #import "HGPresentationController.h"
 @interface  HGPresentationController()
-
+@property (nonatomic, assign) CGRect showFrame;
 @end
 @implementation HGPresentationController
+-(CGRect)showFrame
+{
+    return self.presentFrame;
+}
 - (UIView*)coverView
 {
     if (!_coverView) {
         self.coverView = [[UIView alloc]init];
         self.coverView.frame=[UIScreen mainScreen].bounds;
-        self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
+        self.coverView.backgroundColor=[UIColor clearColor];
         [self.coverView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(close)]];
     }
     return _coverView;
 }
--(instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController
+
+- (instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController
 {
     return [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController];
 }
+
 /// 即将布局子视图
--(void)containerViewWillLayoutSubviews
+- (void)containerViewWillLayoutSubviews
 {
-    
-    if (self.isFirstPresent) [self.containerView insertSubview:self.coverView atIndex:0];
+    [self.containerView insertSubview:self.coverView atIndex:0];
     if (CGRectEqualToRect(_presentFrame, CGRectZero)) {
-        self.presentedView.frame=CGRectMake(0, kScreenHeight*0.5, kScreenWidth, kScreenHeight*0.5);
-        
+        self.presentedView.frame=self.showFrame;
     }else{
         self.presentedView.frame=_presentFrame;
-            [UIView animateWithDuration:0.25 animations:^{
-                self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
-            }];
     }
     
 }
 
 - (void)close{
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
-    
 }
 @end

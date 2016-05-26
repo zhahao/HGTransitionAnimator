@@ -14,4 +14,7 @@
 
 - (void)popverAnimateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration;
 - (void)popverAnimateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration;
+
+
+- (NSTimeInterval)popverTransitionDuration;
 @end

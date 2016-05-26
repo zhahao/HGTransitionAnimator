@@ -7,7 +7,7 @@
 //
 
 #import "OneViewController.h"
-
+#import "UIViewController+HGPopver.h"
 @interface OneViewController ()
 
 @end
@@ -23,7 +23,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self dismissViewControllerPopver];
+}
 /*
 #pragma mark - Navigation
 
