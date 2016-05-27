@@ -7,9 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#define  kScreenBounds [UIScreen mainScreen].bounds
-#define kScreenWidth   kScreenBounds.size.width
-#define kScreenHeight   kScreenBounds.size.height
 
 @interface HGPresentationController : UIPresentationController
 @property (nonatomic, assign) CGRect presentFrame;// <- 记录当前的frame

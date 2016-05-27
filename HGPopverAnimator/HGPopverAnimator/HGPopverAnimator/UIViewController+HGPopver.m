@@ -12,11 +12,11 @@
 
 static NSString *const HGPopverAnimatorKey=@"HGPopverAnimatorKey";
 @implementation UIViewController (HGPopver)
--(void)presentViewController:(UIViewController *)viewControllerToPresent animateStyle:(HGPopverAnimatorStyle)style delegate:(id<HGPopverAnimatorDelegate>)delegate presentFrame:(CGRect)presentFrame relateView:(UIView *)relateView animated:(BOOL)flag
+-(void)hg_presentViewController:(UIViewController *)viewControllerToPresent animateStyle:(HGPopverAnimatorStyle)style delegate:(id<HGPopverAnimatorDelegate>)delegate presentFrame:(CGRect)presentFrame relateView:(UIView *)relateView animated:(BOOL)flag
 {
     if (relateView==nil) relateView=self.view;
-    objc_setAssociatedObject(self, &HGPopverAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     BOOL fullScreen=CGRectEqualToRect(self.view.frame, relateView.frame);
+    objc_setAssociatedObject(self, &HGPopverAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     HGPopverAnimator *popver=[[HGPopverAnimator alloc]initWithAnimateStyle:style relateView:relateView presentFrame:presentFrame delegate:delegate fullScreen:fullScreen animated:flag];
     objc_setAssociatedObject(self, &HGPopverAnimatorKey, popver, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     viewControllerToPresent.modalPresentationStyle=UIModalPresentationCustom;
@@ -24,7 +24,7 @@ static NSString *const HGPopverAnimatorKey=@"HGPopverAnimatorKey";
     [self presentViewController:viewControllerToPresent animated:flag completion:nil];
 }
 
-- (void)dismissViewControllerPopver
+- (void)hg_dismissViewController
 {
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 

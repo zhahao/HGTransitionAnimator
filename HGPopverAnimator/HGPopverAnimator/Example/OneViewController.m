@@ -25,7 +25,11 @@
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self dismissViewControllerPopver];
+    [self hg_dismissViewController];
+}
+-(void)dealloc
+{
+    NSLog(@"OneViewController销毁了!!");
 }
 /*
 #pragma mark - Navigation

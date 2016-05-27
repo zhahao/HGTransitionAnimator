@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="377-F5-gU2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="377-F5-gU2">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -18,9 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon" translatesAutoresizingMaskIntoConstraints="NO" id="vA0-vq-yZT" userLabel="backImage">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbB-tW-iF3">
                                 <rect key="frame" x="88" y="80" width="60" height="40"/>
                                 <color key="backgroundColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -110,7 +107,6 @@
                             <constraint firstItem="1IT-WG-qAL" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="EDL-bo-H8d"/>
                             <constraint firstItem="HOv-H0-eOk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="FFr-eW-byr"/>
                             <constraint firstItem="6VU-Fl-paz" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="Lti-eA-69V"/>
-                            <constraint firstAttribute="trailing" secondItem="vA0-vq-yZT" secondAttribute="trailing" id="MXP-ha-kkU"/>
                             <constraint firstItem="HOv-H0-eOk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="10" id="NDk-bX-BVd"/>
                             <constraint firstItem="ER8-sL-Y6E" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="O1T-vo-pyy"/>
                             <constraint firstItem="8q8-aQ-U5p" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="Os6-CM-BcG"/>
@@ -120,15 +116,12 @@
                             <constraint firstItem="6VU-Fl-paz" firstAttribute="top" secondItem="1IT-WG-qAL" secondAttribute="top" id="Yb7-8v-ytD"/>
                             <constraint firstItem="KYX-hw-Nsv" firstAttribute="trailing" secondItem="8q8-aQ-U5p" secondAttribute="leading" constant="-10" id="awc-M0-Yup"/>
                             <constraint firstItem="6VU-Fl-paz" firstAttribute="height" secondItem="KbB-tW-iF3" secondAttribute="height" id="bMf-aR-YeZ"/>
-                            <constraint firstItem="vA0-vq-yZT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="c4v-dJ-gz1"/>
                             <constraint firstItem="KbB-tW-iF3" firstAttribute="trailing" secondItem="HOv-H0-eOk" secondAttribute="leading" constant="-10" id="hMy-fv-Daq"/>
-                            <constraint firstItem="vA0-vq-yZT" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="kdA-Tt-fUi"/>
                             <constraint firstItem="8q8-aQ-U5p" firstAttribute="height" secondItem="KbB-tW-iF3" secondAttribute="height" id="ncm-FO-DGV"/>
                             <constraint firstItem="KYX-hw-Nsv" firstAttribute="height" secondItem="KbB-tW-iF3" secondAttribute="height" id="oer-DK-7b3"/>
                             <constraint firstItem="KYX-hw-Nsv" firstAttribute="top" secondItem="8q8-aQ-U5p" secondAttribute="top" id="pdQ-CV-djg"/>
                             <constraint firstItem="HOv-H0-eOk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="80" id="peU-UH-9nI"/>
                             <constraint firstItem="1IT-WG-qAL" firstAttribute="height" secondItem="KbB-tW-iF3" secondAttribute="height" id="qbO-HZ-LAv"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="vA0-vq-yZT" secondAttribute="bottom" id="wSo-QT-nAd"/>
                             <constraint firstItem="ER8-sL-Y6E" firstAttribute="top" secondItem="8q8-aQ-U5p" secondAttribute="top" id="xU0-7G-m7r"/>
                             <constraint firstItem="ER8-sL-Y6E" firstAttribute="leading" secondItem="8q8-aQ-U5p" secondAttribute="trailing" constant="10" id="xq8-F2-auA"/>
                         </constraints>
@@ -163,10 +156,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Nd-UV-akR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="133" y="325"/>
+            <point key="canvasLocation" x="-164" y="420"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="icon" width="720" height="1280"/>
-    </resources>
 </document>
