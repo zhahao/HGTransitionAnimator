@@ -12,31 +12,34 @@
 #import <objc/runtime.h>
 
 #define SETTER(hg_property) _##hg_property=(hg_property)
-#define kWeakSelf __weak __typeof(self)weakSelf = self;
-static const CGFloat defaultDuratin=0.524;
+
+#ifndef kWeakSelf
+    #define kWeakSelf __weak __typeof(self)weakSelf = self;
+#endif
+
+static const CGFloat defaultDuratin=0.524;//时间和原生的push,model一样
 @interface  HGPopverAnimator()
-@property (nonatomic, assign) BOOL  willPresent;
+@property (nonatomic, assign) BOOL  willPresent;//<- 即将展示
 @property (nonatomic, assign) CGRect presentFrame;//<- 弹出视图的的frame
 @property (nonatomic, assign,nullable) id<HGPopverAnimatorDelegate> delegate;//<- 代理
 @property (nonatomic, assign) HGPopverAnimatorStyle animateStyle;//<- push样式
 @property (nonatomic, weak) UIView *relateView;//<-参照的View
 @property (nonatomic, assign) BOOL animated;//<- 是否动画
-@property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间 deflaut=0.25s
+@property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间
 @property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
 @property (nonatomic, assign) BOOL fullScreen;// <-全屏
 @end
 
 
-static const char *HGPresentationControllerKey="HGPresentationControllerKey";
+static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey";
 @implementation HGPopverAnimator
--(instancetype)initWithAnimateStyle:(HGPopverAnimatorStyle)animateStyle relateView:(UIView *)relateView presentFrame:(CGRect)presentFrame delegate:(id<HGPopverAnimatorDelegate>)delegate fullScreen:(BOOL)fullScreen animated:(BOOL)animated
+-(instancetype)initWithAnimateStyle:(HGPopverAnimatorStyle)animateStyle relateView:(UIView *)relateView presentFrame:(CGRect)presentFrame delegate:(id<HGPopverAnimatorDelegate>)delegate animated:(BOOL)animated
 {
     if (self=[super init]) {
         SETTER(animateStyle);
         SETTER(relateView);
         SETTER(presentFrame);
         SETTER(delegate);
-        SETTER(fullScreen);
         SETTER(animated);
         _duration=_animated? defaultDuratin:0;
         _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
@@ -202,14 +205,10 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
     } completion:completeTransitionBlock];
 
 }
-static  CGRect addMinY (CGRect rect){
-    CGRect tmp=rect;
-    tmp.origin.y+=20;
-    return tmp;
-}
 - (CGRect)relateViewToWindow
 {
-    return  [self.relateView convertRect:self.relateView.bounds toView:[[UIApplication sharedApplication] keyWindow]];
+    CGRect rect=[self.relateView convertRect:self.relateView.bounds toView:[[UIApplication sharedApplication] keyWindow]];
+    return  rect;
 }
 - (CGFloat)relateViewMaxXToWindow
 {
@@ -245,8 +244,7 @@ static  CGRect addMinY (CGRect rect){
     }else if(self.animateStyle==HGPopverAnimatorFromBottomStyle){
         return ([self relateViewMaxYToWindow]-self.presentFrame.origin.y)/view.height;
     }else if (self.animateStyle==HGPopverAnimatorFromTopStyle){
-        return 1;
-//        return (self.presentFrame.size.height+self.presentFrame.origin.y-[self relateViewMaxYToWindow])/view.height;
+        return (self.presentFrame.size.height+self.presentFrame.origin.y-[self relateViewMaxYToWindow])/view.height;
     }else if (self.animateStyle==HGPopverAnimatorHorizontalScaleStyle){
         return self.presentFrame.size.width/view.width;
     }else if (self.animateStyle==HGPopverAnimatorVerticalScaleStyle){

@@ -23,31 +23,29 @@
 @implementation ViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGRect presentFrame=CGRectMake(0, kScreenHeight*0.6, kScreenWidth, kScreenHeight*0.5);
+    CGRect presentFrame=CGRectMake(kScreenWidth*0.2, kScreenHeight*0.2, kScreenWidth*0.6,  kScreenHeight*0.6);
     self.presentFrame=presentFrame;
 }
 - (IBAction)fromLeftStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame  animated:YES];
 }
 - (IBAction)horizontalScaleStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorHorizontalScaleStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorHorizontalScaleStyle delegate:nil presentFrame:_presentFrame  animated:YES];
 }
 - (IBAction)verticalScaleStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorVerticalScaleStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorVerticalScaleStyle delegate:nil presentFrame:_presentFrame animated:NO];
 }
 - (IBAction)FromTopStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromTopStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromTopStyle delegate:nil presentFrame:_presentFrame animated:YES];
 }
 - (IBAction)fromBottomStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromBottomStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromBottomStyle delegate:nil presentFrame:_presentFrame animated:NO];
 }
 - (IBAction)fromRightStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromRightStyle delegate:nil presentFrame:_presentFrame relateView:nil animated:YES];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromRightStyle delegate:nil presentFrame:_presentFrame animated:NO];
 }
 - (IBAction)customStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorCustomStyle delegate:self presentFrame:_presentFrame relateView:nil animated:YES];
-//    NSLog(@"开始");
-//    [self presentViewController:OneViewControllerINIT animated:YES completion:nil];
+    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorCustomStyle delegate:self presentFrame:_presentFrame animated:YES];
 }
 #pragma mark -HGPopverAnimatorDelegate
 -(void)popverAnimateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration

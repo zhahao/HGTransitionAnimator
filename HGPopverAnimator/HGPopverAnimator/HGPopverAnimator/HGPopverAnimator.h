@@ -20,9 +20,9 @@ typedef NS_ENUM(NSInteger,HGPopverAnimatorStyle)
 };
 typedef NS_ENUM(NSInteger,HGPopverAnimatorSpeedStyle)
 {
-    HGPopverAnimatorSpeedSlowStyle=1,
-    HGPopverAnimatorSpeedNormalStyle,
-    HGPopverAnimatorSpeedQuicklyStyle,
+    HGPopverAnimatorSpeedSlowStyle=1,      // 慢速
+    HGPopverAnimatorSpeedLevelStyle,       // 中速
+    HGPopverAnimatorSpeedQuicklyStyle,     // 快速
 };
 NS_ASSUME_NONNULL_BEGIN
 @interface HGPopverAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new  NS_UNAVAILABLE;
 
-- (instancetype)initWithAnimateStyle:(HGPopverAnimatorStyle)animateStyle relateView:(nullable UIView *)relateView presentFrame:(CGRect)presentFrame delegate:(nullable id <HGPopverAnimatorDelegate>)delegate fullScreen:(BOOL)fullScreen animated:(BOOL)animated;
+- (instancetype)initWithAnimateStyle:(HGPopverAnimatorStyle)animateStyle relateView:(nullable UIView *)relateView presentFrame:(CGRect)presentFrame delegate:(nullable id <HGPopverAnimatorDelegate>)delegate animated:(BOOL)animated;
 
 NS_ASSUME_NONNULL_END
 @end
