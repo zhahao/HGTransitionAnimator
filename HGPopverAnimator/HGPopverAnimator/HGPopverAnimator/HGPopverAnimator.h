@@ -9,14 +9,20 @@
 #import "HGPopverAnimatorDelegate.h"
 typedef NS_ENUM(NSInteger,HGPopverAnimatorStyle)
 {
-    HGPopverAnimatorCustomStyle=0,          //自定义样式
-    HGPopverAnimatorFromLeftStyle,          //从左边弹出样式
-    HGPopverAnimatorFromRightStyle,         //从右边弹出样式
-    HGPopverAnimatorFromTopStyle,           //从顶部弹出样式
-    HGPopverAnimatorFromBottomStyle,        //从底部弹出样式
-    HGPopverAnimatorVerticalScaleStyle,     //垂直压缩样式
-    HGPopverAnimatorHorizontalScaleStyle,   //水平压缩样式
+    HGPopverAnimatorCustomStyle             = 1 <<  0,          //自定义样式
+    HGPopverAnimatorFromLeftStyle           = 1 <<  1,          //从左边弹出样式
+    HGPopverAnimatorFromRightStyle          = 1 <<  2,          //从右边弹出样式
+    HGPopverAnimatorFromTopStyle            = 1 <<  3,          //从顶部弹出样式
+    HGPopverAnimatorFromBottomStyle         = 1 <<  4,          //从底部弹出样式
+    HGPopverAnimatorVerticalScaleStyle      = 1 <<  5,          //垂直压缩样式
+    HGPopverAnimatorHorizontalScaleStyle    = 1 <<  6,          //水平压缩样式
 
+};
+typedef NS_ENUM(NSInteger,HGPopverAnimatorSpeedStyle)
+{
+    HGPopverAnimatorSpeedSlowStyle=1,
+    HGPopverAnimatorSpeedNormalStyle,
+    HGPopverAnimatorSpeedQuicklyStyle,
 };
 NS_ASSUME_NONNULL_BEGIN
 @interface HGPopverAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>

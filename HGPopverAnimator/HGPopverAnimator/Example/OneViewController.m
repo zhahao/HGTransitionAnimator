@@ -29,7 +29,7 @@
 }
 -(void)dealloc
 {
-    NSLog(@"OneViewController销毁了!!");
+    NSLog(@"%s",__func__);
 }
 /*
 #pragma mark - Navigation

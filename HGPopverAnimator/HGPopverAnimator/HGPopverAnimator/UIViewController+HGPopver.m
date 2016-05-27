@@ -26,7 +26,9 @@ static NSString *const HGPopverAnimatorKey=@"HGPopverAnimatorKey";
 
 - (void)hg_dismissViewController
 {
-    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+    
+    }];
 
 }
 @end

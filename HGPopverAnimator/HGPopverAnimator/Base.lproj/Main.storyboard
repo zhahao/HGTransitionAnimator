@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="377-F5-gU2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="377-F5-gU2">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -18,6 +18,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backImage" translatesAutoresizingMaskIntoConstraints="NO" id="jvD-aI-9yP">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbB-tW-iF3">
                                 <rect key="frame" x="88" y="80" width="60" height="40"/>
                                 <color key="backgroundColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -95,6 +98,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="jvD-aI-9yP" secondAttribute="trailing" id="0a1-39-bNQ"/>
                             <constraint firstItem="8q8-aQ-U5p" firstAttribute="centerY" secondItem="HOv-H0-eOk" secondAttribute="centerY" id="0rs-9f-PUf"/>
                             <constraint firstItem="KYX-hw-Nsv" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="3Bd-zA-Me7"/>
                             <constraint firstItem="8q8-aQ-U5p" firstAttribute="centerX" secondItem="HOv-H0-eOk" secondAttribute="centerX" id="3FF-ip-FSg"/>
@@ -110,8 +114,11 @@
                             <constraint firstItem="HOv-H0-eOk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="10" id="NDk-bX-BVd"/>
                             <constraint firstItem="ER8-sL-Y6E" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="O1T-vo-pyy"/>
                             <constraint firstItem="8q8-aQ-U5p" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="Os6-CM-BcG"/>
+                            <constraint firstItem="jvD-aI-9yP" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Pc1-Yd-3Pr"/>
+                            <constraint firstItem="jvD-aI-9yP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QgY-yK-cCq"/>
                             <constraint firstItem="HOv-H0-eOk" firstAttribute="width" secondItem="KbB-tW-iF3" secondAttribute="width" id="SHV-NN-eJn"/>
                             <constraint firstItem="8q8-aQ-U5p" firstAttribute="top" secondItem="HOv-H0-eOk" secondAttribute="bottom" constant="10" id="TiV-uI-3sN"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="jvD-aI-9yP" secondAttribute="bottom" id="Vjd-2a-lq0"/>
                             <constraint firstItem="1IT-WG-qAL" firstAttribute="leading" secondItem="HOv-H0-eOk" secondAttribute="trailing" constant="10" id="WeZ-En-fef"/>
                             <constraint firstItem="6VU-Fl-paz" firstAttribute="top" secondItem="1IT-WG-qAL" secondAttribute="top" id="Yb7-8v-ytD"/>
                             <constraint firstItem="KYX-hw-Nsv" firstAttribute="trailing" secondItem="8q8-aQ-U5p" secondAttribute="leading" constant="-10" id="awc-M0-Yup"/>
@@ -151,7 +158,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="FQz-xT-FcC"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="iXL-Fu-Ywn"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Nd-UV-akR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -159,4 +166,7 @@
             <point key="canvasLocation" x="-164" y="420"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="backImage" width="1080" height="1920"/>
+    </resources>
 </document>

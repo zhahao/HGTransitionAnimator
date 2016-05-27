@@ -13,7 +13,7 @@
 
 #define SETTER(hg_property) _##hg_property=(hg_property)
 #define kWeakSelf __weak __typeof(self)weakSelf = self;
-
+static const CGFloat defaultDuratin=0.524;
 @interface  HGPopverAnimator()
 @property (nonatomic, assign) BOOL  willPresent;
 @property (nonatomic, assign) CGRect presentFrame;//<- 弹出视图的的frame
@@ -22,10 +22,6 @@
 @property (nonatomic, weak) UIView *relateView;//<-参照的View
 @property (nonatomic, assign) BOOL animated;//<- 是否动画
 @property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间 deflaut=0.25s
-
-
-@property (nonatomic, assign) NSTimeInterval pushDuration;//<- push动画时间 deflaut=0.5s
-@property (nonatomic, assign) NSTimeInterval popDuration;//<- pop动画时间 deflaut=0.5s
 @property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
 @property (nonatomic, assign) BOOL fullScreen;// <-全屏
 @end
@@ -42,7 +38,7 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
         SETTER(delegate);
         SETTER(fullScreen);
         SETTER(animated);
-        _duration=_animated? 0.5:0;
+        _duration=_animated? defaultDuratin:0;
         _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     }
     return self;
@@ -56,7 +52,7 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
     }else{
         pc=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
         pc.presentFrame=self.presentFrame;
-        objc_setAssociatedObject(self, &HGPresentationControllerKey, pc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &HGPresentationControllerKey, pc, OBJC_ASSOCIATION_ASSIGN);
     }
     return pc;
 
@@ -80,7 +76,7 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     if(self.delegate&&[self.delegate respondsToSelector:@selector(popverTransitionDuration)]){
-        return [self.delegate popverTransitionDuration];
+        _duration=[self.delegate popverTransitionDuration];
        };
     return _duration;
 }
@@ -89,7 +85,6 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
     UIView *coverView=[self getPresentationControllerCoverView];
     if (_willPresent) {
          UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
-        toView.layer.anchorPoint=CGPointMake(0.5, 0);
         [[transitionContext containerView] addSubview:toView];
         if (_animateStyle==HGPopverAnimatorCustomStyle) { // 自定义
             NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimateTransitionToView:duration:)], @"自定义样式必须实现animateTransitionToView:duration:代理方法!");
@@ -122,18 +117,25 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
 // pop
 - (void)setupPopAnimator:(UIView *)fromView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
+    kWeakSelf;
     if (_animateStyle==HGPopverAnimatorFromLeftStyle) {
-        [self toView:fromView context:transitionContext animations:^{ fromView.x-=fromView.width; }];
+        [self toView:fromView context:transitionContext animations:^{
+            fromView.x=[self relateViewXToWindow]-fromView.width; }];
     }else if (_animateStyle==HGPopverAnimatorFromRightStyle){
-        [self toView:fromView context:transitionContext animations:^{ fromView.x+=fromView.width; }];
+        [self toView:fromView context:transitionContext animations:^{
+            fromView.x=[self relateViewXToWindow]+weakSelf.relateView.width; }];
     }else if (_animateStyle==HGPopverAnimatorFromTopStyle){
-        [self toView:fromView context:transitionContext animations:^{ fromView.y-=fromView.height; }];
+        [self toView:fromView context:transitionContext animations:^{
+            fromView.y=[self relateViewXToWindow]-fromView.height; }];
     }else if (_animateStyle==HGPopverAnimatorFromBottomStyle){
-        [self toView:fromView context:transitionContext animations:^{ fromView.y+=fromView.height; }];
+        [self toView:fromView context:transitionContext animations:^{
+            fromView.y=[self relateViewYToWindow]+weakSelf.relateView.height+fromView.height; }];
     }else if (_animateStyle==HGPopverAnimatorVerticalScaleStyle){
-        [self toView:fromView context:transitionContext animations:^{ fromView.transform=CGAffineTransformMakeScale(1.0, 0.000001); }];
+        [self toView:fromView context:transitionContext animations:^{
+            fromView.transform=CGAffineTransformMakeScale(1.0, 0.000001); }];
     }else if (_animateStyle==HGPopverAnimatorHorizontalScaleStyle){
-        [self toView:fromView context:transitionContext animations:^{ fromView.transform=CGAffineTransformMakeScale(0.000001, 1.0); }];
+        [self toView:fromView context:transitionContext animations:^{
+            fromView.transform=CGAffineTransformMakeScale(0.000001, 1.0); }];
     }
 }
 // push
@@ -157,11 +159,13 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
             toView.y=CGRectGetMaxY(toView.frame);
         } animations:^{ toView.y=[self relateViewYToWindow]+self.relateView.height-toView.height; }];
     }else if (_animateStyle==HGPopverAnimatorVerticalScaleStyle){
+        toView.layer.anchorPoint=CGPointMake(0.5, 0);
         toView.transform=CGAffineTransformMakeScale(1.0, 0.0);
         [UIView animateWithDuration:_duration animations:^{ toView.transform=CGAffineTransformIdentity;
         } completion:^(BOOL finished) { [transitionContext completeTransition:YES];
         }];
     }else if (_animateStyle==HGPopverAnimatorHorizontalScaleStyle){
+        toView.layer.anchorPoint=CGPointMake(0, 0.5);
         toView.transform=CGAffineTransformMakeScale(0.0,1.0);
         [UIView animateWithDuration:_duration animations:^{ toView.transform=CGAffineTransformIdentity;
         } completion:^(BOOL finished) { [transitionContext completeTransition:YES];
@@ -198,10 +202,24 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
     } completion:completeTransitionBlock];
 
 }
+static  CGRect addMinY (CGRect rect){
+    CGRect tmp=rect;
+    tmp.origin.y+=20;
+    return tmp;
+}
 - (CGRect)relateViewToWindow
 {
     return  [self.relateView convertRect:self.relateView.bounds toView:[[UIApplication sharedApplication] keyWindow]];
 }
+- (CGFloat)relateViewMaxXToWindow
+{
+    return  [self relateViewXToWindow]+_relateView.width;
+}
+- (CGFloat)relateViewMaxYToWindow
+{
+    return  [self relateViewYToWindow]+_relateView.height;
+}
+
 - (CGFloat)relateViewXToWindow
 {
     return  [self relateViewToWindow].origin.x;
@@ -217,5 +235,24 @@ static const char *HGPresentationControllerKey="HGPresentationControllerKey";
 - (HGPresentationController *)getPresentationController
 {
     return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
+}
+- (CGFloat)scaleDuration:(UIView *)view
+{
+    if (self.animateStyle==HGPopverAnimatorFromLeftStyle){
+        return (self.presentFrame.size.width+self.presentFrame.origin.x-[self relateViewXToWindow])/view.width;
+    }else if (self.animateStyle==HGPopverAnimatorFromRightStyle){
+        return ([self relateViewMaxXToWindow]-view.x)/view.width;
+    }else if(self.animateStyle==HGPopverAnimatorFromBottomStyle){
+        return ([self relateViewMaxYToWindow]-self.presentFrame.origin.y)/view.height;
+    }else if (self.animateStyle==HGPopverAnimatorFromTopStyle){
+        return 1;
+//        return (self.presentFrame.size.height+self.presentFrame.origin.y-[self relateViewMaxYToWindow])/view.height;
+    }else if (self.animateStyle==HGPopverAnimatorHorizontalScaleStyle){
+        return self.presentFrame.size.width/view.width;
+    }else if (self.animateStyle==HGPopverAnimatorVerticalScaleStyle){
+        return self.presentFrame.size.height/view.height;
+    }else{
+        return 1.0f;
+    }
 }
 @end

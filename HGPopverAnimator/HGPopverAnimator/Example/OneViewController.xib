@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10116"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OneViewController">
@@ -12,41 +12,25 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4aE-7Y-C4K" userLabel="leftView">
-                    <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
-                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="200" id="r6K-WT-v2y"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="noY-X0-iWF" userLabel="rightView">
-                    <rect key="frame" x="300" y="0.0" width="300" height="200"/>
-                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wkV-kW-C5E" userLabel="bottomView">
-                    <rect key="frame" x="0.0" y="200" width="600" height="400"/>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
+                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="liang" translatesAutoresizingMaskIntoConstraints="NO" id="w1a-Gm-RFU">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="noY-X0-iWF" firstAttribute="height" secondItem="4aE-7Y-C4K" secondAttribute="height" id="0Er-MJ-i3q"/>
-                <constraint firstAttribute="bottom" secondItem="wkV-kW-C5E" secondAttribute="bottom" id="3RT-qn-ogA"/>
-                <constraint firstItem="wkV-kW-C5E" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="48B-FB-0sr"/>
-                <constraint firstItem="4aE-7Y-C4K" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="JvP-Dg-mxL"/>
-                <constraint firstAttribute="trailing" secondItem="wkV-kW-C5E" secondAttribute="trailing" id="PaO-dG-XIt"/>
-                <constraint firstAttribute="trailing" secondItem="noY-X0-iWF" secondAttribute="trailing" id="W9n-37-Bx2"/>
-                <constraint firstItem="noY-X0-iWF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="WPS-QS-wQX"/>
-                <constraint firstItem="noY-X0-iWF" firstAttribute="width" secondItem="4aE-7Y-C4K" secondAttribute="width" id="enN-jp-keq"/>
-                <constraint firstItem="4aE-7Y-C4K" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hSW-KT-7Zq"/>
-                <constraint firstItem="wkV-kW-C5E" firstAttribute="top" secondItem="4aE-7Y-C4K" secondAttribute="bottom" id="oni-xq-RgL"/>
-                <constraint firstItem="noY-X0-iWF" firstAttribute="leading" secondItem="4aE-7Y-C4K" secondAttribute="trailing" id="vNI-qH-8Rf"/>
+                <constraint firstAttribute="trailing" secondItem="w1a-Gm-RFU" secondAttribute="trailing" id="09F-pm-E8i"/>
+                <constraint firstAttribute="bottom" secondItem="w1a-Gm-RFU" secondAttribute="bottom" id="Jtd-9Y-scl"/>
+                <constraint firstItem="w1a-Gm-RFU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="L1O-XZ-qrT"/>
+                <constraint firstItem="w1a-Gm-RFU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ldz-9r-mxk"/>
             </constraints>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <point key="canvasLocation" x="327" y="371"/>
         </view>
     </objects>
+    <resources>
+        <image name="liang" width="639" height="1136"/>
+    </resources>
 </document>
