@@ -66,24 +66,22 @@
     [self hg_presentViewController:oneVC animateStyle:(HGPopverAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
 }
 #pragma mark - HGPopverAnimatorDelegate
--(void)popverAnimateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration
-{
+- (void)popverAnimator:(HGPopverAnimator *)animator animateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration{
     toView.transform=CGAffineTransformMakeScale(0.0, 1.0);
     [UIView animateWithDuration:duration animations:^{
         toView.transform=CGAffineTransformIdentity;
     }];
 }
--(void)popverAnimateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration
-{
+- (void)popverAnimator:(HGPopverAnimator *)animator animateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration{
     [UIView animateWithDuration:duration animations:^{
         fromView.transform=CGAffineTransformMakeScale(0.00001, 1.0);
     }];
 }
--(void)popverAnimationControllerForDismissedController:(UIViewController *)dismissed
+- (void)popverAnimator:(HGPopverAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed
 {
     NSLog(@"presentedController---dismissed");
 }
--(void)popverAnimationControllerForPresentedController:(UIViewController *)presented
+- (void)popverAnimator:(HGPopverAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented
 {
     NSLog(@"presentedController---presented");
 }
@@ -91,7 +89,7 @@
 {
     return self.slider.value;
 }
--(BOOL)popverBackgoundCanResponse
+- (BOOL)popverAnimatorBackgoundCanResponse:(HGPopverAnimator *)animator
 {
     return !self.responseSegment.selectedSegmentIndex;
 }

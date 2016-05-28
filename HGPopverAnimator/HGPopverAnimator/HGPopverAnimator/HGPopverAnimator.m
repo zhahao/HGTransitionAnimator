@@ -61,8 +61,8 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
     }else{
         presentController=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
         presentController.presentFrame=self.presentFrame;
-        if (self.delegate&&[self.delegate respondsToSelector:@selector(popverBackgoundCanResponse)]) {
-            presentController.response=[self.delegate popverBackgoundCanResponse];
+        if (self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimatorBackgoundCanResponse:)]) {
+            presentController.response=[self.delegate popverAnimatorBackgoundCanResponse:self];
         }
         objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController, OBJC_ASSOCIATION_ASSIGN);
     }
@@ -72,23 +72,23 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
 {
     self.willPresent=YES;
-    if (_delegate&&[_delegate respondsToSelector:@selector(popverAnimationControllerForPresentedController:)]) {
-        [self.delegate popverAnimationControllerForPresentedController:source];
+    if (_delegate&&[_delegate respondsToSelector:@selector(popverAnimator:animationControllerForPresentedController:)]) {
+        [self.delegate popverAnimator:self animationControllerForPresentedController:source];
     }
     return self;
 }
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
     self.willPresent=NO;
-    if (_delegate&&[_delegate respondsToSelector:@selector(popverAnimationControllerForDismissedController:)]) {
-        [self.delegate popverAnimationControllerForDismissedController:dismissed];
+    if (_delegate&&[_delegate respondsToSelector:@selector(popverAnimator:animationControllerForDismissedController:)]) {
+        [self.delegate popverAnimator:self animationControllerForDismissedController:dismissed];
     }
     return self;
 }
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    if(self.delegate&&_animateStyle==HGPopverAnimatorCustomStyle&&[self.delegate respondsToSelector:@selector(popverTransitionDuration)]){
-        _duration=[self.delegate popverTransitionDuration];
+    if(self.delegate&&_animateStyle==HGPopverAnimatorCustomStyle&&[self.delegate respondsToSelector:@selector(popverAnimatorTransitionDuration:)]){
+        _duration=[self.delegate popverAnimatorTransitionDuration:self];
        };
     return _duration;
 }
@@ -99,8 +99,8 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
          UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
         [[transitionContext containerView] addSubview:toView];
         if (_animateStyle==HGPopverAnimatorCustomStyle) { // 自定义
-            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimateTransitionToView:duration:)], @"自定义样式必须实现animateTransitionToView:duration:代理方法!");
-            [self.delegate popverAnimateTransitionToView:toView duration:_duration];
+            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimator:animateTransitionToView:duration:)], @"自定义样式必须实现animateTransitionToView:duration:代理方法!");
+            [self.delegate popverAnimator:self animateTransitionToView:toView duration:_duration];
             [UIView animateWithDuration:_duration animations:^{
                 coverView.backgroundColor=_backgroundColor;
             } completion:^(BOOL finished) {
@@ -112,8 +112,8 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
     }else{
         UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
         if (_animateStyle==HGPopverAnimatorCustomStyle) { // 自定义
-            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimateTransitionFromView:duration:)], @"自定义样式必须实现animateTransitionFromView:duration:代理方法!");
-                [_delegate popverAnimateTransitionFromView:fromView duration:_duration];
+            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(popverAnimator:animateTransitionFromView:duration:)], @"自定义样式必须实现animateTransitionFromView:duration:代理方法!");
+                [_delegate popverAnimator:self animateTransitionFromView:fromView duration:_duration];
                 [UIView animateWithDuration:_duration animations:^{
                     coverView.backgroundColor=[UIColor clearColor];
                 } completion:^(BOOL finished) {
