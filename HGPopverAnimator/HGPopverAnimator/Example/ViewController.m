@@ -14,15 +14,14 @@
 #define kScreenWidth   [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight   [UIScreen mainScreen].bounds.size.height
 @interface ViewController ()<HGPopverAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, strong) OneViewController*toCtrl;
-@property (nonatomic, assign) CGRect presentFrame;
-@property (nonatomic, strong) UIColor *backgroundColor;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *animateSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *responseSegment;
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
-
+@property (nonatomic, strong) OneViewController*toCtrl;
+@property (nonatomic, assign) CGRect presentFrame;
+@property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) NSMutableArray *styles;
 @end
 @implementation ViewController

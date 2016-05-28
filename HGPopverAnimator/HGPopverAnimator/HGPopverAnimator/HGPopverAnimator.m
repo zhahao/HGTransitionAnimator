@@ -23,7 +23,7 @@
 @property (nonatomic, assign) CGFloat height;
 @end
 
-static const CGFloat defaultDuratin=0.524*3;
+static const CGFloat defaultDuratin=0.524;
 @interface  HGPopverAnimator()
 @property (nonatomic, weak)   UIView *relateView;//<-参照的View
 @property (nonatomic, assign) BOOL  willPresent;//<- 即将展示
