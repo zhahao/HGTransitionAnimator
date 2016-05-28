@@ -28,6 +28,7 @@
 
 - (instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController
 {
+    self.response=YES;
     return [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController];
 }
 /// 即将布局子视图
@@ -39,10 +40,9 @@
     }else{
         self.presentedView.frame=_presentFrame;
     }
-    
 }
 
 - (void)close{
-    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+    if (self.canResponse) [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 @end

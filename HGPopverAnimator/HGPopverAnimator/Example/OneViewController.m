@@ -7,38 +7,28 @@
 //
 
 #import "OneViewController.h"
-#import "UIViewController+HGPopver.h"
+#import "UIViewController+HGAnimator.h"
 @interface OneViewController ()
-
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *animateSegment;
 @end
 
 @implementation OneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)backBtnClick:(id)sender {
+    [self hg_dismissViewControllerAnimated:!self.animateSegment.selectedSegmentIndex completion:nil];
 }
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+-(void)viewWillDisappear:(BOOL)animated
 {
-    [self hg_dismissViewController];
+    [super viewWillDisappear:animated];
+    __weak typeof (self)ws=self;
+    if (_callBackBlock)  _callBackBlock(ws.textField.text);
 }
 -(void)dealloc
 {
     NSLog(@"%s",__func__);
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

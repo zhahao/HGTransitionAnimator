@@ -34,9 +34,13 @@
 - (void)popverAnimateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration;
 
 /**
- *  自定义情况下的代理
+ *  设置动画时间
  *
  *  @return 动画时间
  */
 - (NSTimeInterval)popverTransitionDuration;
+/**
+ *  背景点击是否响应,默认YES
+ */
+- (BOOL)popverBackgoundCanResponse;
 @end

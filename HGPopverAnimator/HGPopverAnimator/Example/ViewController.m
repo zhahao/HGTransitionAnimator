@@ -8,61 +8,92 @@
 
 #import "ViewController.h"
 #import "OneViewController.h"
-#import "UIViewController+HGPopver.h"
+#import "UIViewController+HGAnimator.h"
 #import "HGPresentationController.h"
 
-#define kScreenBounds [UIScreen mainScreen].bounds
-#define kScreenWidth   kScreenBounds.size.width
-#define kScreenHeight   kScreenBounds.size.height
-#define OneViewControllerINIT   [[OneViewController alloc]init]
-@interface ViewController ()<HGPopverAnimatorDelegate>
+#define kScreenWidth   [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight   [UIScreen mainScreen].bounds.size.height
+@interface ViewController ()<HGPopverAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) OneViewController*toCtrl;
 @property (nonatomic, assign) CGRect presentFrame;
-@end
+@property (nonatomic, strong) UIColor *backgroundColor;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *animateSegment;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *responseSegment;
+@property (weak, nonatomic) IBOutlet UISlider *slider;
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 
+@property (nonatomic, strong) NSMutableArray *styles;
+@end
 @implementation ViewController
+- (NSMutableArray*)styles
+{
+    if (!_styles) {
+        _styles = [[NSMutableArray alloc]initWithObjects:@"自定义样式",@"从左边弹出样式",@"从右边弹出样式",@"从顶部弹出样式",@"从底部弹出样式", @"显示隐藏样式",@"垂直压缩样式",@"水平压缩样式",@"顶部中点消失样式",@"顶部左上角消失样式",@"顶部右上角消失样式",nil];
+    }
+    return _styles;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGRect presentFrame=CGRectMake(kScreenWidth*0.2, kScreenHeight*0.2, kScreenWidth*0.6,  kScreenHeight*0.6);
+    CGRect presentFrame=CGRectMake(0, 100, kScreenWidth,  kScreenHeight-100);
+    self.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     self.presentFrame=presentFrame;
 }
-- (IBAction)fromLeftStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromLeftStyle delegate:nil presentFrame:_presentFrame  animated:YES];
+#pragma mark - UITableViewDelegate,UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.styles.count;
 }
-- (IBAction)horizontalScaleStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorHorizontalScaleStyle delegate:nil presentFrame:_presentFrame  animated:YES];
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *ID = @"cellID";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+    }
+    cell.selectionStyle=UITableViewCellSelectionStyleGray;
+    cell.textLabel.text=self.styles[indexPath.row];
+    cell.textLabel.textAlignment=NSTextAlignmentCenter;
+    return cell;
 }
-- (IBAction)verticalScaleStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorVerticalScaleStyle delegate:nil presentFrame:_presentFrame animated:NO];
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    __weak typeof(self) ws=self;
+    OneViewController *oneVC=[[OneViewController alloc]init];
+    oneVC.callBackBlock=^(NSString *text){
+        ws.messageLabel.text=text;
+    };
+    [self hg_presentViewController:oneVC animateStyle:(HGPopverAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
 }
-- (IBAction)FromTopStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromTopStyle delegate:nil presentFrame:_presentFrame animated:YES];
-}
-- (IBAction)fromBottomStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromBottomStyle delegate:nil presentFrame:_presentFrame animated:NO];
-}
-- (IBAction)fromRightStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorFromRightStyle delegate:nil presentFrame:_presentFrame animated:NO];
-}
-- (IBAction)customStyle{
-    [self hg_presentViewController:OneViewControllerINIT animateStyle:HGPopverAnimatorCustomStyle delegate:self presentFrame:_presentFrame animated:YES];
-}
-#pragma mark -HGPopverAnimatorDelegate
+#pragma mark - HGPopverAnimatorDelegate
 -(void)popverAnimateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration
 {
+    toView.transform=CGAffineTransformMakeScale(0.0, 1.0);
     [UIView animateWithDuration:duration animations:^{
-        toView.layer.transform=CATransform3DMakeRotation(M_PI, 0, 1, 0);
+        toView.transform=CGAffineTransformIdentity;
     }];
-    
 }
 -(void)popverAnimateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration
 {
     [UIView animateWithDuration:duration animations:^{
-        fromView.layer.transform=CATransform3DIdentity;
+        fromView.transform=CGAffineTransformMakeScale(0.00001, 1.0);
     }];
+}
+-(void)popverAnimationControllerForDismissedController:(UIViewController *)dismissed
+{
+    NSLog(@"presentedController---dismissed");
+}
+-(void)popverAnimationControllerForPresentedController:(UIViewController *)presented
+{
+    NSLog(@"presentedController---presented");
 }
 - (NSTimeInterval)popverTransitionDuration
 {
-    return 3;
+    return self.slider.value;
+}
+-(BOOL)popverBackgoundCanResponse
+{
+    return !self.responseSegment.selectedSegmentIndex;
 }
 @end

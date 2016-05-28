@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface OneViewController : UIViewController
-
+/// 数据回调,也可以用通知
+@property (nonatomic, copy) void (^callBackBlock)(NSString *text);
 @end

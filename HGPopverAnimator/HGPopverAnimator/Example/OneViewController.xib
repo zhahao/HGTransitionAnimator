@@ -3,10 +3,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OneViewController">
             <connections>
+                <outlet property="animateSegment" destination="zLE-NR-z3o" id="C7V-TL-6Rh"/>
+                <outlet property="textField" destination="NI1-cp-xp7" id="L31-Cr-c9Q"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -15,19 +18,70 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="liang" translatesAutoresizingMaskIntoConstraints="NO" id="w1a-Gm-RFU">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="liang" translatesAutoresizingMaskIntoConstraints="NO" id="w1a-Gm-RFU">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zLE-NR-z3o">
+                    <rect key="frame" x="221" y="30" width="121" height="29"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="28" id="9Z6-Kf-vCy"/>
+                        <constraint firstAttribute="width" constant="121" id="Wrr-lZ-niq"/>
+                    </constraints>
+                    <segments>
+                        <segment title="需要动画"/>
+                        <segment title="不要动画"/>
+                    </segments>
+                </segmentedControl>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="回调消息" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NI1-cp-xp7">
+                    <rect key="frame" x="33" y="30" width="121" height="28"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m7s-EE-zyv">
+                    <rect key="frame" x="57" y="78" width="261" height="30"/>
+                    <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="261" id="VsT-gm-y90"/>
+                        <constraint firstAttribute="height" constant="30" id="Zxe-r5-svl"/>
+                    </constraints>
+                    <state key="normal" title="回到上一个控制器">
+                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="backBtnClick:" destination="-1" eventType="touchUpInside" id="wDE-k3-2JA"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="第二个控制器" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gvf-GX-Ddm">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="21"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="q9v-OR-7jR"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="w1a-Gm-RFU" secondAttribute="trailing" id="09F-pm-E8i"/>
+                <constraint firstItem="NI1-cp-xp7" firstAttribute="height" secondItem="zLE-NR-z3o" secondAttribute="height" id="8ZR-7l-tOA"/>
+                <constraint firstItem="zLE-NR-z3o" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" multiplier="1.5" id="E0W-gn-1Yp"/>
                 <constraint firstAttribute="bottom" secondItem="w1a-Gm-RFU" secondAttribute="bottom" id="Jtd-9Y-scl"/>
                 <constraint firstItem="w1a-Gm-RFU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="L1O-XZ-qrT"/>
                 <constraint firstItem="w1a-Gm-RFU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ldz-9r-mxk"/>
+                <constraint firstItem="zLE-NR-z3o" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="M8k-fj-GRm"/>
+                <constraint firstItem="m7s-EE-zyv" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="iI9-Nu-fNE"/>
+                <constraint firstItem="m7s-EE-zyv" firstAttribute="top" secondItem="NI1-cp-xp7" secondAttribute="bottom" constant="20" id="iRE-VY-cSG"/>
+                <constraint firstItem="NI1-cp-xp7" firstAttribute="width" secondItem="zLE-NR-z3o" secondAttribute="width" id="iq2-6j-he8"/>
+                <constraint firstAttribute="trailing" secondItem="Gvf-GX-Ddm" secondAttribute="trailing" id="kgF-nT-DgA"/>
+                <constraint firstItem="Gvf-GX-Ddm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="mCS-gd-oJ9"/>
+                <constraint firstItem="NI1-cp-xp7" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" multiplier="0.5" id="wTD-lN-hig"/>
+                <constraint firstItem="NI1-cp-xp7" firstAttribute="top" secondItem="zLE-NR-z3o" secondAttribute="top" id="weV-Lx-vJw"/>
+                <constraint firstItem="Gvf-GX-Ddm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="zsA-Z1-zmt"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="327" y="371"/>
+            <point key="canvasLocation" x="-146.5" y="180.5"/>
         </view>
     </objects>
     <resources>

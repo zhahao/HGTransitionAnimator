@@ -8,32 +8,38 @@
 
 #import "HGPopverAnimator.h"
 #import "HGPresentationController.h"
-#import "UIView+Extension.h"
 #import <objc/runtime.h>
 
 #define SETTER(hg_property) _##hg_property=(hg_property)
 
-#ifndef kWeakSelf
-    #define kWeakSelf __weak __typeof(self)weakSelf = self;
+#ifndef HGWeakSelf
+    #define HGWeakSelf __weak __typeof(self)weakSelf = self;
 #endif
 
-static const CGFloat defaultDuratin=0.524;//时间和原生的push,model一样
-@interface  HGPopverAnimator()
-@property (nonatomic, assign) BOOL  willPresent;//<- 即将展示
-@property (nonatomic, assign) CGRect presentFrame;//<- 弹出视图的的frame
-@property (nonatomic, assign,nullable) id<HGPopverAnimatorDelegate> delegate;//<- 代理
-@property (nonatomic, assign) HGPopverAnimatorStyle animateStyle;//<- push样式
-@property (nonatomic, weak) UIView *relateView;//<-参照的View
-@property (nonatomic, assign) BOOL animated;//<- 是否动画
-@property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间
-@property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
-@property (nonatomic, assign) BOOL fullScreen;// <-全屏
+@interface UIView (HGExtension)
+@property (nonatomic, assign) CGFloat x;
+@property (nonatomic, assign) CGFloat y;
+@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat height;
 @end
 
+static const CGFloat defaultDuratin=0.524*3;
+@interface  HGPopverAnimator()
+@property (nonatomic, weak)   UIView *relateView;//<-参照的View
+@property (nonatomic, assign) BOOL  willPresent;//<- 即将展示
+@property (nonatomic, assign) BOOL animated;//<- 是否动画
+@property (nonatomic, assign) CGRect presentFrame;//<- 弹出视图的的frame
+@property (nonatomic, assign) HGPopverAnimatorStyle animateStyle;//<- push样式
+@property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间
+@property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
+@property (nonatomic, assign,nullable) id<HGPopverAnimatorDelegate> delegate;//<- 代理
+
+@end
 
 static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey";
 @implementation HGPopverAnimator
--(instancetype)initWithAnimateStyle:(HGPopverAnimatorStyle)animateStyle relateView:(UIView *)relateView presentFrame:(CGRect)presentFrame delegate:(id<HGPopverAnimatorDelegate>)delegate animated:(BOOL)animated
+
+-(instancetype)initWithAnimateStyle:(HGPopverAnimatorStyle)animateStyle relateView:(UIView *)relateView presentFrame:(CGRect)presentFrame backgroundColor:(UIColor *)backgroundColor delegate:(id<HGPopverAnimatorDelegate>)delegate animated:(BOOL)animated
 {
     if (self=[super init]) {
         SETTER(animateStyle);
@@ -41,23 +47,26 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
         SETTER(presentFrame);
         SETTER(delegate);
         SETTER(animated);
-        _duration=_animated? defaultDuratin:0;
-        _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        _duration=_animated ? defaultDuratin:0;
+        _backgroundColor=backgroundColor==nil ? [UIColor clearColor]:backgroundColor;
     }
     return self;
 }
 
 -(UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(UIViewController *)presenting sourceViewController:(UIViewController *)source
 {
-    HGPresentationController*pc=nil;
+    HGPresentationController *presentController=nil;
     if ([self getPresentationController]) {
-        pc=[self getPresentationController];
+        presentController=[self getPresentationController];
     }else{
-        pc=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
-        pc.presentFrame=self.presentFrame;
-        objc_setAssociatedObject(self, &HGPresentationControllerKey, pc, OBJC_ASSOCIATION_ASSIGN);
+        presentController=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
+        presentController.presentFrame=self.presentFrame;
+        if (self.delegate&&[self.delegate respondsToSelector:@selector(popverBackgoundCanResponse)]) {
+            presentController.response=[self.delegate popverBackgoundCanResponse];
+        }
+        objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController, OBJC_ASSOCIATION_ASSIGN);
     }
-    return pc;
+    return presentController;
 
 }
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
@@ -78,7 +87,7 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
 }
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    if(self.delegate&&[self.delegate respondsToSelector:@selector(popverTransitionDuration)]){
+    if(self.delegate&&_animateStyle==HGPopverAnimatorCustomStyle&&[self.delegate respondsToSelector:@selector(popverTransitionDuration)]){
         _duration=[self.delegate popverTransitionDuration];
        };
     return _duration;
@@ -97,7 +106,6 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
             } completion:^(BOOL finished) {
                 [transitionContext completeTransition:YES];
             }];
-
         }else{
             [self setupPushAnimator:toView context:transitionContext coverView:coverView];
         }
@@ -120,71 +128,96 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
 // pop
 - (void)setupPopAnimator:(UIView *)fromView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
-    kWeakSelf;
+    HGWeakSelf;
     if (_animateStyle==HGPopverAnimatorFromLeftStyle) {
-        [self toView:fromView context:transitionContext animations:^{
+        [self fromView:fromView context:transitionContext animations:^{
             fromView.x=[self relateViewXToWindow]-fromView.width; }];
     }else if (_animateStyle==HGPopverAnimatorFromRightStyle){
-        [self toView:fromView context:transitionContext animations:^{
+        [self fromView:fromView context:transitionContext animations:^{
             fromView.x=[self relateViewXToWindow]+weakSelf.relateView.width; }];
     }else if (_animateStyle==HGPopverAnimatorFromTopStyle){
-        [self toView:fromView context:transitionContext animations:^{
+        [self fromView:fromView context:transitionContext animations:^{
             fromView.y=[self relateViewXToWindow]-fromView.height; }];
     }else if (_animateStyle==HGPopverAnimatorFromBottomStyle){
-        [self toView:fromView context:transitionContext animations:^{
+        [self fromView:fromView context:transitionContext animations:^{
             fromView.y=[self relateViewYToWindow]+weakSelf.relateView.height+fromView.height; }];
+    }else if (_animateStyle==HGPopverAnimatorHiddenStyle){
+        [self fromView:fromView context:transitionContext animations:^{ fromView.alpha=0.0f; }];
     }else if (_animateStyle==HGPopverAnimatorVerticalScaleStyle){
-        [self toView:fromView context:transitionContext animations:^{
+        [self fromView:fromView context:transitionContext animations:^{
             fromView.transform=CGAffineTransformMakeScale(1.0, 0.000001); }];
     }else if (_animateStyle==HGPopverAnimatorHorizontalScaleStyle){
-        [self toView:fromView context:transitionContext animations:^{
+        [self fromView:fromView context:transitionContext animations:^{
             fromView.transform=CGAffineTransformMakeScale(0.000001, 1.0); }];
+    }else{
+        [self fromView:fromView context:transitionContext animations:^{
+            fromView.transform=CGAffineTransformMakeScale(0.000001, 0.000001); }];
     }
 }
 // push
 - (void)setupPushAnimator:(UIView *)toView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
-    kWeakSelf
+    HGWeakSelf;
     if (_animateStyle==HGPopverAnimatorFromLeftStyle) {
-        [self fromView:toView context:transitionContext actions:^{
+        [self toView:toView context:transitionContext actions:^{
             toView.x=[weakSelf relateViewXToWindow]-toView.width;
         } animations:^{ toView.x=[weakSelf relateViewXToWindow]; }];
     }else if (_animateStyle==HGPopverAnimatorFromRightStyle){
-        [self fromView:toView context:transitionContext actions:^{
+        [self toView:toView context:transitionContext actions:^{
             toView.x=[self relateViewXToWindow]+toView.width;
         } animations:^{ toView.x=[self relateViewXToWindow]+self.relateView.width-toView.width; }];
     }else if (_animateStyle==HGPopverAnimatorFromTopStyle){
-        [self fromView:toView context:transitionContext actions:^{
+        [self toView:toView context:transitionContext actions:^{
             toView.y=[self relateViewYToWindow]-toView.height;
         } animations:^{ toView.y=[self relateViewYToWindow]; }];
     }else if (_animateStyle==HGPopverAnimatorFromBottomStyle){
-        [self fromView:toView context:transitionContext actions:^{
+        [self toView:toView context:transitionContext actions:^{
             toView.y=CGRectGetMaxY(toView.frame);
         } animations:^{ toView.y=[self relateViewYToWindow]+self.relateView.height-toView.height; }];
-    }else if (_animateStyle==HGPopverAnimatorVerticalScaleStyle){
-        toView.layer.anchorPoint=CGPointMake(0.5, 0);
-        toView.transform=CGAffineTransformMakeScale(1.0, 0.0);
-        [UIView animateWithDuration:_duration animations:^{ toView.transform=CGAffineTransformIdentity;
-        } completion:^(BOOL finished) { [transitionContext completeTransition:YES];
-        }];
-    }else if (_animateStyle==HGPopverAnimatorHorizontalScaleStyle){
-        toView.layer.anchorPoint=CGPointMake(0, 0.5);
-        toView.transform=CGAffineTransformMakeScale(0.0,1.0);
-        [UIView animateWithDuration:_duration animations:^{ toView.transform=CGAffineTransformIdentity;
-        } completion:^(BOOL finished) { [transitionContext completeTransition:YES];
-        }];
+    }else if (_animateStyle==HGPopverAnimatorHiddenStyle){
+        [self toView:toView context:transitionContext actions:nil animations:^{ toView.alpha=1.0f; }];
+    }else{
+        CGPoint anchorPoint;
+        CGAffineTransform CGAffineTransformScale;
+        if (_animateStyle==HGPopverAnimatorVerticalScaleStyle){
+            anchorPoint=CGPointMake(0.5, 0);
+            CGAffineTransformScale=CGAffineTransformMakeScale(1.0, 0.0);
+        }else if (_animateStyle==HGPopverAnimatorHorizontalScaleStyle){
+            anchorPoint=CGPointMake(0, 0.5);
+            CGAffineTransformScale=CGAffineTransformMakeScale(0.0, 1.0);
+        }else if (_animateStyle==HGPopverAnimatorFocusTopRightStyle){
+            anchorPoint=CGPointMake(1, 0);
+            CGAffineTransformScale=CGAffineTransformMakeScale(0.0, 0.0);
+        }else if (_animateStyle==HGPopverAnimatorFocusTopCenterStyle){
+            anchorPoint=CGPointMake(0.5, 0);
+            CGAffineTransformScale=CGAffineTransformMakeScale(0.0, 0.0);
+        }else if (_animateStyle==HGPopverAnimatorFocusTopLeftStyle){
+            anchorPoint=CGPointMake(0, 0);
+            CGAffineTransformScale=CGAffineTransformMakeScale(0.0, 0.0);
+        }
+        toView.layer.anchorPoint=anchorPoint;
+        toView.transform=CGAffineTransformScale;
+        [UIView animateWithDuration:_duration animations:^{
+            toView.transform=CGAffineTransformIdentity;
+            [self getPresentationControllerCoverView].backgroundColor=weakSelf.backgroundColor;
+        } completion:^(BOOL finished) { [transitionContext completeTransition:YES]; }];
     }
 }
 // 方法抽取
-- (void)fromView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext actions:(void(^)())actions animations:(void (^)(void))animations
+- (void)toView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext actions:(void(^)())actions animations:(void (^)(void))animations
 {
-    kWeakSelf;
-    view.hidden=YES;
-    actions();
-    view.hidden=NO;
+    HGWeakSelf;
+    if (actions){
+        view.hidden=YES;
+        actions();
+        view.hidden=NO;
+    }else{
+        view.alpha=0.0f;
+    }
+    
     __block UIView * coverView=[self getPresentationControllerCoverView];
     void (^endAnimations) (void)= ^ (void){
-        animations();
+        if (animations) animations();
         coverView.backgroundColor=weakSelf.backgroundColor;
     };
     [UIView animateWithDuration:weakSelf.duration animations:endAnimations completion:^(BOOL finished){
@@ -192,23 +225,19 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
     }];
 }
 // 方法抽取
-- (void)toView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext animations:(void (^)(void))animations
+- (void)fromView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext animations:(void (^)(void))animations
 {
-    kWeakSelf;
+    HGWeakSelf;
     __block UIView * coverView=[self getPresentationControllerCoverView];
-    void (^completeTransitionBlock) (BOOL) = ^(BOOL finished){
-        [transitionContext completeTransition:YES];
-    };
+    void (^completeTransitionBlock) (BOOL) = ^(BOOL finished){ [transitionContext completeTransition:YES]; };
     [UIView animateWithDuration:weakSelf.duration animations:^{
         animations();
         coverView.backgroundColor=[UIColor clearColor];
     } completion:completeTransitionBlock];
-
 }
 - (CGRect)relateViewToWindow
 {
-    CGRect rect=[self.relateView convertRect:self.relateView.bounds toView:[[UIApplication sharedApplication] keyWindow]];
-    return  rect;
+    return  [self.relateView convertRect:self.relateView.bounds toView:[[UIApplication sharedApplication] keyWindow]];
 }
 - (CGFloat)relateViewMaxXToWindow
 {
@@ -237,20 +266,75 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
 }
 - (CGFloat)scaleDuration:(UIView *)view
 {
+    CGFloat x=self.presentFrame.origin.x;
+    CGFloat y=self.presentFrame.origin.y;
+    CGFloat width=self.presentFrame.size.width;
+    CGFloat height=self.presentFrame.size.height;
+    
     if (self.animateStyle==HGPopverAnimatorFromLeftStyle){
-        return (self.presentFrame.size.width+self.presentFrame.origin.x-[self relateViewXToWindow])/view.width;
+        return (width+x-[self relateViewXToWindow])/view.width;
     }else if (self.animateStyle==HGPopverAnimatorFromRightStyle){
         return ([self relateViewMaxXToWindow]-view.x)/view.width;
     }else if(self.animateStyle==HGPopverAnimatorFromBottomStyle){
-        return ([self relateViewMaxYToWindow]-self.presentFrame.origin.y)/view.height;
+        return ([self relateViewMaxYToWindow]-y)/view.height;
     }else if (self.animateStyle==HGPopverAnimatorFromTopStyle){
-        return (self.presentFrame.size.height+self.presentFrame.origin.y-[self relateViewMaxYToWindow])/view.height;
+        return (height+y-[self relateViewMaxYToWindow])/view.height;
     }else if (self.animateStyle==HGPopverAnimatorHorizontalScaleStyle){
-        return self.presentFrame.size.width/view.width;
+        return width/view.width;
     }else if (self.animateStyle==HGPopverAnimatorVerticalScaleStyle){
-        return self.presentFrame.size.height/view.height;
+        return height/view.height;
     }else{
         return 1.0f;
     }
+}
+@end
+@implementation UIView (HGExtension)
+
+- (void)setX:(CGFloat)x
+{
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+}
+
+- (void)setY:(CGFloat)y
+{
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
+}
+
+- (CGFloat)x
+{
+    return self.frame.origin.x;
+}
+
+- (CGFloat)y
+{
+    return self.frame.origin.y;
+}
+
+- (void)setWidth:(CGFloat)width
+{
+    CGRect frame = self.frame;
+    frame.size.width = width;
+    self.frame = frame;
+}
+
+- (void)setHeight:(CGFloat)height
+{
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+}
+
+- (CGFloat)height
+{
+    return self.frame.size.height;
+}
+
+- (CGFloat)width
+{
+    return self.frame.size.width;
 }
 @end

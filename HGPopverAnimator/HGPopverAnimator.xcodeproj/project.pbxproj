@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6649595C1CF72B8A00F2258B /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649595B1CF72B8A00F2258B /* UIView+Extension.m */; };
-		6680AC421CF5C031000B0977 /* UIViewController+HGPopver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6680AC411CF5C031000B0977 /* UIViewController+HGPopver.m */; };
+		6680AC421CF5C031000B0977 /* UIViewController+HGAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6680AC411CF5C031000B0977 /* UIViewController+HGAnimator.m */; };
 		66EC01541CF4833A007B4661 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EC01531CF4833A007B4661 /* main.m */; };
 		66EC015D1CF4833A007B4661 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66EC015B1CF4833A007B4661 /* Main.storyboard */; };
 		66EC015F1CF4833A007B4661 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66EC015E1CF4833A007B4661 /* Assets.xcassets */; };
@@ -23,10 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6649595A1CF72B8A00F2258B /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
-		6649595B1CF72B8A00F2258B /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
-		6680AC401CF5C031000B0977 /* UIViewController+HGPopver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+HGPopver.h"; sourceTree = "<group>"; };
-		6680AC411CF5C031000B0977 /* UIViewController+HGPopver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+HGPopver.m"; sourceTree = "<group>"; };
+		6680AC401CF5C031000B0977 /* UIViewController+HGAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+HGAnimator.h"; sourceTree = "<group>"; };
+		6680AC411CF5C031000B0977 /* UIViewController+HGAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+HGAnimator.m"; sourceTree = "<group>"; };
 		6680AC431CF5DF1B000B0977 /* HGPopverAnimatorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGPopverAnimatorDelegate.h; sourceTree = "<group>"; };
 		66EC014F1CF4833A007B4661 /* HGPopverAnimator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGPopverAnimator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EC01531CF4833A007B4661 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -77,7 +74,7 @@
 		66EC01511CF4833A007B4661 /* HGPopverAnimator */ = {
 			isa = PBXGroup;
 			children = (
-				66EC01691CF483E3007B4661 /* Example */,
+				66EC01691CF483E3007B4661 /* Demo */,
 				66EC016C1CF483E3007B4661 /* HGPopverAnimator */,
 				66EC01711CF483E3007B4661 /* Others */,
 				66EC01521CF4833A007B4661 /* Supporting Files */,
@@ -94,7 +91,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		66EC01691CF483E3007B4661 /* Example */ = {
+		66EC01691CF483E3007B4661 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
 				66EC015B1CF4833A007B4661 /* Main.storyboard */,
@@ -104,21 +101,20 @@
 				66EC017D1CF48476007B4661 /* OneViewController.m */,
 				66EC017E1CF48476007B4661 /* OneViewController.xib */,
 			);
+			name = Demo;
 			path = Example;
 			sourceTree = "<group>";
 		};
 		66EC016C1CF483E3007B4661 /* HGPopverAnimator */ = {
 			isa = PBXGroup;
 			children = (
-				6649595A1CF72B8A00F2258B /* UIView+Extension.h */,
-				6649595B1CF72B8A00F2258B /* UIView+Extension.m */,
 				66EC016D1CF483E3007B4661 /* HGPopverAnimator.h */,
 				66EC016E1CF483E3007B4661 /* HGPopverAnimator.m */,
 				6680AC431CF5DF1B000B0977 /* HGPopverAnimatorDelegate.h */,
 				66EC016F1CF483E3007B4661 /* HGPresentationController.h */,
 				66EC01701CF483E3007B4661 /* HGPresentationController.m */,
-				6680AC401CF5C031000B0977 /* UIViewController+HGPopver.h */,
-				6680AC411CF5C031000B0977 /* UIViewController+HGPopver.m */,
+				6680AC401CF5C031000B0977 /* UIViewController+HGAnimator.h */,
+				6680AC411CF5C031000B0977 /* UIViewController+HGAnimator.m */,
 			);
 			path = HGPopverAnimator;
 			sourceTree = "<group>";
@@ -165,7 +161,6 @@
 				TargetAttributes = {
 					66EC014E1CF4833A007B4661 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = C6J483WBM2;
 					};
 				};
 			};
@@ -208,12 +203,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				66EC017F1CF48476007B4661 /* OneViewController.m in Sources */,
-				6680AC421CF5C031000B0977 /* UIViewController+HGPopver.m in Sources */,
+				6680AC421CF5C031000B0977 /* UIViewController+HGAnimator.m in Sources */,
 				66EC01781CF483E3007B4661 /* HGPresentationController.m in Sources */,
 				66EC01771CF483E3007B4661 /* HGPopverAnimator.m in Sources */,
 				66EC01761CF483E3007B4661 /* ViewController.m in Sources */,
 				66EC01541CF4833A007B4661 /* main.m in Sources */,
-				6649595C1CF72B8A00F2258B /* UIView+Extension.m in Sources */,
 				66EC01791CF483E3007B4661 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -333,7 +327,7 @@
 				INFOPLIST_FILE = HGPopverAnimator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.9P4TH4J3.superclass.HGPopverAnimator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhahao.HGPopverAnimatorDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -348,7 +342,7 @@
 				INFOPLIST_FILE = HGPopverAnimator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.9P4TH4J3.superclass.HGPopverAnimator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhahao.HGPopverAnimatorDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
