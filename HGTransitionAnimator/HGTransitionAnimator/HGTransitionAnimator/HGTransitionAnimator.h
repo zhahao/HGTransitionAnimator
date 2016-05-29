@@ -1,6 +1,6 @@
 //
 //  HGTransitioningDelegate.h
-//  自定义转场动画_OC
+//  HGTransitionAnimator
 //
 //  Created by 查昊 on 16/5/23.
 //  Copyright © 2016年 haocha. All rights reserved.
@@ -21,13 +21,15 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
     HGTransitionAnimatorHiddenStyle,            //显示隐藏样式
     HGTransitionAnimatorVerticalScaleStyle,     //垂直压缩样式
     HGTransitionAnimatorHorizontalScaleStyle,   //水平压缩样式
+    HGTransitionAnimatorCenterStyle,            //中点消失样式
     HGTransitionAnimatorFocusTopCenterStyle,    //顶部中点消失样式
     HGTransitionAnimatorFocusTopLeftStyle,      //顶部左上角消失样式
     HGTransitionAnimatorFocusTopRightStyle,     //顶部右上角消失样式
 };
 
-///默认动画时间
-extern const NSTimeInterval defaultDuratin;
+
+/// 默认动画时间
+FOUNDATION_EXPORT const NSTimeInterval defaultDuratin;
 
 NS_ASSUME_NONNULL_BEGIN
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
@@ -44,7 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param delegate        代理
  *  @param animated        是否动画
  */
-- (instancetype)initWithAnimateStyle:(HGTransitionAnimatorStyle)animateStyle relateView:(nullable UIView *)relateView presentFrame:(CGRect)presentFrame backgroundColor:(nullable UIColor *)backgroundColor delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate animated:(BOOL)animated;
+- (instancetype)initWithAnimateStyle:(HGTransitionAnimatorStyle)animateStyle
+                          relateView:(nullable UIView *)relateView
+                        presentFrame:(CGRect)presentFrame
+                     backgroundColor:(nullable UIColor *)backgroundColor
+                            delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
+                            animated:(BOOL)animated NS_DESIGNATED_INITIALIZER;
 
 @end
 NS_ASSUME_NONNULL_END

@@ -10,10 +10,12 @@
 @class HGTransitionAnimator;
 @protocol HGTransitionAnimatorDelegate <NSObject>
 @optional
+
 /**
  *  弹出控制器视图之后后调用该代理方法
  */
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented;
+
 /**
  *  回收控制器视图之后调用该代理方法
  */
@@ -26,6 +28,7 @@
  *  @param duration 动画时间
  */
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration;
+
 /**
  *  自定义动画需要用到,在该代理方法中实现动画效果
  *
@@ -40,6 +43,7 @@
  *  @return 动画时间
  */
 - (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator;
+
 /**
  *  背景点击是否响应,默认YES
  */

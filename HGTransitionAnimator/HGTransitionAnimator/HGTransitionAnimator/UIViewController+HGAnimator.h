@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface UIViewController (HGAnimator)
 /**
- *  自定义弹出控制器
+ *  自定义弹出控制器,一定会在主线程里面执行
  *
  *  @param viewControllerToPresent 需要转场出来的控制器
  *  @param style                   转场样式
@@ -20,14 +20,20 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param flag                    是否需要动画效果
  *  @return                        转场动画对象
  */
-
-- (HGTransitionAnimator *)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent animateStyle:(HGTransitionAnimatorStyle )style delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate presentFrame:(CGRect)presentFrame backgroundColor:(nullable UIColor *)backgroundColor animated:(BOOL)flag;
+- (HGTransitionAnimator *)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
+                                      animateStyle:(HGTransitionAnimatorStyle )style
+                                          delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
+                                      presentFrame:(CGRect)presentFrame
+                                   backgroundColor:(nonnull UIColor *)backgroundColor
+                                          animated:(BOOL)flag;
 /**
- *  dismiss控制器,并销毁控制器
+ *  dismiss控制器,并销毁控制器,一定会在主线程里面执行
  *
  *  @param flag       是否需要动画
  *  @param completion 完成之后的block
  *  @return           转场动画对象
- */- (HGTransitionAnimator *)hg_dismissViewControllerAnimated:(BOOL)flag completion: (void (^ __nullable)(void))completion;
+ */
+- (HGTransitionAnimator *)hg_dismissViewControllerAnimated:(BOOL)flag
+                                                completion:(void (^ __nullable)(void))completion;
 @end
 NS_ASSUME_NONNULL_END

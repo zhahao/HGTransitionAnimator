@@ -41,22 +41,22 @@ OneViewController *oneVC=[[OneViewController alloc]init];
 ```
 #项目演示
 `查看并运行 	HGTransitionAnimator/demo`
-##自定义样式
+###自定义样式
 ```
 	animateStyle:HGTransitionAnimatorCustomStyle
 ```
 ![(自定义样式)](http://files.cnblogs.com/files/zhahao/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%B7%E5%BC%8F.gif)
-##底部弹出样式
+###底部弹出样式
 ```
 	animateStyle:HGTransitionAnimatorFromBottomStyle
 ```
 ![(底部弹出)](http://files.cnblogs.com/files/zhahao/%E5%BA%95%E9%83%A8%E5%BC%B9%E5%87%BA.gif)
-##隐藏样式
+###隐藏样式
 ```
 	animateStyle:HGTransitionAnimatorHiddenStyle
 ```
 ![(隐藏样式)](http://files.cnblogs.com/files/zhahao/%E9%9A%90%E8%97%8F%E6%A0%B7%E5%BC%8F.gif)
-##垂直压缩样式
+###垂直压缩样式
 ```
 	animateStyle:HGTransitionAnimatorVerticalScaleStyle
 ```
@@ -68,7 +68,7 @@ OneViewController *oneVC=[[OneViewController alloc]init];
 
 注意
 ==============
-使用控制器管理弹出视图的好处:`面向协议编程`,使控制器与View之间的传递控制链转换成控制器与控制器之间的传递,降低了代码的耦合度并且提高了代码的复用率,这也是Apple推出转场控制器的用意。转场结束后,被转场的控制器会被销毁。例如`QQ右上角的添加`,`分享界面的底部弹出`都可以用自带样式定义一个专属控制器。共有`10`种自带的样式,持续更新中...现有的基本上可以满足日常的开发需求。如果自定义,请实现`HGTransitionAnimatorDelegate`代理方法。
+支持`横竖屏的切换`。使用控制器管理弹出视图的好处:`面向协议编程`,使控制器与View之间的传递控制链转换成控制器与控制器之间的传递,降低了代码的耦合度并且提高了代码的复用率,这也是Apple推出转场控制器的用意。如`QQ右上角的添加`、`分享界面的底部弹出`、都可以用自带样式定义一个专属控制器,支持。目前有`11`种自带的样式,基本上可以满足日常的开发需求。如果自定义,请实现`HGTransitionAnimatorDelegate`代理方法。
 
 
 许可证

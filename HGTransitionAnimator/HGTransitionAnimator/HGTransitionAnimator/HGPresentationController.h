@@ -1,6 +1,6 @@
 //
 //  HGPresentationController.h
-//  自定义转场动画_OC
+//  HGTransitionAnimator
 //
 //  Created by 查昊 on 16/5/23.
 //  Copyright © 2016年 haocha. All rights reserved.
