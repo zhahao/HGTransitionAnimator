@@ -7,6 +7,7 @@
 //
 
 #import "HGPresentationController.h"
+#import "UIViewController+HGAnimator.h"
 @interface  HGPresentationController()
 @property (nonatomic, assign) CGRect showFrame;
 @end

@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  HGPopverAnimator
+//  HGTransitionAnimator
 //
 //  Created by 查昊 on 16/5/24.
 //  Copyright © 2016年 haocha. All rights reserved.
@@ -13,7 +13,7 @@
 
 #define kScreenWidth   [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight   [UIScreen mainScreen].bounds.size.height
-@interface ViewController ()<HGPopverAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface ViewController ()<HGTransitionAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *animateSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *responseSegment;
@@ -63,33 +63,33 @@
     oneVC.callBackBlock=^(NSString *text){
         ws.messageLabel.text=text;
     };
-    [self hg_presentViewController:oneVC animateStyle:(HGPopverAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
+    [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
 }
-#pragma mark - HGPopverAnimatorDelegate
-- (void)popverAnimator:(HGPopverAnimator *)animator animateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration{
+#pragma mark - HGTransitionAnimatorDelegate
+- (void)transitionAnimator:(HGTransitionAnimator *)animator animateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration{
     toView.transform=CGAffineTransformMakeScale(0.0, 1.0);
     [UIView animateWithDuration:duration animations:^{
         toView.transform=CGAffineTransformIdentity;
     }];
 }
-- (void)popverAnimator:(HGPopverAnimator *)animator animateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration{
+- (void)transitionAnimator:(HGTransitionAnimator *)animator animateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration{
     [UIView animateWithDuration:duration animations:^{
         fromView.transform=CGAffineTransformMakeScale(0.00001, 1.0);
     }];
 }
-- (void)popverAnimator:(HGPopverAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed
+- (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed
 {
     NSLog(@"presentedController---dismissed");
 }
-- (void)popverAnimator:(HGPopverAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented
+- (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented
 {
     NSLog(@"presentedController---presented");
 }
-- (NSTimeInterval)popverTransitionDuration
+- (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator
 {
     return self.slider.value;
 }
-- (BOOL)popverAnimatorBackgoundCanResponse:(HGPopverAnimator *)animator
+- (BOOL)transitionAnimatorCanResponse:(HGTransitionAnimator *)animator
 {
     return !self.responseSegment.selectedSegmentIndex;
 }
