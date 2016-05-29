@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param delegate                代理,如果不自定义转场动画,设置为空即可
  *  @param presentFrame            转场控制器的视图frame,相对于window的frame
  *  @param flag                    是否需要动画效果
- *  @return                        转场动画对象
+ *  @return                        转场动画代理对象
  */
 - (HGTransitionAnimator *)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
                                       animateStyle:(HGTransitionAnimatorStyle )style
@@ -30,10 +30,18 @@ NS_ASSUME_NONNULL_BEGIN
  *  dismiss控制器,并销毁控制器,一定会在主线程里面执行
  *
  *  @param flag       是否需要动画
- *  @param completion 完成之后的block
- *  @return           转场动画对象
+ *  @param completion 完成之后的操作block
  */
-- (HGTransitionAnimator *)hg_dismissViewControllerAnimated:(BOOL)flag
-                                                completion:(void (^ __nullable)(void))completion;
+- (void)hg_dismissViewControllerAnimated:(BOOL)flag
+                              completion:(void (^ __nullable)(void))completion;
+
+
+/**
+ *  点击了蒙版需要做操作 // 基本用不上
+ *
+ *  @param Dismiss 需要的操作
+ */
+- (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss;
 @end
 NS_ASSUME_NONNULL_END
+

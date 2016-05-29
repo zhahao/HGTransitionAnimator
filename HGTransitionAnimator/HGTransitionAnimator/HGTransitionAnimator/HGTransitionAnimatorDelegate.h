@@ -49,3 +49,11 @@
  */
 - (BOOL)transitionAnimatorCanResponse:(HGTransitionAnimator *)animator;
 @end
+
+
+
+
+
+
+
+

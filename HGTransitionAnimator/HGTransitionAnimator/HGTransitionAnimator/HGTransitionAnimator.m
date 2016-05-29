@@ -14,10 +14,6 @@
     #define SETTER(hg_property) _##hg_property=(hg_property)
 #endif
 
-#ifndef HGWeakSelf
-    #define HGWeakSelf __weak __typeof(self)weakSelf = self;
-#endif
-
 @interface UIView (HGExtension)
 @property (nonatomic, assign) CGFloat x;
 @property (nonatomic, assign) CGFloat y;
@@ -280,7 +276,6 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
 {
     return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
 }
-
 - (CGFloat)scaleDuration:(UIView *)view
 {
     CGFloat x=self.presentFrame.origin.x;
@@ -303,6 +298,11 @@ static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey
     }else{
         return 1.0f;
     }
+}
+
+-(void)dealloc
+{
+    NSLog(@"%s",__func__);
 }
 @end
 

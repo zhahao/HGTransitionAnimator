@@ -8,6 +8,7 @@
 
 #import "HGPresentationController.h"
 #import "UIViewController+HGAnimator.h"
+#import "HGTransitionAnimatorDelegate.h"
 
 @interface  HGPresentationController()
 @property (nonatomic, assign) CGRect showFrame;
@@ -25,7 +26,7 @@
     if (!_coverView) {
         self.coverView = [[UIView alloc]init];
         self.coverView.backgroundColor=[UIColor clearColor];
-        [self.coverView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(close)]];
+        [self.coverView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close:)]];
     }
     return _coverView;
 }
@@ -47,7 +48,21 @@
     }
 }
 
-- (void)close{
-    if (self.canResponse) [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+- (void)hg_close:(BOOL (^)(void))dismiss
+{
+    if (self.canResponse){
+        if (dismiss) {
+            BOOL (^completionBlaock) (void) = ^ (void){ return dismiss(); };
+            [self.presentedViewController dismissViewControllerAnimated:completionBlaock() completion:nil];
+            return;
+        }
+        [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
+
+-(void)dealloc
+{
+    NSLog(@"%s",__func__);
+}
+
 @end

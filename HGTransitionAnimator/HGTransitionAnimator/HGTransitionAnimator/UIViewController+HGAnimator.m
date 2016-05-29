@@ -28,18 +28,21 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
     
     UIView* relateView=self.view;
     HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style relateView:relateView  presentFrame:presentFrame backgroundColor:backgroundColor delegate:delegate animated:flag];
+    
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
     viewControllerToPresent.modalPresentationStyle=UIModalPresentationCustom;
     viewControllerToPresent.transitioningDelegate=animator;
     void (^presentBlock)(void) = ^ (void) {
         [self presentViewController:viewControllerToPresent animated:flag completion:nil];
     };
     dispatch_main_async_safe(presentBlock);
+    
     return  animator;
 }
 
-- (HGTransitionAnimator *)hg_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
+- (void)hg_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
 {
     HGTransitionAnimator *animator=(HGTransitionAnimator *)self.transitioningDelegate;
     if (!flag) [animator transitionDuration:0];
@@ -47,6 +50,26 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
         [self dismissViewControllerAnimated:flag completion:completion];
     };
     dispatch_main_async_safe(dismissBlock);
-    return animator;
+    objc_setAssociatedObject([self currentPresentingViewController], &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss
+{
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"    
+    [self.presentationController performSelector:NSSelectorFromString(@"hg_close:") withObject:dismiss];
+#pragma clang diagnostic pop
+    
+}
+
+- (UIViewController *)currentPresentingViewController
+{
+    if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nav=(UINavigationController *)self.presentingViewController;
+        return  [nav.viewControllers lastObject];
+    }else{
+        return  self.presentingViewController;
+    }
 }
 @end

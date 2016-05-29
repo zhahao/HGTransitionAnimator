@@ -17,6 +17,10 @@
 #pragma mark - 这个控制器随便写写
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self hg_coverViewWillDismiss:^BOOL{
+        NSLog(@"1111");
+        return YES;
+    }];
 }
 - (IBAction)backBtnClick:(id)sender {
     [self hg_dismissViewControllerAnimated:!self.animateSegment.selectedSegmentIndex completion:nil];

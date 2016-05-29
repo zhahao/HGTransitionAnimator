@@ -27,6 +27,9 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
     HGTransitionAnimatorFocusTopRightStyle,     //顶部右上角消失样式
 };
 
+#ifndef HGWeakSelf
+    #define HGWeakSelf __weak __typeof(self)weakSelf = self;
+#endif
 
 /// 默认动画时间
 FOUNDATION_EXPORT const NSTimeInterval defaultDuratin;
