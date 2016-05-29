@@ -21,6 +21,7 @@
 @property (nonatomic, assign) CGFloat height;
 @end
 
+NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey";
 const NSTimeInterval defaultDuratin=0.52;
 
 @interface  HGTransitionAnimator()
@@ -34,7 +35,6 @@ const NSTimeInterval defaultDuratin=0.52;
 @property (nonatomic, assign,nullable) id<HGTransitionAnimatorDelegate> delegate;//<- 代理
 @end
 
-static NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey";
 @implementation HGTransitionAnimator
 
 -(instancetype)initWithAnimateStyle:(HGTransitionAnimatorStyle)animateStyle relateView:(UIView *)relateView presentFrame:(CGRect)presentFrame backgroundColor:(UIColor *)backgroundColor delegate:(id<HGTransitionAnimatorDelegate>)delegate animated:(BOOL)animated

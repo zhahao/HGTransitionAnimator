@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param Dismiss 需要的操作
  */
-- (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss;
+//- (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss;
 @end
 NS_ASSUME_NONNULL_END
 

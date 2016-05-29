@@ -26,7 +26,7 @@
     if (!_coverView) {
         self.coverView = [[UIView alloc]init];
         self.coverView.backgroundColor=[UIColor clearColor];
-        [self.coverView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close:)]];
+        [self.coverView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close)]];
     }
     return _coverView;
 }
@@ -48,14 +48,21 @@
     }
 }
 
-- (void)hg_close:(BOOL (^)(void))dismiss
+- (void)hg_close
 {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+    });
     if (self.canResponse){
-        if (dismiss) {
-            BOOL (^completionBlaock) (void) = ^ (void){ return dismiss(); };
-            [self.presentedViewController dismissViewControllerAnimated:completionBlaock() completion:nil];
-            return;
-        }
+//        if (dismiss) {
+////            BOOL (^completionBlock) (void) = ^ (void){
+////                BOOL animate=dismiss();
+////                return animate;
+////            };
+//            BOOL animate= dismiss();
+//            [self.presentedViewController dismissViewControllerAnimated:animate completion:nil];
+//            return;
+//        }
         [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }

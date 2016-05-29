@@ -32,9 +32,11 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 #endif
 
 /// 默认动画时间
-FOUNDATION_EXPORT const NSTimeInterval defaultDuratin;
-
 NS_ASSUME_NONNULL_BEGIN
+
+UIKIT_EXTERN    NSTimeInterval const defaultDuratin;
+UIKIT_EXTERN    NSString * const HGPresentationControllerKey;
+
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
 
 - (instancetype)init NS_UNAVAILABLE;

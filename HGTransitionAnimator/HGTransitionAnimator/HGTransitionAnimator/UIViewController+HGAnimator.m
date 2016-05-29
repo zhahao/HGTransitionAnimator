@@ -55,10 +55,12 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 
 - (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss
 {
-    
+//    HGTransitionAnimator *animator=objc_getAssociatedObject([self currentPresentingViewController], &HGTransitionAnimatorKey);
+//    UIPresentationController *presentationController= objc_getAssociatedObject(animator, &HGPresentationControllerKey);
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"    
-    [self.presentationController performSelector:NSSelectorFromString(@"hg_close:") withObject:dismiss];
+//    [presentationController performSelector:NSSelectorFromString(@"hg_close:") withObject:dismiss];
+//    [self hg_dismissViewControllerAnimated:dismiss() completion:nil];
 #pragma clang diagnostic pop
     
 }
