@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param flag                    是否需要动画效果
  *  @return                        转场动画代理对象
  */
-- (HGTransitionAnimator *)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
+- (HGTransitionAnimator *_Nonnull)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
                                       animateStyle:(HGTransitionAnimatorStyle )style
                                           delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
                                       presentFrame:(CGRect)presentFrame
@@ -35,13 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)hg_dismissViewControllerAnimated:(BOOL)flag
                               completion:(void (^ __nullable)(void))completion;
 
-
 /**
- *  点击了蒙版需要做操作 // 基本用不上
- *
- *  @param Dismiss 需要的操作
+ *  获取负责转场的对象,在被转场对象中需要时可以获取
  */
-//- (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss;
+- (HGPresentationController * _Nonnull)hg_getPresentationController;
 @end
 NS_ASSUME_NONNULL_END
 

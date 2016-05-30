@@ -14,14 +14,9 @@
     #define SETTER(hg_property) _##hg_property=(hg_property)
 #endif
 
-@interface UIView (HGExtension)
-@property (nonatomic, assign) CGFloat x;
-@property (nonatomic, assign) CGFloat y;
-@property (nonatomic, assign) CGFloat width;
-@property (nonatomic, assign) CGFloat height;
-@end
 
-NSString *const HGPresentationControllerKey=@"HGPresentationControllerKey";
+
+static NSString * const HGPresentationControllerKey=@"HGPresentationControllerKey";
 const NSTimeInterval defaultDuratin=0.52;
 
 @interface  HGTransitionAnimator()

@@ -8,7 +8,9 @@
 
 #import "OneViewController.h"
 #import "UIViewController+HGAnimator.h"
-@interface OneViewController ()
+#import "HGPresentationController.h"
+
+@interface OneViewController ()<HGPresentationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *animateSegment;
 @end
@@ -17,10 +19,7 @@
 #pragma mark - 这个控制器随便写写
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self hg_coverViewWillDismiss:^BOOL{
-//        NSLog(@"1111111");
-//        return NO;
-//    }];
+    [self hg_getPresentationController].hg_delegate=self;
 }
 - (IBAction)backBtnClick:(id)sender {
     [self hg_dismissViewControllerAnimated:!self.animateSegment.selectedSegmentIndex completion:nil];
@@ -31,6 +30,17 @@
     __weak typeof (self)ws=self;
     if (_callBackBlock)  _callBackBlock(ws.textField.text);
 }
+
+-(BOOL)coverViewWillDismiss:(UIView *)coverView
+{
+    return !_animateSegment.selectedSegmentIndex;
+}
+
+-(BOOL)presentationControllerCanPanLeftOrRight:(HGPresentationController *)controller
+{
+    return YES;
+}
+
 -(void)dealloc
 {
     NSLog(@"%s",__func__);

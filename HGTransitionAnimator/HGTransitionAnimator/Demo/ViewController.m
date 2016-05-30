@@ -48,7 +48,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGRect presentFrame=CGRectMake(kScreenWidth*0.15, kScreenHeight*0.15, kScreenWidth*0.7,  kScreenHeight*0.7);
+    CGRect presentFrame=CGRectMake(kScreenWidth*0.1, kScreenHeight*0.2, kScreenWidth*0.8,  kScreenHeight*0.6);
     self.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     self.presentFrame=presentFrame;
 }
@@ -80,7 +80,7 @@
     oneVC.callBackBlock=^(NSString *text){
         ws.messageLabel.text=text;
     };
-    [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
+     [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
 }
 
 #pragma mark - HGTransitionAnimatorDelegate

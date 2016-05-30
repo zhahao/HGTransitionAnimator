@@ -53,25 +53,21 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
     objc_setAssociatedObject([self currentPresentingViewController], &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)hg_coverViewWillDismiss:(BOOL (^)(void))dismiss
+- (HGPresentationController *)hg_getPresentationController
 {
-//    HGTransitionAnimator *animator=objc_getAssociatedObject([self currentPresentingViewController], &HGTransitionAnimatorKey);
-//    UIPresentationController *presentationController= objc_getAssociatedObject(animator, &HGPresentationControllerKey);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"    
-//    [presentationController performSelector:NSSelectorFromString(@"hg_close:") withObject:dismiss];
-//    [self hg_dismissViewControllerAnimated:dismiss() completion:nil];
-#pragma clang diagnostic pop
-    
+    HGTransitionAnimator *animator=(HGTransitionAnimator *)self.transitioningDelegate;
+    NSAssert1([animator isKindOfClass:[HGTransitionAnimator class]], @"负责转场的对象不是HGTransitionAnimator或它的子类%@,获取失败!",animator);
+    return [animator getPresentationController];
 }
-
 - (UIViewController *)currentPresentingViewController
 {
     if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav=(UINavigationController *)self.presentingViewController;
         return  [nav.viewControllers lastObject];
-    }else{
-        return  self.presentingViewController;
     }
+    return  self.presentingViewController;
 }
 @end
+
+
+

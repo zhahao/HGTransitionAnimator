@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#pragma mark - HGTransitionAnimatorDelegate
 @class HGTransitionAnimator;
 @protocol HGTransitionAnimatorDelegate <NSObject>
 @optional
@@ -49,6 +50,29 @@
  */
 - (BOOL)transitionAnimatorCanResponse:(HGTransitionAnimator *)animator;
 @end
+
+#pragma mark - HGPresentationControllerDelegate
+@class HGPresentationController;
+@protocol HGPresentationControllerDelegate <NSObject>
+@optional
+
+/**
+ *  点击了蒙版,蒙版即将消失
+ *
+ *  @param coverView 蒙版View
+ *
+ *  @return 是否需要动画
+ */
+- (BOOL)coverViewWillDismiss:(UIView *)coverView;
+
+
+/**
+ *  暂时不用
+ */
+- (BOOL)presentationControllerCanPanLeftOrRight:(HGPresentationController *)controller;
+- (BOOL)presentationControllerCanPanTopOrBottom:(HGPresentationController *)controller;
+@end
+
 
 
 

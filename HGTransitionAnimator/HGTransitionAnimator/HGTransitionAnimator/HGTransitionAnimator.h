@@ -34,10 +34,17 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 /// 默认动画时间
 NS_ASSUME_NONNULL_BEGIN
 
-UIKIT_EXTERN    NSTimeInterval const defaultDuratin;
-UIKIT_EXTERN    NSString * const HGPresentationControllerKey;
+FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
+
+@interface UIView (HGExtension)
+@property (nonatomic, assign) CGFloat x;
+@property (nonatomic, assign) CGFloat y;
+@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat height;
+@end
 
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
+
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new  NS_UNAVAILABLE;
@@ -58,6 +65,9 @@ UIKIT_EXTERN    NSString * const HGPresentationControllerKey;
                             delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
                             animated:(BOOL)animated NS_DESIGNATED_INITIALIZER;
 
+
+
+- ( HGPresentationController * _Nonnull )getPresentationController;
 @end
 NS_ASSUME_NONNULL_END
 
