@@ -14,8 +14,6 @@
     #define SETTER(hg_property) _##hg_property=(hg_property)
 #endif
 
-
-
 static NSString * const HGPresentationControllerKey=@"HGPresentationControllerKey";
 const NSTimeInterval defaultDuratin=0.52;
 
@@ -27,7 +25,7 @@ const NSTimeInterval defaultDuratin=0.52;
 @property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;//<- 动画样式
 @property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间
 @property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
-@property (nonatomic, assign,nullable) id<HGTransitionAnimatorDelegate> delegate;//<- 代理
+@property (nonatomic, assign, nullable) id<HGTransitionAnimatorDelegate> delegate;//<- 代理
 @end
 
 @implementation HGTransitionAnimator
@@ -52,6 +50,7 @@ const NSTimeInterval defaultDuratin=0.52;
     presentController.presentFrame=self.presentFrame;
     if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimatorCanResponse:)]){
         presentController.response=[self.delegate transitionAnimatorCanResponse:self];
+        presentController.animateStyle=_animated;
     }
     objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController,OBJC_ASSOCIATION_ASSIGN);
     return presentController;
@@ -295,10 +294,10 @@ const NSTimeInterval defaultDuratin=0.52;
     }
 }
 
--(void)dealloc
-{
-    NSLog(@"%s",__func__);
-}
+//-(void)dealloc
+//{
+//    NSLog(@"%s",__func__);
+//}
 @end
 
 @implementation UIView (HGExtension)

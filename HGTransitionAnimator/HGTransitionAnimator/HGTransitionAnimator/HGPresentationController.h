@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HGTransitionAnimatorDelegate.h"
+#import "HGTransitionAnimator.h"
 
 @interface HGPresentationController : UIPresentationController
 @property (nonatomic, assign) CGRect presentFrame;// <- 记录当前的frame
@@ -15,4 +16,9 @@
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, assign,getter=canResponse) BOOL response;
 @property (nonatomic, assign)id <HGPresentationControllerDelegate> hg_delegate;
+
+@property (nonatomic, assign)HGTransitionAnimatorStyle animateStyle;
+
+@property (nonatomic, assign,getter=canPanLeftOrRight) BOOL panLeftOrRight;
+@property (nonatomic, assign,getter=canPanTopOrBottom) BOOL panTopOrBottom;
 @end

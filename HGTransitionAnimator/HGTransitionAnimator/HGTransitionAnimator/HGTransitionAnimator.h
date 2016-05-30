@@ -35,7 +35,6 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
-
 @interface UIView (HGExtension)
 @property (nonatomic, assign) CGFloat x;
 @property (nonatomic, assign) CGFloat y;

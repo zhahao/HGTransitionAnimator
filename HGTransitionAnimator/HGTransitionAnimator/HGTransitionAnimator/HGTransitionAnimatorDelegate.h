@@ -55,7 +55,6 @@
 @class HGPresentationController;
 @protocol HGPresentationControllerDelegate <NSObject>
 @optional
-
 /**
  *  点击了蒙版,蒙版即将消失
  *
@@ -67,10 +66,10 @@
 
 
 /**
- *  暂时不用
- */
-- (BOOL)presentationControllerCanPanLeftOrRight:(HGPresentationController *)controller;
-- (BOOL)presentationControllerCanPanTopOrBottom:(HGPresentationController *)controller;
+ *  暂时不可用,效果是弹出的视图可以拖动,并且根据拖动手势消失的动画
+// */
+//- (BOOL)presentationControllerCanPanLeftOrRight:(HGPresentationController *)controller;
+//- (BOOL)presentationControllerCanPanTopOrBottom:(HGPresentationController *)controller;
 @end
 
 

@@ -19,7 +19,10 @@
 #pragma mark - 这个控制器随便写写
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self hg_getPresentationController].hg_delegate=self;
+    HGPresentationController *pc=[self hg_getPresentationController];
+    pc.panLeftOrRight=YES;
+//    pc.panTopOrBottom=YES;
+    pc.hg_delegate=self;
 }
 - (IBAction)backBtnClick:(id)sender {
     [self hg_dismissViewControllerAnimated:!self.animateSegment.selectedSegmentIndex completion:nil];
@@ -33,16 +36,11 @@
 
 -(BOOL)coverViewWillDismiss:(UIView *)coverView
 {
+    NSLog(@"Do Something!");
     return !_animateSegment.selectedSegmentIndex;
 }
-
--(BOOL)presentationControllerCanPanLeftOrRight:(HGPresentationController *)controller
-{
-    return YES;
-}
-
--(void)dealloc
-{
-    NSLog(@"%s",__func__);
-}
+//-(void)dealloc
+//{
+//    NSLog(@"%s",__func__);
+//}
 @end
