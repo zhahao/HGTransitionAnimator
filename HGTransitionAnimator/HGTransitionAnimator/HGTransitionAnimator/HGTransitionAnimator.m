@@ -51,6 +51,7 @@ const NSTimeInterval defaultDuratin=0.52;
     if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimatorCanResponse:)]){
         presentController.response=[self.delegate transitionAnimatorCanResponse:self];
         presentController.animateStyle=_animated;
+        presentController.duration=_duration;
     }
     objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController,OBJC_ASSOCIATION_ASSIGN);
     return presentController;

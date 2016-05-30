@@ -15,7 +15,8 @@
 #define kScreenHeight   [UIScreen mainScreen].bounds.size.height
 
 @interface ViewController ()<HGTransitionAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, assign) CGRect presentFrame;
+@property (nonatomic, assign) CGRect leftPresentFrame;
+@property (nonatomic, assign) CGRect rightPresentFrame;
 @property (nonatomic, strong) OneViewController*toCtrl;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) NSMutableArray *styles;
@@ -48,9 +49,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGRect presentFrame=CGRectMake(0, 0, kScreenWidth*0.7,  kScreenHeight);
+    CGRect leftPresentFrame=CGRectMake(0, 0, kScreenWidth*0.7,  kScreenHeight);
+    CGRect rightPresentFrame=CGRectMake(kScreenWidth*0.3, 0, kScreenWidth*0.7,  kScreenHeight);
+
     self.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-    self.presentFrame=presentFrame;
+    self.leftPresentFrame=leftPresentFrame;
+    self.rightPresentFrame=rightPresentFrame;
 }
 
 #pragma mark - UITableViewDelegate,UITableViewDataSource
@@ -80,7 +84,13 @@
     oneVC.callBackBlock=^(NSString *text){
         ws.messageLabel.text=text;
     };
-     [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:_presentFrame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
+    CGRect  frame;
+    if (indexPath.row==1) {
+        frame=_leftPresentFrame;
+    }else{
+        frame=_rightPresentFrame;
+    }
+    [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:frame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
 }
 
 #pragma mark - HGTransitionAnimatorDelegate

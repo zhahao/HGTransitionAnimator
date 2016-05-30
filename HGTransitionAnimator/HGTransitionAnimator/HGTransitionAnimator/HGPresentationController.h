@@ -16,9 +16,8 @@
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, assign,getter=canResponse) BOOL response;
 @property (nonatomic, assign)id <HGPresentationControllerDelegate> hg_delegate;
-
+@property (nonatomic, assign)NSTimeInterval duration;
 @property (nonatomic, assign)HGTransitionAnimatorStyle animateStyle;
-
 @property (nonatomic, assign,getter=canPanLeftOrRight) BOOL panLeftOrRight;
 @property (nonatomic, assign,getter=canPanTopOrBottom) BOOL panTopOrBottom;
 @end
