@@ -7,6 +7,25 @@
 //
 
 #import "HGTransitionAnimatorDelegate.h"
+
+#ifndef HGWeakSelf
+    #define HGWeakSelf __weak __typeof(self)weakSelf = self;
+#endif
+
+#ifndef SETTER
+    #define SETTER(hg_property) _##hg_property=(hg_property)
+#endif
+
+#ifndef dispatch_main_async_safe
+    #define dispatch_main_async_safe(block)\
+        if ([NSThread isMainThread]) {\
+            block();\
+        } else {\
+            dispatch_async(dispatch_get_main_queue(), block);\
+        }
+#endif
+
+
 typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 {
     
@@ -27,14 +46,9 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
     HGTransitionAnimatorFocusTopRightStyle,     //顶部右上角消失样式
 };
 
-#ifndef HGWeakSelf
-    #define HGWeakSelf __weak __typeof(self)weakSelf = self;
-#endif
-
 /// 默认动画时间
-NS_ASSUME_NONNULL_BEGIN
-
 FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
+
 @interface UIView (HGExtension)
 @property (nonatomic, assign) CGFloat x;
 @property (nonatomic, assign) CGFloat y;
@@ -42,6 +56,7 @@ FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
 @property (nonatomic, assign) CGFloat height;
 @end
 
+NS_ASSUME_NONNULL_BEGIN
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
 
 

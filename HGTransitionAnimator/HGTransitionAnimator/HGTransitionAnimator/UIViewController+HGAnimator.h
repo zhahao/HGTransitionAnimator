@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface UIViewController (HGAnimator)
 /**
- *  自定义弹出控制器,一定会在主线程里面执行
+ *  自定义弹出控制器并实现转场动画,一定会在主线程里面执行
  *
  *  @param viewControllerToPresent 需要转场出来的控制器
  *  @param style                   转场样式

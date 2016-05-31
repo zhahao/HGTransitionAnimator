@@ -11,14 +11,21 @@
 #import "HGTransitionAnimatorDelegate.h"
 
 static const CGFloat defaultVelocityX=300;
-static const CGFloat defaultVelocityY=150;
 static const CGFloat scale=0.5;
 
 @interface  HGPresentationController()
+
 @property (nonatomic, assign) CGPoint currentTranslation; // 当前滑动位置
 @property (nonatomic, assign) CGPoint currentVelocity; // 滑动速率
+@property (nonatomic, assign) CGFloat alpha; // 滑动速率
+@property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;
+@property (nonatomic, assign) CGRect  presentFrame;// <- 记录当前的frame
+@property (nonatomic, assign) BOOL    response;
 @property (nonatomic, strong) UIView  *panView;
-@property (nonatomic, assign) BOOL    willPresent;
+@property (nonatomic, strong) UIView  *coverView;
+@property (nonatomic, strong) UIColor *backgroundColor;
+
 @end
 
 @implementation HGPresentationController
@@ -28,23 +35,44 @@ static const CGFloat scale=0.5;
     if (!_coverView) {
         self.coverView = [[UIView alloc]init];
         self.coverView.backgroundColor=[UIColor clearColor];
-        if (self.response&&(_panLeftOrRight || _panTopOrBottom)) {
+        if (self.response) {
             UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close)];
             [self.coverView addGestureRecognizer:tap];
         }
     }
     return _coverView;
 }
-
-- (instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController
+-(instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController
+                      presentingViewController:(UIViewController *)presentingViewController
+                               backgroundColor:(UIColor *)backgroundColor
+                                  animateStyle:(HGTransitionAnimatorStyle)animateStyle
+                                  presentFrame:(CGRect)presentFrame
+                                      duration:(NSTimeInterval)duration
+                                      response:(BOOL)response
 {
-    self.response=YES;
-    return [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController];
+    if (self=[super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
+        SETTER(animateStyle);
+        SETTER(presentFrame);
+        SETTER(backgroundColor);
+        SETTER(duration);
+        SETTER(response);
+        _alpha=CGColorGetAlpha(self.backgroundColor.CGColor);
+    }
+    return self;
 }
-- (void)presentationTransitionWillBegin
+
+-(void)presentationTransitionDidEnd:(BOOL)completed
 {
-    self.willPresent=YES;
-    [super presentationTransitionWillBegin];
+    if (!_response)     return  ;
+    UIPanGestureRecognizer *panGestureRecognizer=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
+    panGestureRecognizer.minimumNumberOfTouches = 1;
+    panGestureRecognizer.maximumNumberOfTouches = 1;
+    [self.containerView addGestureRecognizer:panGestureRecognizer];
+    
+    UISwipeGestureRecognizer *swipeGestureRecognizer=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
+    swipeGestureRecognizer.numberOfTouchesRequired=1;
+    swipeGestureRecognizer.direction= 1 << _direction;
+    [self.containerView addGestureRecognizer:swipeGestureRecognizer];
 }
 
 - (void)containerViewWillLayoutSubviews
@@ -52,22 +80,13 @@ static const CGFloat scale=0.5;
     self.coverView.frame=[UIScreen mainScreen].bounds;
     [self.containerView insertSubview:self.coverView atIndex:0];
     self.presentedView.frame=_presentFrame;
-    
-    
-    if (self.willPresent&&(self.canPanTopOrBottom || self.canPanLeftOrRight)) {
-        UIPanGestureRecognizer *panGestureRecognizer=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
-        panGestureRecognizer.minimumNumberOfTouches = 1;
-        panGestureRecognizer.maximumNumberOfTouches = 1;
-        [self.containerView addGestureRecognizer:panGestureRecognizer];
-    }
-    
 }
 
 - (void)hg_close
 {
-    if (self.canResponse){
-        if ([self.hg_delegate respondsToSelector:@selector(coverViewWillDismiss:)]) {
-            BOOL  animate=[self.hg_delegate coverViewWillDismiss:self.coverView];
+    if (_response){
+        if ([self.hg_delegate respondsToSelector:@selector(presentedViewBeginDismiss:)]) {
+            BOOL  animate=[self.hg_delegate presentedViewBeginDismiss:_duration];
             [self.presentedViewController hg_dismissViewControllerAnimated:animate completion:nil];
         }else{
             [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
@@ -75,17 +94,21 @@ static const CGFloat scale=0.5;
     }
 }
 
+- (void)handleSwipe:(UISwipeGestureRecognizer*)recognizer
+{
+    [self.presentedViewController hg_dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)handlePan:(UIPanGestureRecognizer*)recognizer
 {
     
-    self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:(1-ABS(self.presentedView.x)/self.presentedView.width)*0.5]; // 根据拖动情况改变背景色
+    self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:(1-ABS(self.presentedView.x)/self.presentedView.width)*_alpha]; // 根据拖动情况改变背景色
     
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
     CGPoint velocity = [recognizer velocityInView:self.containerView.superview];
     CGFloat velocityX=velocity.x-self.currentVelocity.x;
-//    CGFloat velocityY=velocity.y-self.currentVelocity.y;
     
-    if (self.canPanLeftOrRight) {
+    if (self.direction) {
         CGFloat dx=translation.x-self.currentTranslation.x; //累加偏移值
         if (ABS(dx)>=self.presentedView.width)   dx=0;      //防止左边出界
         self.presentedView.x+=dx;
@@ -145,16 +168,6 @@ static const CGFloat scale=0.5;
     //    }
 
 }
-
-
-- (void)topOrBottomRecognizerWithVelocityY:(CGFloat )velocityY dy:(CGFloat )dy
-{
-    
-}
-
-
-
-
 
 @end
 

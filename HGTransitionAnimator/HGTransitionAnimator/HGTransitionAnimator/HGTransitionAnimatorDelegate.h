@@ -54,22 +54,17 @@
 #pragma mark - HGPresentationControllerDelegate
 @class HGPresentationController;
 @protocol HGPresentationControllerDelegate <NSObject>
+
 @optional
 /**
  *  点击了蒙版,蒙版即将消失
  *
  *  @param coverView 蒙版View
  *
- *  @return 是否需要动画
+ *  @return 是否需要动画presentationTransitionWillBegin
  */
-- (BOOL)coverViewWillDismiss:(UIView *)coverView;
+- (BOOL)presentedViewBeginDismiss:(NSTimeInterval)duration;
 
-
-/**
- *  暂时不可用,效果是弹出的视图可以拖动,并且根据拖动手势消失的动画
-// */
-//- (BOOL)presentationControllerCanPanLeftOrRight:(HGPresentationController *)controller;
-//- (BOOL)presentationControllerCanPanTopOrBottom:(HGPresentationController *)controller;
 @end
 
 

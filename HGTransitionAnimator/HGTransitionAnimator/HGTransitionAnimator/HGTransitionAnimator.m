@@ -10,9 +10,6 @@
 #import "HGPresentationController.h"
 #import <objc/runtime.h>
 
-#ifndef SETTER
-    #define SETTER(hg_property) _##hg_property=(hg_property)
-#endif
 
 static NSString * const HGPresentationControllerKey=@"HGPresentationControllerKey";
 const NSTimeInterval defaultDuratin=0.52;
@@ -46,16 +43,14 @@ const NSTimeInterval defaultDuratin=0.52;
 
 -(UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(UIViewController *)presenting sourceViewController:(UIViewController *)source
 {
-    HGPresentationController *presentController=[[HGPresentationController alloc]initWithPresentedViewController:presented presentingViewController:presenting];
-    presentController.presentFrame=self.presentFrame;
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimatorCanResponse:)]){
-        presentController.response=[self.delegate transitionAnimatorCanResponse:self];
-        presentController.animateStyle=_animated;
-        presentController.duration=_duration;
+    
+    BOOL response=YES;
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimatorCanResponse:)]) {
+        response=[self.delegate transitionAnimatorCanResponse:self];
     }
+    HGPresentationController *presentController=[[HGPresentationController alloc]initWithPresentedViewController:presented  presentingViewController:presenting backgroundColor:_backgroundColor animateStyle:_animated presentFrame:_presentFrame  duration:_duration response:response];
     objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController,OBJC_ASSOCIATION_ASSIGN);
     return presentController;
-
 }
 
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
@@ -166,7 +161,7 @@ const NSTimeInterval defaultDuratin=0.52;
     }else if (_animateStyle==HGTransitionAnimatorHiddenStyle){
         [self toView:toView context:transitionContext actions:nil animations:^{ toView.alpha=1.0f; }];
     }else{
-        CGPoint anchorPoint;
+        CGPoint anchorPoint=CGPointZero;
         CGAffineTransform CGAffineTransformScale;
         if (_animateStyle==HGTransitionAnimatorVerticalScaleStyle){
             anchorPoint=CGPointMake(0.5, 0);
@@ -264,7 +259,7 @@ const NSTimeInterval defaultDuratin=0.52;
 
 - (UIView *)getPresentationControllerCoverView
 {
-    return  [self getPresentationController].coverView;
+    return  [self getPresentationController].containerView.subviews.firstObject;
 }
 
 - (HGPresentationController *)getPresentationController

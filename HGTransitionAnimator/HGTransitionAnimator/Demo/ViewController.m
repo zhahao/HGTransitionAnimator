@@ -17,6 +17,9 @@
 @interface ViewController ()<HGTransitionAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, assign) CGRect leftPresentFrame;
 @property (nonatomic, assign) CGRect rightPresentFrame;
+@property (nonatomic, assign) CGRect topPresentFrame;
+@property (nonatomic, assign) CGRect bottomPresentFrame;
+
 @property (nonatomic, strong) OneViewController*toCtrl;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) NSMutableArray *styles;
@@ -51,10 +54,14 @@
     [super viewDidLoad];
     CGRect leftPresentFrame=CGRectMake(0, 0, kScreenWidth*0.7,  kScreenHeight);
     CGRect rightPresentFrame=CGRectMake(kScreenWidth*0.3, 0, kScreenWidth*0.7,  kScreenHeight);
+    CGRect topPresentFrame=CGRectMake(0, 0, kScreenWidth,  kScreenHeight*0.3);
+    CGRect bottomPresentFrame=CGRectMake(0, kScreenHeight*0.7, kScreenWidth,  kScreenHeight*0.3);
 
-    self.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-    self.leftPresentFrame=leftPresentFrame;
-    self.rightPresentFrame=rightPresentFrame;
+    _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    _leftPresentFrame=leftPresentFrame;
+    _rightPresentFrame=rightPresentFrame;
+    _topPresentFrame=topPresentFrame;
+    _bottomPresentFrame=bottomPresentFrame;
 }
 
 #pragma mark - UITableViewDelegate,UITableViewDataSource
@@ -87,9 +94,16 @@
     CGRect  frame;
     if (indexPath.row==1) {
         frame=_leftPresentFrame;
-    }else{
+    }else if (indexPath.row==2) {
         frame=_rightPresentFrame;
+    }else if (indexPath.row==3) {
+        frame=_topPresentFrame;
+    }else if (indexPath.row==4) {
+        frame=_bottomPresentFrame;
+    }else{
+        frame=CGRectMake(kScreenWidth*0.15, kScreenHeight*0.25, kScreenWidth*0.7, kScreenHeight*0.5);
     }
+    
     [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:frame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
 }
 

@@ -20,8 +20,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     HGPresentationController *pc=[self hg_getPresentationController];
-    pc.panLeftOrRight=YES;
-//    pc.panTopOrBottom=YES;
     pc.hg_delegate=self;
 }
 - (IBAction)backBtnClick:(id)sender {
@@ -34,9 +32,9 @@
     if (_callBackBlock)  _callBackBlock(ws.textField.text);
 }
 
--(BOOL)coverViewWillDismiss:(UIView *)coverView
+-(BOOL)coverViewWillDismiss:(UIView *)coverView duration:(NSTimeInterval)duration
 {
-    NSLog(@"Do Something!");
+    NSLog(@"Do Something with%f s",duration);
     return !_animateSegment.selectedSegmentIndex;
 }
 //-(void)dealloc

@@ -10,14 +10,6 @@
 #import "HGTransitionAnimator.h"
 #import <objc/runtime.h>
 
-#ifndef dispatch_main_async_safe
-    #define dispatch_main_async_safe(block)\
-        if ([NSThread isMainThread]) {\
-            block();\
-        } else {\
-            dispatch_async(dispatch_get_main_queue(), block);\
-        }
-#endif
 
 static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 
