@@ -63,6 +63,13 @@
  *
  *  @return 是否需要动画presentationTransitionWillBegin
  */
+/**
+ *  点击了蒙版,蒙版即将消失
+ *
+ *  @param duration 即将消失花费的时间
+ *
+ *  @return 是否动画
+ */
 - (BOOL)presentedViewBeginDismiss:(NSTimeInterval)duration;
 
 @end

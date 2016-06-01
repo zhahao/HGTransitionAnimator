@@ -9,23 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "HGTransitionAnimatorDelegate.h"
 #import "HGTransitionAnimator.h"
-/**
- *  拖拽方向
- */
-typedef NS_OPTIONS(NSUInteger, HGPresentationfDragDirection) {
-    HGPresentationfDragDirectionRight      =0,  //向右
-    HGPresentationfDragDirectionLeft       =1,  //向左
-    HGPresentationfDragDirectionUp         =2,  //向上
-    HGPresentationfDragDirectionDown       =3   //向下
-};
 
 NS_ASSUME_NONNULL_BEGIN
 @interface HGPresentationController : UIPresentationController
 /// 代理
-@property (nonatomic, assign,nonnull)id <HGPresentationControllerDelegate>  hg_delegate;
-/// 拖拽方向
-@property (nonatomic, assign)HGPresentationfDragDirection direction;
+@property (nonatomic, assign, nonnull)id <HGPresentationControllerDelegate>  hg_delegate;
 
+@property (nonatomic, strong, nonnull) UIView  *coverView;
+/// 激活拖拽消失手势,默认NO---只支持animateStyle= Left Top Bottom
+@property (nonatomic, assign) BOOL activeDrag;
 /**
  *  初始化方法
  *
@@ -47,5 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
                                         duration:(NSTimeInterval )duration
                                         response:(BOOL)response;
 
+
 @end
 NS_ASSUME_NONNULL_END
+

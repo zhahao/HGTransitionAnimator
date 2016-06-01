@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		664543D81CFF385B00C4D033 /* UIView+HGExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 664543D71CFF385B00C4D033 /* UIView+HGExtension.m */; };
 		6666A75C1CFAB144007C3F79 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6666A75B1CFAB144007C3F79 /* main.m */; };
 		6666A7651CFAB144007C3F79 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6666A7631CFAB144007C3F79 /* Main.storyboard */; };
 		6666A7671CFAB144007C3F79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6666A7661CFAB144007C3F79 /* Assets.xcassets */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		664543D61CFF385B00C4D033 /* UIView+HGExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+HGExtension.h"; sourceTree = "<group>"; };
+		664543D71CFF385B00C4D033 /* UIView+HGExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+HGExtension.m"; sourceTree = "<group>"; };
 		6666A7571CFAB144007C3F79 /* HGTransitionAnimator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGTransitionAnimator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6666A75B1CFAB144007C3F79 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6666A7641CFAB144007C3F79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -95,13 +98,15 @@
 		6666A7881CFAB301007C3F79 /* HGTransitionAnimator */ = {
 			isa = PBXGroup;
 			children = (
+				6666A78E1CFAB301007C3F79 /* UIViewController+HGAnimator.h */,
+				6666A78F1CFAB301007C3F79 /* UIViewController+HGAnimator.m */,
+				664543D61CFF385B00C4D033 /* UIView+HGExtension.h */,
+				664543D71CFF385B00C4D033 /* UIView+HGExtension.m */,
 				6666A7891CFAB301007C3F79 /* HGTransitionAnimatorDelegate.h */,
 				6666A78A1CFAB301007C3F79 /* HGPresentationController.h */,
 				6666A78B1CFAB301007C3F79 /* HGPresentationController.m */,
 				6666A78C1CFAB301007C3F79 /* HGTransitionAnimator.h */,
 				6666A78D1CFAB301007C3F79 /* HGTransitionAnimator.m */,
-				6666A78E1CFAB301007C3F79 /* UIViewController+HGAnimator.h */,
-				6666A78F1CFAB301007C3F79 /* UIViewController+HGAnimator.m */,
 			);
 			path = HGTransitionAnimator;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 				6666A7A31CFAB3C0007C3F79 /* OneViewController.m in Sources */,
 				6666A79A1CFAB301007C3F79 /* HGTransitionAnimator.m in Sources */,
 				6666A79C1CFAB301007C3F79 /* AppDelegate.m in Sources */,
+				664543D81CFF385B00C4D033 /* UIView+HGExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

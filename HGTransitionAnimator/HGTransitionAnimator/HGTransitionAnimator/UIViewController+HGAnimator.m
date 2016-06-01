@@ -17,7 +17,6 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 
 -(HGTransitionAnimator *)hg_presentViewController:(UIViewController *)viewControllerToPresent animateStyle:(HGTransitionAnimatorStyle)style delegate:(id<HGTransitionAnimatorDelegate>)delegate presentFrame:(CGRect)presentFrame backgroundColor:(UIColor *)backgroundColor animated:(BOOL)flag
 {
-    
     UIView* relateView=self.view;
     HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style relateView:relateView  presentFrame:presentFrame backgroundColor:backgroundColor delegate:delegate animated:flag];
     

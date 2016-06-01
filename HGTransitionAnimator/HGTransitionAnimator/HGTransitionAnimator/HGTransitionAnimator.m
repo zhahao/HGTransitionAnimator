@@ -8,11 +8,12 @@
 
 #import "HGTransitionAnimator.h"
 #import "HGPresentationController.h"
+#import "UIView+HGExtension.h"
 #import <objc/runtime.h>
 
 
 static NSString * const HGPresentationControllerKey=@"HGPresentationControllerKey";
-const NSTimeInterval defaultDuratin=0.52;
+const  NSTimeInterval defaultDuratin=0.52;
 
 @interface  HGTransitionAnimator()
 @property (nonatomic, weak)   UIView *relateView;//<-参照的View
@@ -48,7 +49,7 @@ const NSTimeInterval defaultDuratin=0.52;
     if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimatorCanResponse:)]) {
         response=[self.delegate transitionAnimatorCanResponse:self];
     }
-    HGPresentationController *presentController=[[HGPresentationController alloc]initWithPresentedViewController:presented  presentingViewController:presenting backgroundColor:_backgroundColor animateStyle:_animated presentFrame:_presentFrame  duration:_duration response:response];
+    HGPresentationController *presentController=[[HGPresentationController alloc]initWithPresentedViewController:presented  presentingViewController:presenting backgroundColor:_backgroundColor animateStyle:_animateStyle presentFrame:_presentFrame  duration:_duration response:response];
     objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController,OBJC_ASSOCIATION_ASSIGN);
     return presentController;
 }
@@ -160,7 +161,8 @@ const NSTimeInterval defaultDuratin=0.52;
         } animations:^{ toView.y=[self relateViewYToWindow]+self.relateView.height-toView.height; }];
     }else if (_animateStyle==HGTransitionAnimatorHiddenStyle){
         [self toView:toView context:transitionContext actions:nil animations:^{ toView.alpha=1.0f; }];
-    }else{
+    }else
+    {
         CGPoint anchorPoint=CGPointZero;
         CGAffineTransform CGAffineTransformScale;
         if (_animateStyle==HGTransitionAnimatorVerticalScaleStyle){
@@ -259,7 +261,7 @@ const NSTimeInterval defaultDuratin=0.52;
 
 - (UIView *)getPresentationControllerCoverView
 {
-    return  [self getPresentationController].containerView.subviews.firstObject;
+    return  [self getPresentationController].coverView;
 }
 
 - (HGPresentationController *)getPresentationController
@@ -289,60 +291,5 @@ const NSTimeInterval defaultDuratin=0.52;
         return 1.0f;
     }
 }
-
-//-(void)dealloc
-//{
-//    NSLog(@"%s",__func__);
-//}
 @end
 
-@implementation UIView (HGExtension)
-
-- (void)setX:(CGFloat)x
-{
-    CGRect frame = self.frame;
-    frame.origin.x = x;
-    self.frame = frame;
-}
-
-- (void)setY:(CGFloat)y
-{
-    CGRect frame = self.frame;
-    frame.origin.y = y;
-    self.frame = frame;
-}
-
-- (CGFloat)x
-{
-    return self.frame.origin.x;
-}
-
-- (CGFloat)y
-{
-    return self.frame.origin.y;
-}
-
-- (void)setWidth:(CGFloat)width
-{
-    CGRect frame = self.frame;
-    frame.size.width = width;
-    self.frame = frame;
-}
-
-- (void)setHeight:(CGFloat)height
-{
-    CGRect frame = self.frame;
-    frame.size.height = height;
-    self.frame = frame;
-}
-
-- (CGFloat)height
-{
-    return self.frame.size.height;
-}
-
-- (CGFloat)width
-{
-    return self.frame.size.width;
-}
-@end

@@ -20,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     HGPresentationController *pc=[self hg_getPresentationController];
+    // 激活拖拽消失手势
+    pc.activeDrag=YES;
     pc.hg_delegate=self;
 }
 - (IBAction)backBtnClick:(id)sender {
@@ -32,13 +34,9 @@
     if (_callBackBlock)  _callBackBlock(ws.textField.text);
 }
 
--(BOOL)coverViewWillDismiss:(UIView *)coverView duration:(NSTimeInterval)duration
+-(BOOL)presentedViewBeginDismiss:(NSTimeInterval)duration
 {
     NSLog(@"Do Something with%f s",duration);
     return !_animateSegment.selectedSegmentIndex;
 }
-//-(void)dealloc
-//{
-//    NSLog(@"%s",__func__);
-//}
 @end

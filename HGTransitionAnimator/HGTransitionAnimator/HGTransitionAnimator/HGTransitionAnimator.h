@@ -49,12 +49,6 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 /// 默认动画时间
 FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
 
-@interface UIView (HGExtension)
-@property (nonatomic, assign) CGFloat x;
-@property (nonatomic, assign) CGFloat y;
-@property (nonatomic, assign) CGFloat width;
-@property (nonatomic, assign) CGFloat height;
-@end
 
 NS_ASSUME_NONNULL_BEGIN
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
