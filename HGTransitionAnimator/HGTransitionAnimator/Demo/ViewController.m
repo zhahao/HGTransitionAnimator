@@ -57,7 +57,7 @@
     CGRect topPresentFrame=CGRectMake(0, 0, kScreenWidth,  kScreenHeight*0.3);
     CGRect bottomPresentFrame=CGRectMake(0, kScreenHeight*0.7, kScreenWidth,  kScreenHeight*0.3);
 
-    _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
+    _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
     _leftPresentFrame=leftPresentFrame;
     _rightPresentFrame=rightPresentFrame;
     _topPresentFrame=topPresentFrame;
@@ -123,12 +123,10 @@
 
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed
 {
-//    NSLog(@"presentedController=`%@`---dismissed",dismissed);
 }
 
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented
 {
-//    NSLog(@"presentedController=`%@`---presented",presented);
 }
 
 - (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator

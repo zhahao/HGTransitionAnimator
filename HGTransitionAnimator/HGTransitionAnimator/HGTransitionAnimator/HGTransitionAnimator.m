@@ -31,11 +31,11 @@ const  NSTimeInterval defaultDuratin=0.52;
 -(instancetype)initWithAnimateStyle:(HGTransitionAnimatorStyle)animateStyle relateView:(UIView *)relateView presentFrame:(CGRect)presentFrame backgroundColor:(UIColor *)backgroundColor delegate:(id<HGTransitionAnimatorDelegate>)delegate animated:(BOOL)animated
 {
     if (self=[super init]) {
-        SETTER(animateStyle);
-        SETTER(relateView);
-        SETTER(presentFrame);
-        SETTER(delegate);
-        SETTER(animated);
+        _animateStyle=animateStyle;
+        _relateView=relateView;
+        _presentFrame=presentFrame;
+        _delegate=delegate;
+        _animated=animated;
         _duration=_animated ? defaultDuratin:0;
         _backgroundColor=backgroundColor==nil ? [UIColor clearColor]:backgroundColor;
     }
@@ -109,7 +109,6 @@ const  NSTimeInterval defaultDuratin=0.52;
     }
 }
 
-// pop
 - (void)setupPopAnimator:(UIView *)fromView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
     HGWeakSelf;
@@ -139,7 +138,6 @@ const  NSTimeInterval defaultDuratin=0.52;
     }
 }
 
-// push
 - (void)setupPushAnimator:(UIView *)toView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
     HGWeakSelf;

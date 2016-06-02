@@ -11,17 +11,16 @@
 #import "HGTransitionAnimatorDelegate.h"
 #import "UIView+HGExtension.h"
 
-static const CGFloat defaultVelocityX=420; // 水平滑动速度阈值
+static const CGFloat defaultVelocityX=500; // 水平滑动速度阈值
 static const CGFloat defaultVelocityY=250; // 垂直滑动速度阈值
-
-static const CGFloat scale=0.5;
+static const CGFloat scale=0.5;            // 滑动阈值节点
 
 @interface  HGPresentationController()
 
 @property (nonatomic, assign) CGPoint currentTranslation; // <- 当前滑动位置
 @property (nonatomic, assign) CGPoint currentVelocity; // <- 滑动速率
 @property (nonatomic, assign) CGFloat alpha; // <- 背景透明度
-@property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, assign) NSTimeInterval duration;// <- 动画时间
 @property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;// <- 动画类型
 @property (nonatomic, assign) CGRect  presentFrame;// <- 记录当前的frame
 @property (nonatomic, assign) BOOL    response;// <- 背景是否响应手势
@@ -38,7 +37,7 @@ static const CGFloat scale=0.5;
     if (!_coverView) {
         self.coverView = [[UIView alloc]init];
         self.coverView.backgroundColor=[UIColor clearColor];
-        if (self.response) {
+        if (_response) {
             UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close)];
             [self.coverView addGestureRecognizer:tap];
         }
@@ -54,12 +53,12 @@ static const CGFloat scale=0.5;
                                       response:(BOOL)response
 {
     if (self=[super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
-        SETTER(animateStyle);
-        SETTER(presentFrame);
-        SETTER(backgroundColor);
-        SETTER(duration);
-        SETTER(response);
-        _alpha=CGColorGetAlpha(self.backgroundColor.CGColor);
+        _animateStyle=animateStyle;
+        _presentFrame=presentFrame;
+        _backgroundColor=backgroundColor;
+        _duration=duration;
+        _response=response;
+        _alpha=CGColorGetAlpha(_backgroundColor.CGColor);
     }
     return self;
 }
@@ -83,6 +82,7 @@ static const CGFloat scale=0.5;
 
 - (void)containerViewWillLayoutSubviews
 {
+    if (_duration==0) self.coverView.backgroundColor=_backgroundColor;
     self.coverView.frame=[UIScreen mainScreen].bounds;
     [self.containerView insertSubview:self.coverView atIndex:0];
     self.presentedView.frame=_presentFrame;
@@ -107,7 +107,6 @@ static const CGFloat scale=0.5;
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
     CGPoint velocity = [recognizer velocityInView:self.containerView.superview];
     CGFloat velocityX=velocity.x-self.currentVelocity.x;
-    
     CGFloat velocityY=velocity.y-self.currentVelocity.y;
 
     if (_animateStyle ==HGTransitionAnimatorFromLeftStyle ) {
@@ -116,7 +115,18 @@ static const CGFloat scale=0.5;
         self.presentedView.x+=dx;
         if (self.presentedView.x>=0)    self.presentedView.x=0; //防止右边出边界
         
-        if (recognizer.state==UIGestureRecognizerStateEnded || recognizer.state==UIGestureRecognizerStateRecognized) {
+        if (velocityX<-defaultVelocityX &&translation.x<0){ // 快速滑动时
+            [recognizer removeTarget:self action:@selector(handlePan:)];
+            [UIView animateWithDuration:0.32 animations:^{
+                self.presentedView.x=-self.presentedView.width;
+                self.coverView.backgroundColor=[UIColor clearColor];
+            } completion:^(BOOL finished) {
+                [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
+            }];
+            return  ;
+        }
+
+        if (recognizer.state==UIGestureRecognizerStateEnded) {
             // 停止滚动,判断是否要保持当前状态还消失
             if (ABS(self.presentedView.x)>=self.presentedView.width*(1-scale)) { // 左弹效果
                 [UIView animateWithDuration:0.15 animations:^{
@@ -134,21 +144,12 @@ static const CGFloat scale=0.5;
                 } completion:^(BOOL finished) {
                 }];
             }
-            
             self.currentVelocity=CGPointZero;
-            self.currentTranslation=CGPointZero;    //只要停止就要清空已经记录的偏移
+            self.currentTranslation=CGPointZero;
             return  ;
+
         }
-        if (velocityX<-defaultVelocityX &&translation.x<0){ // 快速滑动时
-            [UIView animateWithDuration:0.32 animations:^{
-                self.presentedView.x=-self.presentedView.width;
-                self.coverView.backgroundColor=[UIColor clearColor];
-                [recognizer removeTarget:self action:@selector(handlePan:)];
-            } completion:^(BOOL finished) {
-                [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
-                return;
-            }];
-        }
+
     }
     
     if (_animateStyle ==HGTransitionAnimatorFromTopStyle) {  // 从顶部出来的样式

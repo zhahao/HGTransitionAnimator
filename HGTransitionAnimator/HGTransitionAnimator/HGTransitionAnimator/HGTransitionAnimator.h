@@ -12,10 +12,6 @@
     #define HGWeakSelf __weak __typeof(self)weakSelf = self;
 #endif
 
-#ifndef SETTER
-    #define SETTER(hg_property) _##hg_property=(hg_property)
-#endif
-
 #ifndef dispatch_main_async_safe
     #define dispatch_main_async_safe(block)\
         if ([NSThread isMainThread]) {\
