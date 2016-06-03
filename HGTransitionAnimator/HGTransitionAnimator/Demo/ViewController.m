@@ -123,16 +123,18 @@
 
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed
 {
+    // 负责弹出的控制器
 }
 
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented
 {
+    // presented 被弹出的控制器
 }
 
-- (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator
-{
-    return self.slider.value;
-}
+//- (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator
+//{
+//    return self.slider.value;
+//}
 
 - (BOOL)transitionAnimatorCanResponse:(HGTransitionAnimator *)animator
 {

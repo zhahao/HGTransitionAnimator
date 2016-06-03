@@ -36,7 +36,7 @@ const  NSTimeInterval defaultDuratin=0.52;
         _presentFrame=presentFrame;
         _delegate=delegate;
         _animated=animated;
-        _duration=_animated ? defaultDuratin:0;
+        _duration=_animated ? defaultDuratin: 0;
         _backgroundColor=backgroundColor==nil ? [UIColor clearColor]:backgroundColor;
     }
     return self;
@@ -75,7 +75,7 @@ const  NSTimeInterval defaultDuratin=0.52;
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     if(self.delegate&&[self.delegate respondsToSelector:@selector(transitionDuration:)]){
-        _duration=[self.delegate transitionDuration:self];
+            _duration=[self.delegate transitionDuration:self];
        };
     return _duration;
 }
@@ -288,6 +288,10 @@ const  NSTimeInterval defaultDuratin=0.52;
     }else{
         return 1.0f;
     }
+}
+-(void)dealloc
+{
+    NSLog(@"%s",__func__);
 }
 @end
 

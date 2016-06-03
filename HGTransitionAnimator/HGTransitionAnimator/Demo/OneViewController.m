@@ -58,11 +58,14 @@ static NSString * ID=@"cell";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     NSString *text=[[[tableView cellForRowAtIndexPath:indexPath] textLabel] text];
     self.callBackBlock(text);
     [self hg_dismissViewControllerAnimated:YES completion:nil];
 }
-
+-(void)dealloc
+{
+    NSLog(@"%s",__func__);
+}
 
 @end

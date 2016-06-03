@@ -26,7 +26,7 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
     viewControllerToPresent.modalPresentationStyle=UIModalPresentationCustom;
     viewControllerToPresent.transitioningDelegate=animator;
     void (^presentBlock)(void) = ^ (void) {
-        [self presentViewController:viewControllerToPresent animated:flag completion:nil];
+        [self presentViewController:viewControllerToPresent animated:YES completion:nil];
     };
     dispatch_main_async_safe(presentBlock);
     
@@ -54,7 +54,8 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 {
     if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav=(UINavigationController *)self.presentingViewController;
-        return  [nav.viewControllers lastObject];
+        UIViewController *vc=[nav.viewControllers lastObject];
+        return  vc;
     }
     return  self.presentingViewController;
 }

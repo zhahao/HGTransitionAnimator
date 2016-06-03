@@ -13,7 +13,7 @@
 
 static const CGFloat defaultVelocityX=500; // 水平滑动速度阈值
 static const CGFloat defaultVelocityY=250; // 垂直滑动速度阈值
-static const CGFloat scale=0.5;            // 滑动阈值节点
+static const CGFloat scale=0.5;            // 滑动阈值节点比例
 
 @interface  HGPresentationController()
 
@@ -101,7 +101,6 @@ static const CGFloat scale=0.5;            // 滑动阈值节点
 
 - (void)handlePan:(UIPanGestureRecognizer*)recognizer
 {
-    
     self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:(1-ABS(self.presentedView.x)/self.presentedView.width)*_alpha]; // 根据拖动情况改变背景色
     
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
@@ -117,39 +116,33 @@ static const CGFloat scale=0.5;            // 滑动阈值节点
         
         if (velocityX<-defaultVelocityX &&translation.x<0){ // 快速滑动时
             [recognizer removeTarget:self action:@selector(handlePan:)];
-            [UIView animateWithDuration:0.32 animations:^{
+            [self animateWithDuration:0.32 animations:^{
                 self.presentedView.x=-self.presentedView.width;
                 self.coverView.backgroundColor=[UIColor clearColor];
-            } completion:^(BOOL finished) {
-                [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
-            }];
+            } completionDismiss:YES];
             return  ;
         }
 
         if (recognizer.state==UIGestureRecognizerStateEnded) {
             // 停止滚动,判断是否要保持当前状态还消失
             if (ABS(self.presentedView.x)>=self.presentedView.width*(1-scale)) { // 左弹效果
-                [UIView animateWithDuration:0.15 animations:^{
+                [self animateWithDuration:0.15 animations:^{
                     self.presentedView.x=-self.presentedView.width;
                     self.coverView.backgroundColor=[UIColor clearColor];
-                } completion:^(BOOL finished) {
-                    [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
-                }];
+                } completionDismiss:YES];
             }
             
             if (CGRectGetMaxX(self.presentedView.frame) >=self.presentedView.width*(1-scale)) {// 右弹效果
-                [UIView animateWithDuration:0.15 animations:^{
+                [self animateWithDuration:0.15 animations:^{
                     self.presentedView.x=0;
-                    self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:_alpha];
-                } completion:^(BOOL finished) {
-                }];
+                    self.coverView.backgroundColor=_backgroundColor;
+                } completionDismiss:NO];
             }
+            // 每次停止,需要清空记录
             self.currentVelocity=CGPointZero;
             self.currentTranslation=CGPointZero;
             return  ;
-
         }
-
     }
     
     if (_animateStyle ==HGTransitionAnimatorFromTopStyle) {  // 从顶部出来的样式
@@ -172,6 +165,17 @@ static const CGFloat scale=0.5;            // 滑动阈值节点
     self.currentVelocity=velocity;
 }
 
+- (void)animateWithDuration:(NSTimeInterval )duration animations:(void (^)())animations completionDismiss:(BOOL)flag
+{
+    [UIView animateWithDuration:duration animations:animations completion:^(BOOL finished) {
+        if (flag) [self.presentedViewController hg_dismissViewControllerAnimated:NO completion:nil];
+    }];
+}
+
+-(void)dealloc
+{
+    NSLog(@"%s",__func__);
+}
 @end
 
 

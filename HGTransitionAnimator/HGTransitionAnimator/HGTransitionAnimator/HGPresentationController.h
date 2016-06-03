@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HGPresentationController : UIPresentationController
 /// 代理
 @property (nonatomic, assign, nonnull)id <HGPresentationControllerDelegate>  hg_delegate;
-
+/// 蒙版背景
 @property (nonatomic, strong, nonnull) UIView  *coverView;
 /// 激活拖拽消失手势,默认NO---只支持animateStyle= Left Top Bottom
 @property (nonatomic, assign) BOOL activeDrag;
