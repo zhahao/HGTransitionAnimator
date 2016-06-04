@@ -172,10 +172,6 @@ static const CGFloat scale=0.5;            // 滑动阈值节点比例
     }];
 }
 
--(void)dealloc
-{
-    NSLog(@"%s",__func__);
-}
 @end
 
 

@@ -11,11 +11,16 @@
 #import <objc/runtime.h>
 
 
-static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
+static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 
 @implementation UIViewController (HGAnimator)
 
--(HGTransitionAnimator *)hg_presentViewController:(UIViewController *)viewControllerToPresent animateStyle:(HGTransitionAnimatorStyle)style delegate:(id<HGTransitionAnimatorDelegate>)delegate presentFrame:(CGRect)presentFrame backgroundColor:(UIColor *)backgroundColor animated:(BOOL)flag
+-(HGTransitionAnimator *)hg_presentViewController:(UIViewController *)viewControllerToPresent
+                                     animateStyle:(HGTransitionAnimatorStyle)style
+                                         delegate:(id<HGTransitionAnimatorDelegate>)delegate
+                                     presentFrame:(CGRect)presentFrame
+                                  backgroundColor:(UIColor *)backgroundColor
+                                         animated:(BOOL)flag
 {
     UIView* relateView=self.view;
     HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style relateView:relateView  presentFrame:presentFrame backgroundColor:backgroundColor delegate:delegate animated:flag];
@@ -54,8 +59,7 @@ static NSString *const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 {
     if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav=(UINavigationController *)self.presentingViewController;
-        UIViewController *vc=[nav.viewControllers lastObject];
-        return  vc;
+        return  [nav.viewControllers lastObject];;
     }
     return  self.presentingViewController;
 }

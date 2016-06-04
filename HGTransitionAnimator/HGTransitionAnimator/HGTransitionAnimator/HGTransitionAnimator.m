@@ -75,7 +75,7 @@ const  NSTimeInterval defaultDuratin=0.52;
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     if(self.delegate&&[self.delegate respondsToSelector:@selector(transitionDuration:)]){
-            _duration=[self.delegate transitionDuration:self];
+        _duration= !_animated ? 0 : [self.delegate transitionDuration:self];
        };
     return _duration;
 }
@@ -289,9 +289,6 @@ const  NSTimeInterval defaultDuratin=0.52;
         return 1.0f;
     }
 }
--(void)dealloc
-{
-    NSLog(@"%s",__func__);
-}
+
 @end
 

@@ -4,7 +4,7 @@
 //
 //  Created by 查昊 on 16/5/25.
 //  Copyright © 2016年 haocha. All rights reserved.
-//
+//  github地址:https://github.com/zhahao/HGTransitionAnimator
 
 #import "HGTransitionAnimator.h"
 
@@ -20,12 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param flag                    是否需要动画效果
  *  @return                        转场动画代理对象
  */
-- (HGTransitionAnimator *_Nonnull)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
-                                      animateStyle:(HGTransitionAnimatorStyle )style
-                                          delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
-                                      presentFrame:(CGRect)presentFrame
-                                   backgroundColor:(nonnull UIColor *)backgroundColor
-                                          animated:(BOOL)flag;
+- (HGTransitionAnimator * _Nonnull)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
+                                               animateStyle:(HGTransitionAnimatorStyle )style
+                                                   delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
+                                               presentFrame:(CGRect)presentFrame
+                                            backgroundColor:(nonnull UIColor *)backgroundColor
+                                                   animated:(BOOL)flag;
 /**
  *  dismiss控制器,并销毁控制器,一定会在主线程里面执行
  *

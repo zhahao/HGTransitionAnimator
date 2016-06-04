@@ -131,6 +131,7 @@
     // presented 被弹出的控制器
 }
 
+// 如果在构造函数里面animated=NO, 就不要实现返回时间的代理
 //- (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator
 //{
 //    return self.slider.value;

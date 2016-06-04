@@ -63,9 +63,5 @@ static NSString * ID=@"cell";
     self.callBackBlock(text);
     [self hg_dismissViewControllerAnimated:YES completion:nil];
 }
--(void)dealloc
-{
-    NSLog(@"%s",__func__);
-}
 
 @end

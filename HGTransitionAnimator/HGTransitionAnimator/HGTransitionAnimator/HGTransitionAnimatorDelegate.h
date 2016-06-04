@@ -4,21 +4,23 @@
 //
 //  Created by 查昊 on 16/5/25.
 //  Copyright © 2016年 haocha. All rights reserved.
-//
+//  github地址:https://github.com/zhahao/HGTransitionAnimator
 
 #import <UIKit/UIKit.h>
-#pragma mark - HGTransitionAnimatorDelegate
+#pragma mark - HGTransitionAnimatorDelegate,在`PresentingViewController`中使用
 @class HGTransitionAnimator;
 @protocol HGTransitionAnimatorDelegate <NSObject>
 @optional
 
 /**
  *  弹出控制器视图之后后调用该代理方法
+ *  @param presented   被弹出的控制器
  */
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented;
 
 /**
  *  回收控制器视图之后调用该代理方法
+ *  @param dismissed   被弹出的控制器
  */
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed;
 
@@ -40,7 +42,7 @@
 
 /**
  *  设置动画时间
- *
+ *  注意:如果在构造函数里面设置了animated=NO, 避免实现该代理
  *  @return 动画时间
  */
 - (NSTimeInterval)transitionDuration:(HGTransitionAnimator *)animator;
@@ -51,17 +53,17 @@
 - (BOOL)transitionAnimatorCanResponse:(HGTransitionAnimator *)animator;
 @end
 
-#pragma mark - HGPresentationControllerDelegate
+#pragma mark - HGPresentationControllerDelegate,在`PresentedViewController`中使用
 @class HGPresentationController;
 @protocol HGPresentationControllerDelegate <NSObject>
 
 @optional
 /**
- *  点击了蒙版,蒙版即将消失
- *
+ *  `蒙版`和`PresentedView`即将消失.
+ *  在`PresentedViewController`设置是否需要消失动画,可以在该代理中做一些其他的操作.
  *  @param duration 即将消失花费的时间
  *
- *  @return 是否动画。   如果返回了NO,返回动画时间的代理失效
+ *  @return 是否动画,默认YES。
  */
 - (BOOL)presentedViewBeginDismiss:(NSTimeInterval)duration;
 
