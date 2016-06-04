@@ -49,14 +49,13 @@ FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
 NS_ASSUME_NONNULL_BEGIN
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
 
-
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new  NS_UNAVAILABLE;
 /**
  *  构造方法
  *
  *  @param animateStyle    动画类型
- *  @param relateView      参照的view,目前没用,设置nil即可
+ *  @param relateView      参照的view
  *  @param presentFrame    弹出视图的frame
  *  @param backgroundColor 背景色
  *  @param delegate        代理
@@ -71,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-- ( HGPresentationController * _Nonnull )getPresentationController;
+- (HGPresentationController * _Nonnull )getPresentationController;
 @end
 NS_ASSUME_NONNULL_END
 

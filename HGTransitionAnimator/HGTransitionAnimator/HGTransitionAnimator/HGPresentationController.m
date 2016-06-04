@@ -19,13 +19,16 @@ static const CGFloat scale=0.5;            // 滑动阈值节点比例
 
 @property (nonatomic, assign) CGPoint currentTranslation; // <- 当前滑动位置
 @property (nonatomic, assign) CGPoint currentVelocity; // <- 滑动速率
-@property (nonatomic, assign) CGFloat alpha; // <- 背景透明度
 @property (nonatomic, assign) NSTimeInterval duration;// <- 动画时间
 @property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;// <- 动画类型
 @property (nonatomic, assign) CGRect  presentFrame;// <- 记录当前的frame
 @property (nonatomic, assign) BOOL    response;// <- 背景是否响应手势
 @property (nonatomic, strong) UIColor *backgroundColor;// <- 背景色
 
+@property (nonatomic, assign) CGFloat red;   // <- 背景red
+@property (nonatomic, assign) CGFloat green; // <- 背景green
+@property (nonatomic, assign) CGFloat blue;  // <- 背景blue
+@property (nonatomic, assign) CGFloat alpha; // <- 背景透明度
 
 @end
 
@@ -58,7 +61,11 @@ static const CGFloat scale=0.5;            // 滑动阈值节点比例
         _backgroundColor=backgroundColor;
         _duration=duration;
         _response=response;
-        _alpha=CGColorGetAlpha(_backgroundColor.CGColor);
+        _red=_backgroundColor.red;
+        _green=_backgroundColor.green;
+        _blue=_backgroundColor.blue;
+        _alpha=_backgroundColor.alpha;
+        
     }
     return self;
 }
@@ -101,7 +108,7 @@ static const CGFloat scale=0.5;            // 滑动阈值节点比例
 
 - (void)handlePan:(UIPanGestureRecognizer*)recognizer
 {
-    self.coverView.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:(1-ABS(self.presentedView.x)/self.presentedView.width)*_alpha]; // 根据拖动情况改变背景色
+    self.coverView.backgroundColor=[UIColor colorWithRed:_red green:_green blue:_blue alpha:(1-ABS(self.presentedView.x)/self.presentedView.width)*_alpha]; // 根据拖动情况改变背景色
     
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
     CGPoint velocity = [recognizer velocityInView:self.containerView.superview];

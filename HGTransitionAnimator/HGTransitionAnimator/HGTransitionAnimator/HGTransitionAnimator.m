@@ -266,29 +266,6 @@ const  NSTimeInterval defaultDuratin=0.52;
 {
     return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
 }
-- (CGFloat)scaleDuration:(UIView *)view
-{
-    CGFloat x=self.presentFrame.origin.x;
-    CGFloat y=self.presentFrame.origin.y;
-    CGFloat width=self.presentFrame.size.width;
-    CGFloat height=self.presentFrame.size.height;
-    
-    if (self.animateStyle==HGTransitionAnimatorFromLeftStyle){
-        return (width+x-[self relateViewXToWindow])/view.width;
-    }else if (self.animateStyle==HGTransitionAnimatorFromRightStyle){
-        return ([self relateViewMaxXToWindow]-view.x)/view.width;
-    }else if(self.animateStyle==HGTransitionAnimatorFromBottomStyle){
-        return ([self relateViewMaxYToWindow]-y)/view.height;
-    }else if (self.animateStyle==HGTransitionAnimatorFromTopStyle){
-        return (height+y-[self relateViewMaxYToWindow])/view.height;
-    }else if (self.animateStyle==HGTransitionAnimatorHorizontalScaleStyle){
-        return width/view.width;
-    }else if (self.animateStyle==HGTransitionAnimatorVerticalScaleStyle){
-        return height/view.height;
-    }else{
-        return 1.0f;
-    }
-}
 
 @end
 

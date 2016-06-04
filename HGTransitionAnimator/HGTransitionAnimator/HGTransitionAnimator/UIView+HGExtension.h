@@ -14,3 +14,10 @@
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) CGFloat height;
 @end
+
+@interface UIColor (HGExtension)
+@property (nonatomic, readonly) CGFloat red;
+@property (nonatomic, readonly) CGFloat green;
+@property (nonatomic, readonly) CGFloat blue;
+@property (nonatomic, readonly) CGFloat alpha;
+@end

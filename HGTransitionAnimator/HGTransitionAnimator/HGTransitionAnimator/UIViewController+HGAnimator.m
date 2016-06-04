@@ -22,8 +22,7 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
                                   backgroundColor:(UIColor *)backgroundColor
                                          animated:(BOOL)flag
 {
-    UIView* relateView=self.view;
-    HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style relateView:relateView  presentFrame:presentFrame backgroundColor:backgroundColor delegate:delegate animated:flag];
+    HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style relateView:self.view  presentFrame:presentFrame backgroundColor:backgroundColor delegate:delegate animated:flag];
     
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -52,7 +51,7 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 - (HGPresentationController *)hg_getPresentationController
 {
     HGTransitionAnimator *animator=(HGTransitionAnimator *)self.transitioningDelegate;
-    NSAssert1([animator isKindOfClass:[HGTransitionAnimator class]], @"负责转场的对象不是HGTransitionAnimator或它的子类%@,获取失败!",animator);
+    NSAssert1([animator isKindOfClass:[HGTransitionAnimator class]], @"负责转场的对象`%@`不是HGTransitionAnimator或它的子类,获取失败!",animator);
     return [animator getPresentationController];
 }
 - (UIViewController *)currentPresentingViewController
