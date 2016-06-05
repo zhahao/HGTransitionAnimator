@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 };
 
 /// 默认动画时间
-FOUNDATION_EXTERN    NSTimeInterval const defaultDuratin;
+FOUNDATION_EXTERN   NSTimeInterval  const   defaultDuratin;
 
 
 NS_ASSUME_NONNULL_BEGIN

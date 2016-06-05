@@ -52,18 +52,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupViews];
+}
+
+- (void)setupViews
+{
     CGRect leftPresentFrame=CGRectMake(0, 0, kScreenWidth*0.7,  kScreenHeight);
     CGRect rightPresentFrame=CGRectMake(kScreenWidth*0.3, 0, kScreenWidth*0.7,  kScreenHeight);
     CGRect topPresentFrame=CGRectMake(0, 0, kScreenWidth,  kScreenHeight*0.3);
-    CGRect bottomPresentFrame=CGRectMake(0, kScreenHeight*0.7, kScreenWidth,  kScreenHeight*0.3);
-
+    CGRect bottomPresentFrame=CGRectMake(kScreenWidth*0.1, kScreenHeight*0.35, kScreenWidth*0.8,  kScreenHeight*0.3);
+    
     _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
     _leftPresentFrame=leftPresentFrame;
     _rightPresentFrame=rightPresentFrame;
     _topPresentFrame=topPresentFrame;
     _bottomPresentFrame=bottomPresentFrame;
+    
 }
-
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

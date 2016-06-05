@@ -229,7 +229,12 @@ const  NSTimeInterval defaultDuratin=0.52;
 
 - (CGRect)relateViewToWindow
 {
-    return  [self.relateView convertRect:self.relateView.bounds toView:[[UIApplication sharedApplication] keyWindow]];
+    return  [self.relateView convertRect:self.relateView.bounds toView:[[[UIApplication sharedApplication] windows] firstObject]];
+}
+
+- (HGPresentationController *)getPresentationController
+{
+    return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
 }
 
 - (CGFloat)relateViewMaxXToWindow
@@ -260,11 +265,6 @@ const  NSTimeInterval defaultDuratin=0.52;
 - (UIView *)getPresentationControllerCoverView
 {
     return  [self getPresentationController].coverView;
-}
-
-- (HGPresentationController *)getPresentationController
-{
-    return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
 }
 
 @end

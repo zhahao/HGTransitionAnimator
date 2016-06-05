@@ -51,7 +51,7 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 - (HGPresentationController *)hg_getPresentationController
 {
     HGTransitionAnimator *animator=(HGTransitionAnimator *)self.transitioningDelegate;
-    NSAssert1([animator isKindOfClass:[HGTransitionAnimator class]], @"负责转场的对象`%@`不是HGTransitionAnimator或它的子类,获取失败!",animator);
+    NSAssert1([[animator class] isSubclassOfClass:[HGTransitionAnimator class]], @"负责转场的对象`%@`不是HGTransitionAnimator或它的子类,获取失败!",animator);
     return [animator getPresentationController];
 }
 - (UIViewController *)currentPresentingViewController
