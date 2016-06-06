@@ -4,7 +4,7 @@
 //
 //  Created by 查昊 on 16/5/25.
 //  Copyright © 2016年 haocha. All rights reserved.
-//  github地址:https://github.com/zhahao/HGTransitionAnimator
+//  GitHub地址:https://github.com/zhahao/HGTransitionAnimator
 
 #import <UIKit/UIKit.h>
 #pragma mark - HGTransitionAnimatorDelegate,在`PresentingViewController`中使用

@@ -4,7 +4,7 @@
 //
 //  Created by 查昊 on 16/5/23.
 //  Copyright © 2016年 haocha. All rights reserved.
-//  github地址:https://github.com/zhahao/HGTransitionAnimator
+//  GitHub地址:https://github.com/zhahao/HGTransitionAnimator
 
 #import "HGTransitionAnimatorDelegate.h"
 
@@ -55,21 +55,21 @@ NS_ASSUME_NONNULL_BEGIN
  *  构造方法
  *
  *  @param animateStyle    动画类型
- *  @param relateView      参照的view
+ *  @param relateView      参照的view,写`PresentingViewController`的self.view
  *  @param presentFrame    弹出视图的frame
  *  @param backgroundColor 背景色
  *  @param delegate        代理
  *  @param animated        是否动画
  */
 - (instancetype)initWithAnimateStyle:(HGTransitionAnimatorStyle)animateStyle
-                          relateView:(nullable UIView *)relateView
+                          relateView:(nonnull UIView *)relateView
                         presentFrame:(CGRect)presentFrame
                      backgroundColor:(nullable UIColor *)backgroundColor
                             delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
                             animated:(BOOL)animated NS_DESIGNATED_INITIALIZER;
 
 
-
+/// 负责转场的对象
 - (HGPresentationController * _Nonnull )getPresentationController;
 @end
 NS_ASSUME_NONNULL_END

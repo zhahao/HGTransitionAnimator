@@ -4,14 +4,16 @@
 //
 //  Created by 查昊 on 16/5/25.
 //  Copyright © 2016年 haocha. All rights reserved.
-//  github地址:https://github.com/zhahao/HGTransitionAnimator
+//  GitHub地址:https://github.com/zhahao/HGTransitionAnimator
 
 #import "HGTransitionAnimator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface UIViewController (HGAnimator)
+
 /**
  *  自定义弹出控制器并实现转场动画,一定会在主线程里面执行
+ *  用于当前控制器只有`一个`自定义转场代理对象
  *
  *  @param viewControllerToPresent 需要转场出来的控制器
  *  @param style                   转场样式
@@ -20,12 +22,24 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param flag                    是否需要动画效果
  *  @return                        转场动画代理对象
  */
-- (HGTransitionAnimator * _Nonnull)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
+- (void)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
                                                animateStyle:(HGTransitionAnimatorStyle )style
                                                    delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
                                                presentFrame:(CGRect)presentFrame
                                             backgroundColor:(nonnull UIColor *)backgroundColor
                                                    animated:(BOOL)flag;
+
+/**
+ *  自定义弹出控制器并实现转场动画,一定会在主线程里面执行
+ *  用于当前控制器有`多个`自定义转场代理对象,可以区分不同的转场代理。
+ *  需要初始化一个`HGTransitionAnimator`实例化对象,并且`animator`需要被当前控制器强引用。
+ *
+ *  @param viewControllerToPresent  需要转场出来的控制器
+ *  @param animator                 转场代理对象
+ */
+- (void)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
+                        animator:(nonnull HGTransitionAnimator *)animator;
+
 /**
  *  dismiss控制器,并销毁控制器,一定会在主线程里面执行
  *

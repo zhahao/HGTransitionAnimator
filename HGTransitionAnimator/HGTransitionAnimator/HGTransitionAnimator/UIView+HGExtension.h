@@ -4,7 +4,7 @@
 //
 //  Created by 查昊 on 16/6/1.
 //  Copyright © 2016年 haocha. All rights reserved.
-//  github地址:https://github.com/zhahao/HGTransitionAnimator
+//  GitHub地址:https://github.com/zhahao/HGTransitionAnimator
 
 #import <UIKit/UIKit.h>
 

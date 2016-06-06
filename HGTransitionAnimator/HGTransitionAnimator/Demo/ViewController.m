@@ -128,12 +128,12 @@
 
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForDismissedController:(UIViewController *)dismissed
 {
-    // 负责弹出的控制器
+    // 被弹出的控制器已经消失
 }
 
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animationControllerForPresentedController:(UIViewController *)presented
 {
-    // presented 被弹出的控制器
+    // 被弹出的控制器已经弹出
 }
 
 // 如果在构造函数里面animated=NO, 就不要实现返回时间的代理
