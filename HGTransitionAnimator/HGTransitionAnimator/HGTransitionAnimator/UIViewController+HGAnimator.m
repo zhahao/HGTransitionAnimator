@@ -37,8 +37,8 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 }
 - (void)hg_presentViewController:(UIViewController *)viewControllerToPresent animator:(HGTransitionAnimator *)animator
 {
-    viewControllerToPresent.modalPresentationStyle=UIModalPresentationCustom;
-    viewControllerToPresent.transitioningDelegate=animator;
+    viewControllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
+    viewControllerToPresent.transitioningDelegate = animator;
     void (^presentBlock)(void) = ^ (void) {
         [self presentViewController:viewControllerToPresent animated:YES completion:nil];
     };
@@ -46,7 +46,7 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 }
 - (void)hg_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
 {
-    HGTransitionAnimator *animator=(HGTransitionAnimator *)self.transitioningDelegate;
+    HGTransitionAnimator *animator = (HGTransitionAnimator *)self.transitioningDelegate;
     if (!flag) [animator transitionDuration:0];
     void (^dismissBlock)(void) = ^ (void) {
         [self dismissViewControllerAnimated:flag completion:completion];
@@ -57,14 +57,14 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
 
 - (HGPresentationController *)hg_getPresentationController
 {
-    HGTransitionAnimator *animator=(HGTransitionAnimator *)self.transitioningDelegate;
+    HGTransitionAnimator *animator = (HGTransitionAnimator *)self.transitioningDelegate;
     NSAssert1([[animator class] isSubclassOfClass:[HGTransitionAnimator class]], @"负责转场的对象`%@`不是HGTransitionAnimator或它的子类,获取失败!",animator);
     return [animator getPresentationController];
 }
 - (UIViewController *)currentPresentingViewController
 {
     if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *nav=(UINavigationController *)self.presentingViewController;
+        UINavigationController *nav = (UINavigationController *)self.presentingViewController;
         return  [nav.viewControllers lastObject];;
     }
     return  self.presentingViewController;

@@ -102,7 +102,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 {
     if (_response){
         if ([self.hg_delegate respondsToSelector:@selector(presentedViewBeginDismiss:)]) {
-             BOOL  animate=[self.hg_delegate presentedViewBeginDismiss:_duration];
+             BOOL  animate = [self.hg_delegate presentedViewBeginDismiss:_duration];
             [self.presentedViewController hg_dismissViewControllerAnimated:animate completion:nil]; return;
         }
         [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
@@ -111,7 +111,10 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 
 - (void)handlePan:(UIPanGestureRecognizer*)recognizer
 {
-    self.coverView.backgroundColor = [UIColor colorWithRed:_red green:_green blue:_blue alpha:(1-ABS(self.presentedView.x)/self.presentedView.width)*_alpha]; // 根据拖动情况改变背景色
+    self.coverView.backgroundColor = [UIColor colorWithRed:_red
+                                                     green:_green
+                                                      blue:_blue
+                                                     alpha:(1 - ABS(self.presentedView.x) / self.presentedView.width) * _alpha]; // 根据拖动情况改变背景色
     
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
     CGPoint velocity = [recognizer velocityInView:self.containerView.superview];
@@ -119,8 +122,8 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
     CGFloat velocityY = velocity.y - self.currentVelocity.y;
 
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle ) {
-        CGFloat dx=translation.x -self.currentTranslation.x;     //累加偏移值
-        if (ABS(dx) >= self.presentedView.width)   dx = 0;          //防止左边出界
+        CGFloat dx = translation.x -self.currentTranslation.x;     //累加偏移值
+        if (ABS(dx) >= self.presentedView.width) dx = 0;          //防止左边出界
         self.presentedView.x += dx;
         if (self.presentedView.x >= 0)    self.presentedView.x = 0; //防止右边出边界
         
@@ -137,7 +140,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
             // 停止滚动,判断是否要保持当前状态还消失
             if (ABS(self.presentedView.x) >= self.presentedView.width * (1-scale)) { // 左弹效果
                 [self animateWithDuration:0.15 animations:^{
-                    self.presentedView.x =- self.presentedView.width;
+                    self.presentedView.x = -self.presentedView.width;
                     self.coverView.backgroundColor = [UIColor clearColor];
                 } completionDismiss:YES];
             }
