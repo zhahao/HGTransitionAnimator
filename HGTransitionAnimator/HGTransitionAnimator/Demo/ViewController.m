@@ -109,7 +109,12 @@
         frame=CGRectMake(kScreenWidth*0.15, kScreenHeight*0.25, kScreenWidth*0.7, kScreenHeight*0.5);
     }
     
-    [self hg_presentViewController:oneVC animateStyle:(HGTransitionAnimatorStyle)indexPath.row  delegate:self presentFrame:frame backgroundColor:_backgroundColor animated:!self.animateSegment.selectedSegmentIndex];
+    [self hg_presentViewController:oneVC
+                      animateStyle:(HGTransitionAnimatorStyle)indexPath.row
+                          delegate:self
+                      presentFrame:frame
+                   backgroundColor:_backgroundColor
+                          animated:!self.animateSegment.selectedSegmentIndex];
 }
 
 #pragma mark - HGTransitionAnimatorDelegate

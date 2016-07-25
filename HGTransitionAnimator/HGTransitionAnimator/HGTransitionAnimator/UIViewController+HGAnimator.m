@@ -22,7 +22,12 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
                                   backgroundColor:(UIColor *)backgroundColor
                                          animated:(BOOL)flag
 {
-    HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style relateView:self.view  presentFrame:presentFrame backgroundColor:backgroundColor delegate:delegate animated:flag];
+    HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style
+                                                                          relateView:self.view
+                                                                        presentFrame:presentFrame
+                                                                     backgroundColor:backgroundColor
+                                                                            delegate:delegate
+                                                                            animated:flag];
     
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
