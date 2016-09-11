@@ -58,7 +58,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
     _delegate = delegate;
     _animated = animated;
     _duration = _animated ? DefaultDuration_: 0;
-    _backgroundColor = backgroundColor == nil ? [UIColor clearColor] : backgroundColor;
+    _backgroundColor = backgroundColor ? : [UIColor clearColor];
 
     return self;
 }
@@ -90,7 +90,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
                                                                      sourceController:(UIViewController *)source
 {
     self.willPresent = YES;
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimator:animationControllerForPresentedController:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimator:animationControllerForPresentedController:)]) {
         [self.delegate transitionAnimator:self animationControllerForPresentedController:source];
     }
     return self;
@@ -99,7 +99,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 -(id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
     self.willPresent = NO;
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimator:animationControllerForDismissedController:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimator:animationControllerForDismissedController:)]) {
         [self.delegate transitionAnimator:self animationControllerForDismissedController:dismissed];
     }
     return self;
@@ -107,8 +107,8 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    if(self.delegate&&[self.delegate respondsToSelector:@selector(transitionDuration:)]){
-        _duration = !_animated ? 0 : [self.delegate transitionDuration:self];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(transitionDuration:)]){
+        _duration = _animated ? [self.delegate transitionDuration:self] : 0;
        };
     return _duration;
 }
@@ -152,39 +152,39 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 
 - (void)setupPopAnimator:(UIView *)fromView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
-    if (_animateStyle == HGTransitionAnimatorFromLeftStyle) {
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.x = self.relateViewXToWindow - fromView.width;
-        }];
-    }else if (_animateStyle == HGTransitionAnimatorFromRightStyle){
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.x = self.relateViewXToWindow + self.relateView.width;
-        }];
-    }else if (_animateStyle == HGTransitionAnimatorFromTopStyle){
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.y = self.relateViewXToWindow - fromView.height;
-        }];
-    }else if (_animateStyle == HGTransitionAnimatorFromBottomStyle){
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.y = self.relateViewYToWindow + self.relateView.height + fromView.height;
-        }];
-    }else if (_animateStyle == HGTransitionAnimatorHiddenStyle){
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.alpha = 0.0f;
-        }];
-    }else if (_animateStyle == HGTransitionAnimatorVerticalScaleStyle){
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.transform = CGAffineTransformMakeScale(1.0, 0.000001);
-        }];
-    }else if (_animateStyle == HGTransitionAnimatorHorizontalScaleStyle){
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.transform = CGAffineTransformMakeScale(0.000001, 1.0);
-        }];
-    }else{
-        [self fromView:fromView context:transitionContext animations:^{
-            fromView.transform = CGAffineTransformMakeScale(0.000001, 0.000001);
-        }];
+
+#define UPDATE_ANIMATE(...)\
+[self fromView:fromView context:transitionContext animations:^{\
+    __VA_ARGS__;\
+}];\
+
+    switch (_animateStyle) {
+        case HGTransitionAnimatorFromLeftStyle:{
+            UPDATE_ANIMATE(fromView.x = self.relateViewXToWindow - fromView.width)
+        }break;
+        case HGTransitionAnimatorFromRightStyle:{
+            UPDATE_ANIMATE(fromView.x = self.relateViewXToWindow + self.relateView.width)
+        }break;
+        case HGTransitionAnimatorFromTopStyle:{
+            UPDATE_ANIMATE(fromView.y = self.relateViewXToWindow - fromView.height)
+        }break;
+        case HGTransitionAnimatorFromBottomStyle:{
+            UPDATE_ANIMATE(fromView.y = self.relateViewYToWindow + self.relateView.height + fromView.height)
+        }break;
+        case HGTransitionAnimatorHiddenStyle:{
+            UPDATE_ANIMATE(fromView.alpha = 0.0f)
+        }break;
+        case HGTransitionAnimatorVerticalScaleStyle:{
+            UPDATE_ANIMATE(fromView.transform = CGAffineTransformMakeScale(1.0, 0.000001))
+        }break;
+        case HGTransitionAnimatorHorizontalScaleStyle:{
+            UPDATE_ANIMATE(fromView.transform = CGAffineTransformMakeScale(0.000001, 1.0));
+        }break;
+        default:{
+            UPDATE_ANIMATE(fromView.transform = CGAffineTransformMakeScale(0.000001, 0.000001))
+        }break;
     }
+
 }
 
 - (void)setupPushAnimator:(UIView *)toView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
@@ -219,26 +219,32 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
         }];
     }else{
         CGPoint anchorPoint = CGPointZero;
-        CGAffineTransform CGAffineTransformScale;
+        CGAffineTransform CGAffineTransformScale = CGAffineTransformMakeScale(0, 0);
 
-        if (_animateStyle == HGTransitionAnimatorVerticalScaleStyle){
-            anchorPoint = CGPointMake(0.5, 0);
-            CGAffineTransformScale = CGAffineTransformMakeScale(1.0, 0.0);
-        }else if (_animateStyle == HGTransitionAnimatorHorizontalScaleStyle){
-            anchorPoint = CGPointMake(0, 0.5);
-            CGAffineTransformScale = CGAffineTransformMakeScale(0.0, 1.0);
-        }else if (_animateStyle == HGTransitionAnimatorCenterStyle){
-            anchorPoint = CGPointMake(0.5, 0.5);
-            CGAffineTransformScale = CGAffineTransformMakeScale(0.0, 0.0);
-        }else if (_animateStyle == HGTransitionAnimatorFocusTopRightStyle){
-            anchorPoint = CGPointMake(1, 0);
-            CGAffineTransformScale = CGAffineTransformMakeScale(0.0, 0.0);
-        }else if (_animateStyle == HGTransitionAnimatorFocusTopCenterStyle){
-            anchorPoint = CGPointMake(0.5, 0);
-            CGAffineTransformScale = CGAffineTransformMakeScale(0.0, 0.0);
-        }else if (_animateStyle == HGTransitionAnimatorFocusTopLeftStyle){
-            anchorPoint = CGPointMake(0, 0);
-            CGAffineTransformScale = CGAffineTransformMakeScale(0.0, 0.0);
+#define SET_POINT(_x1_,_y1_,_x2_,_y2_)\
+anchorPoint = CGPointMake(_x1_, _y1_);\
+CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
+
+        switch (_animateStyle) {
+            case HGTransitionAnimatorVerticalScaleStyle:{
+                SET_POINT(0.5, 0.0, 1.0, 0.0)
+            }break;
+            case HGTransitionAnimatorHorizontalScaleStyle:{
+                SET_POINT(0.0, 0.5, 0.0, 1.0)
+            }break;
+            case HGTransitionAnimatorCenterStyle:{
+                SET_POINT(0.5, 0.5, 0.0, 0.0)
+            }break;
+            case HGTransitionAnimatorFocusTopRightStyle:{
+                SET_POINT(1.0, 0.0, 0.0, 0.0)
+            }break;
+            case HGTransitionAnimatorFocusTopCenterStyle:{
+                SET_POINT(0.5, 0.0, 0.0, 0.0)
+            }break;
+            case HGTransitionAnimatorFocusTopLeftStyle:{
+                SET_POINT(0.0, 0.0, 0.0, 0.0)
+            }break;
+            default: break;
         }
 
         toView.layer.anchorPoint = anchorPoint;
@@ -275,13 +281,12 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 // 方法抽取
 - (void)fromView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext animations:(void (^)(void))animations
 {
-    void (^completeTransitionBlock) (BOOL) = ^(BOOL finished){
-        [transitionContext completeTransition:YES];
-    };
     [UIView animateWithDuration:self.duration animations:^{
-        animations();
+        if (animations) animations();
         self.presentationControllerCoverView.backgroundColor = [UIColor clearColor];
-    } completion:completeTransitionBlock];
+    } completion:^(BOOL finished) {
+        [transitionContext completeTransition:YES];
+    }];
 }
 
 - (CGRect)relateViewToWindow
@@ -323,5 +328,6 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 {
     return  self.presentationController.coverView;
 }
+
 @end
 
