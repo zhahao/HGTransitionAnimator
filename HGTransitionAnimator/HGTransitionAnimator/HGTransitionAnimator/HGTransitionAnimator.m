@@ -12,8 +12,8 @@
 #import <objc/runtime.h>
 
 
-static NSString * const HGPresentationControllerKey=@"HGPresentationControllerKey";
-const  NSTimeInterval defaultDuratin=0.52;
+static NSString * const HGPresentationControllerKey = @"HGPresentationControllerKey";
+const  NSTimeInterval DefaultDuration_ = 0.52;
 
 @interface  HGTransitionAnimator()
 
@@ -24,7 +24,19 @@ const  NSTimeInterval defaultDuratin=0.52;
 @property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;//<- 动画样式
 @property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间
 @property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
+@property (nonatomic, strong, readonly) UIView *presentationControllerCoverView;//<- 背景视图
 @property (nonatomic, assign, nullable) id <HGTransitionAnimatorDelegate> delegate;//<- 代理
+
+// 内部方法声明
+- (CGFloat)relateViewMaxXToWindow;
+
+- (CGFloat)relateViewMaxYToWindow;
+
+- (CGFloat)relateViewXToWindow;
+
+- (CGFloat)relateViewYToWindow;
+
+- (CGFloat)relateViewWidthToWindow;
 
 @end
 
@@ -37,15 +49,17 @@ const  NSTimeInterval defaultDuratin=0.52;
                            delegate:(id<HGTransitionAnimatorDelegate>)delegate
                            animated:(BOOL)animated
 {
-    if (self=[super init]) {
-        _animateStyle = animateStyle;
-        _relateView = relateView;
-        _presentFrame = presentFrame;
-        _delegate = delegate;
-        _animated = animated;
-        _duration = _animated ? defaultDuratin: 0;
-        _backgroundColor = backgroundColor == nil ? [UIColor clearColor] : backgroundColor;
-    }
+    self = [super init];
+    if (!self) return nil;
+
+    _animateStyle = animateStyle;
+    _relateView = relateView;
+    _presentFrame = presentFrame;
+    _delegate = delegate;
+    _animated = animated;
+    _duration = _animated ? DefaultDuration_: 0;
+    _backgroundColor = backgroundColor == nil ? [UIColor clearColor] : backgroundColor;
+
     return self;
 }
 
@@ -64,7 +78,8 @@ const  NSTimeInterval defaultDuratin=0.52;
                                                       backgroundColor:_backgroundColor
                                                          animateStyle:_animateStyle
                                                          presentFrame:_presentFrame
-                                                             duration:_duration response:response];
+                                                             duration:_duration
+                                                             response:response];
     
     objc_setAssociatedObject(self, &HGPresentationControllerKey, presentController,OBJC_ASSOCIATION_ASSIGN);
     return presentController;
@@ -100,29 +115,29 @@ const  NSTimeInterval defaultDuratin=0.52;
 
 -(void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    UIView *coverView = [self getPresentationControllerCoverView];
+    UIView *coverView = self.presentationControllerCoverView;
     if (_willPresent) {
-        UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-         UIView *toView = toViewController.view;
-        toView.frame = _presentFrame;
+        UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
         [[transitionContext containerView] addSubview:toView];
         if (_animateStyle == HGTransitionAnimatorCustomStyle) { // 自定义
-            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimator:animateTransitionToView:duration:)], @"自定义样式必须实现transitionAnimator:animateTransitionToView:duration:代理方法!");
+            BOOL assert = self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimator:animateTransitionToView:duration:)];
+            NSAssert(assert, @"自定义样式必须实现transitionAnimator:animateTransitionToView:duration:代理方法!");
             [self.delegate transitionAnimator:self animateTransitionToView:toView duration:_duration];
             [UIView animateWithDuration:_duration animations:^{
                 coverView.backgroundColor = _backgroundColor;
             } completion:^(BOOL finished) {
                 [transitionContext completeTransition:YES];
             }];
+
         }else{
             [self setupPushAnimator:toView context:transitionContext coverView:coverView];
         }
     }else{
-//        UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
-        UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-        UIView *fromView = fromViewController.view;
+
+        UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
         if (_animateStyle == HGTransitionAnimatorCustomStyle) { // 自定义
-            NSAssert(self.delegate&&[self.delegate respondsToSelector:@selector(transitionAnimator:animateTransitionFromView:duration:)], @"自定义样式必须实现transitionAnimator:animateTransitionFromView:duration:代理方法!");
+            BOOL assert = self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimator:animateTransitionFromView:duration:)];
+            NSAssert(assert, @"自定义样式必须实现transitionAnimator:animateTransitionFromView:duration:代理方法!");
             [self.delegate transitionAnimator:self animateTransitionFromView:fromView duration:_duration];
             [UIView animateWithDuration:_duration animations:^{
                 coverView.backgroundColor = [UIColor clearColor];
@@ -137,26 +152,25 @@ const  NSTimeInterval defaultDuratin=0.52;
 
 - (void)setupPopAnimator:(UIView *)fromView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
-    HGWeakSelf;
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle) {
         [self fromView:fromView context:transitionContext animations:^{
-            fromView.x = [self relateViewXToWindow] - fromView.width;
+            fromView.x = self.relateViewXToWindow - fromView.width;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromRightStyle){
         [self fromView:fromView context:transitionContext animations:^{
-            fromView.x=[self relateViewXToWindow] + weakSelf.relateView.width;
+            fromView.x = self.relateViewXToWindow + self.relateView.width;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromTopStyle){
         [self fromView:fromView context:transitionContext animations:^{
-            fromView.y = [self relateViewXToWindow] - fromView.height;
+            fromView.y = self.relateViewXToWindow - fromView.height;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromBottomStyle){
         [self fromView:fromView context:transitionContext animations:^{
-            fromView.y = [self relateViewYToWindow] + weakSelf.relateView.height + fromView.height;
+            fromView.y = self.relateViewYToWindow + self.relateView.height + fromView.height;
         }];
     }else if (_animateStyle == HGTransitionAnimatorHiddenStyle){
         [self fromView:fromView context:transitionContext animations:^{
-            fromView.alpha=0.0f;
+            fromView.alpha = 0.0f;
         }];
     }else if (_animateStyle == HGTransitionAnimatorVerticalScaleStyle){
         [self fromView:fromView context:transitionContext animations:^{
@@ -175,38 +189,38 @@ const  NSTimeInterval defaultDuratin=0.52;
 
 - (void)setupPushAnimator:(UIView *)toView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
-    HGWeakSelf;
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle) {
         [self toView:toView context:transitionContext actions:^{
-            toView.x = [weakSelf relateViewXToWindow] - toView.width;
+            toView.x = self.relateViewXToWindow - toView.width;
         } animations:^{
-            toView.x = [weakSelf relateViewXToWindow];
+            toView.x = self.relateViewXToWindow;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromTopStyle){
         [self toView:toView context:transitionContext actions:^{
-            toView.y = [self relateViewYToWindow]-toView.height;
+            toView.y = self.relateViewYToWindow - toView.height;
         } animations:^{
-            toView.y = [self relateViewYToWindow];
+            toView.y = self.relateViewYToWindow;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromRightStyle){
         [self toView:toView context:transitionContext actions:^{
-            toView.x = [self relateViewXToWindow] + [self relateViewWidthToWindow] + toView.width;
+            toView.x = self.relateViewXToWindow + self.relateViewWidthToWindow + toView.width;
         } animations:^{
-            toView.x = [self relateViewXToWindow] + self.relateView.width -toView.width;
+            toView.x = self.relateViewXToWindow + self.relateView.width - toView.width;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromBottomStyle){
         [self toView:toView context:transitionContext actions:^{
             toView.y = CGRectGetMaxY(toView.frame);
         } animations:^{
-            toView.y = [self relateViewYToWindow]+self.relateView.height-toView.height;
+            toView.y = self.relateViewYToWindow + self.relateView.height - toView.height;
         }];
     }else if (_animateStyle == HGTransitionAnimatorHiddenStyle){
         [self toView:toView context:transitionContext actions:nil animations:^{
-            toView.alpha=1.0f;
+            toView.alpha = 1.0f;
         }];
     }else{
         CGPoint anchorPoint = CGPointZero;
         CGAffineTransform CGAffineTransformScale;
+
         if (_animateStyle == HGTransitionAnimatorVerticalScaleStyle){
             anchorPoint = CGPointMake(0.5, 0);
             CGAffineTransformScale = CGAffineTransformMakeScale(1.0, 0.0);
@@ -226,11 +240,13 @@ const  NSTimeInterval defaultDuratin=0.52;
             anchorPoint = CGPointMake(0, 0);
             CGAffineTransformScale = CGAffineTransformMakeScale(0.0, 0.0);
         }
+
         toView.layer.anchorPoint = anchorPoint;
         toView.transform = CGAffineTransformScale;
+
         [UIView animateWithDuration:_duration animations:^{
             toView.transform = CGAffineTransformIdentity;
-            [self getPresentationControllerCoverView].backgroundColor = weakSelf.backgroundColor;
+            self.presentationControllerCoverView.backgroundColor = self.backgroundColor;
         } completion:^(BOOL finished) {
             [transitionContext completeTransition:YES];
         }];
@@ -240,7 +256,6 @@ const  NSTimeInterval defaultDuratin=0.52;
 // 方法抽取
 - (void)toView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext actions:(void(^)())actions animations:(void (^)(void))animations
 {
-    HGWeakSelf;
     if (actions){
         view.hidden = YES;
         actions();
@@ -249,12 +264,10 @@ const  NSTimeInterval defaultDuratin=0.52;
         view.alpha = 0.0f;
     }
     
-    __block UIView * coverView = [self getPresentationControllerCoverView];
-    void (^endAnimations) (void) = ^ (void){
+    [UIView animateWithDuration:self.duration animations:^{
         if (animations) animations();
-        coverView.backgroundColor = weakSelf.backgroundColor;
-    };
-    [UIView animateWithDuration:weakSelf.duration animations:endAnimations completion:^(BOOL finished){
+        self.presentationControllerCoverView.backgroundColor = self.backgroundColor;
+    } completion:^(BOOL finished){
         [transitionContext completeTransition:YES];
     }];
 }
@@ -262,14 +275,12 @@ const  NSTimeInterval defaultDuratin=0.52;
 // 方法抽取
 - (void)fromView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext animations:(void (^)(void))animations
 {
-    HGWeakSelf;
-    __block UIView * coverView = [self getPresentationControllerCoverView];
     void (^completeTransitionBlock) (BOOL) = ^(BOOL finished){
         [transitionContext completeTransition:YES];
     };
-    [UIView animateWithDuration:weakSelf.duration animations:^{
+    [UIView animateWithDuration:self.duration animations:^{
         animations();
-        coverView.backgroundColor = [UIColor clearColor];
+        self.presentationControllerCoverView.backgroundColor = [UIColor clearColor];
     } completion:completeTransitionBlock];
 }
 
@@ -278,19 +289,19 @@ const  NSTimeInterval defaultDuratin=0.52;
     return  [self.relateView convertRect:self.relateView.bounds toView:[[[UIApplication sharedApplication] windows] firstObject]];
 }
 
-- (HGPresentationController *)getPresentationController
+- (HGPresentationController *)presentationController
 {
     return  objc_getAssociatedObject(self, &HGPresentationControllerKey);
 }
 
 - (CGFloat)relateViewMaxXToWindow
 {
-    return  [self relateViewXToWindow]+_relateView.width;
+    return  [self relateViewXToWindow] + _relateView.width;
 }
 
 - (CGFloat)relateViewMaxYToWindow
 {
-    return  [self relateViewYToWindow]+_relateView.height;
+    return  [self relateViewYToWindow] + _relateView.height;
 }
 
 - (CGFloat)relateViewXToWindow
@@ -308,10 +319,9 @@ const  NSTimeInterval defaultDuratin=0.52;
     return  [self relateViewToWindow].size.width;
 }
 
-- (UIView *)getPresentationControllerCoverView
+- (UIView *)presentationControllerCoverView
 {
-    return  [self getPresentationController].coverView;
+    return  self.presentationController.coverView;
 }
-
 @end
 

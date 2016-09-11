@@ -9,6 +9,10 @@
 #import "HGTransitionAnimator.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+/**
+ *   ⚠️ 该转场动画分类只支持iOS8.0及以上
+ */
 @interface UIViewController (HGAnimator)
 
 /**
@@ -23,11 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return                        转场动画代理对象
  */
 - (void)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
-                                               animateStyle:(HGTransitionAnimatorStyle )style
-                                                   delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
-                                               presentFrame:(CGRect)presentFrame
-                                            backgroundColor:(nonnull UIColor *)backgroundColor
-                                                   animated:(BOOL)flag;
+                    animateStyle:(HGTransitionAnimatorStyle )style
+                        delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
+                    presentFrame:(CGRect)presentFrame
+                 backgroundColor:(nonnull UIColor *)backgroundColor
+                        animated:(BOOL)flag;
 
 /**
  *  自定义弹出控制器并实现转场动画,一定会在主线程里面执行
@@ -52,7 +56,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  获取负责转场的对象,在被转场对象中需要时可以获取
  */
-- (HGPresentationController * _Nonnull)hg_getPresentationController;
+@property (nonatomic, strong, readonly, nullable) HGPresentationController *hg_presentationController;
+
 @end
+
 NS_ASSUME_NONNULL_END
 

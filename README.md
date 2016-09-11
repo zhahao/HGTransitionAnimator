@@ -91,7 +91,7 @@ OneViewController *oneVC=[[OneViewController alloc]init];
 ![(垂直压缩)](http://files.cnblogs.com/files/zhahao/%E5%9E%82%E7%9B%B4%E5%8E%8B%E7%BC%A9.gif)
 系统要求
 ==============
-该项目最低支持 `iOS 7.0` 和 `Xcode 7.0`。
+该项目最低支持 `iOS 8.0` 和 `Xcode 7.0`。
 
 
 注意

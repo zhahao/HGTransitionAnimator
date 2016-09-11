@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nonnull) UIView  *coverView;
 /// 激活拖拽消失手势,默认NO---只支持animateStyle= Left Top Bottom
 @property (nonatomic, assign) BOOL activeDrag;
+
 /**
  *  初始化方法
  *

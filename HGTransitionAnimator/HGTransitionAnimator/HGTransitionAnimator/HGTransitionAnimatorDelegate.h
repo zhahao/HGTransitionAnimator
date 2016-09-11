@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #pragma mark - HGTransitionAnimatorDelegate,在`PresentingViewController`中使用
+
 @class HGTransitionAnimator;
 @protocol HGTransitionAnimatorDelegate <NSObject>
 @optional

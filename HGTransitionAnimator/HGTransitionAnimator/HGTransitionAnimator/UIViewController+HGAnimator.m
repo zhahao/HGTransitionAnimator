@@ -11,23 +11,23 @@
 #import <objc/runtime.h>
 
 
-static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
+static NSString * const HGTransitionAnimatorKey = @"HGTransitionAnimatorKey";
 
 @implementation UIViewController (HGAnimator)
 
 - (void)hg_presentViewController:(UIViewController *)viewControllerToPresent
-                                     animateStyle:(HGTransitionAnimatorStyle)style
-                                         delegate:(id<HGTransitionAnimatorDelegate>)delegate
-                                     presentFrame:(CGRect)presentFrame
-                                  backgroundColor:(UIColor *)backgroundColor
-                                         animated:(BOOL)flag
+                    animateStyle:(HGTransitionAnimatorStyle)style
+                        delegate:(id<HGTransitionAnimatorDelegate>)delegate
+                    presentFrame:(CGRect)presentFrame
+                 backgroundColor:(UIColor *)backgroundColor
+                        animated:(BOOL)flag
 {
-    HGTransitionAnimator *animator=[[HGTransitionAnimator alloc]initWithAnimateStyle:style
-                                                                          relateView:self.view
-                                                                        presentFrame:presentFrame
-                                                                     backgroundColor:backgroundColor
-                                                                            delegate:delegate
-                                                                            animated:flag];
+    HGTransitionAnimator *animator = [[HGTransitionAnimator alloc]initWithAnimateStyle:style
+                                                                            relateView:self.view
+                                                                          presentFrame:presentFrame
+                                                                       backgroundColor:backgroundColor
+                                                                              delegate:delegate
+                                                                              animated:flag];
     
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &HGTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -35,6 +35,7 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
     [self hg_presentViewController:viewControllerToPresent animator:animator];
     
 }
+
 - (void)hg_presentViewController:(UIViewController *)viewControllerToPresent animator:(HGTransitionAnimator *)animator
 {
     viewControllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
@@ -55,12 +56,13 @@ static NSString * const HGTransitionAnimatorKey=@"HGTransitionAnimatorKey";
     objc_setAssociatedObject([self currentPresentingViewController], &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (HGPresentationController *)hg_getPresentationController
+- (HGPresentationController *)hg_presentationController
 {
     HGTransitionAnimator *animator = (HGTransitionAnimator *)self.transitioningDelegate;
-    NSAssert1([[animator class] isSubclassOfClass:[HGTransitionAnimator class]], @"负责转场的对象`%@`不是HGTransitionAnimator或它的子类,获取失败!",animator);
-    return [animator getPresentationController];
+    if (animator == nil) return nil;
+    return animator.presentationController;
 }
+
 - (UIViewController *)currentPresentingViewController
 {
     if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {

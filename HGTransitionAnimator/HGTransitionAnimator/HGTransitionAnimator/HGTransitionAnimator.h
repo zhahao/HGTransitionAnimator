@@ -8,10 +8,6 @@
 
 #import "HGTransitionAnimatorDelegate.h"
 
-#ifndef HGWeakSelf
-    #define HGWeakSelf __weak __typeof(self)weakSelf = self;
-#endif
-
 #ifndef dispatch_main_async_safe
     #define dispatch_main_async_safe(block)\
         if ([NSThread isMainThread]) {\
@@ -21,11 +17,10 @@
         }
 #endif
 
-
 typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 {
     
-    HGTransitionAnimatorCustomStyle= 0,         //自定义样式
+    HGTransitionAnimatorCustomStyle = 0,        //自定义样式
 ///////////////参照UIWinow///////////////
     HGTransitionAnimatorFromLeftStyle,          //从左边弹出样式
     HGTransitionAnimatorFromRightStyle,         //从右边弹出样式
@@ -43,10 +38,10 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 };
 
 /// 默认动画时间
-FOUNDATION_EXTERN   NSTimeInterval  const   defaultDuratin;
-
+FOUNDATION_EXTERN NSTimeInterval const DefaultDuratin_;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -70,7 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /// 负责转场的对象
-- (HGPresentationController * _Nonnull )getPresentationController;
+@property (nonatomic, strong, nonnull, readonly) HGPresentationController *presentationController;
+
 @end
 NS_ASSUME_NONNULL_END
 

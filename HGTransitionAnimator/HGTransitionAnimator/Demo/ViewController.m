@@ -15,6 +15,7 @@
 #define kScreenHeight   [UIScreen mainScreen].bounds.size.height
 
 @interface ViewController ()<HGTransitionAnimatorDelegate,UITableViewDelegate,UITableViewDataSource>
+
 @property (nonatomic, assign) CGRect leftPresentFrame;
 @property (nonatomic, assign) CGRect rightPresentFrame;
 @property (nonatomic, assign) CGRect topPresentFrame;
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *responseSegment;
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+
 @end
 @implementation ViewController
 - (NSMutableArray*)styles
@@ -57,17 +59,12 @@
 
 - (void)setupViews
 {
-    CGRect leftPresentFrame=CGRectMake(0, 0, kScreenWidth*0.7,  kScreenHeight);
-    CGRect rightPresentFrame=CGRectMake(kScreenWidth*0.3, 0, kScreenWidth*0.7,  kScreenHeight);
-    CGRect topPresentFrame=CGRectMake(0, 0, kScreenWidth,  kScreenHeight*0.3);
-    CGRect bottomPresentFrame=CGRectMake(kScreenWidth*0.1, kScreenHeight*0.35, kScreenWidth*0.8,  kScreenHeight*0.3);
-    
-    _backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-    _leftPresentFrame=leftPresentFrame;
-    _rightPresentFrame=rightPresentFrame;
-    _topPresentFrame=topPresentFrame;
-    _bottomPresentFrame=bottomPresentFrame;
-    
+    _leftPresentFrame = CGRectMake(0, 0, kScreenWidth * 0.7,  kScreenHeight);
+    _rightPresentFrame = CGRectMake(kScreenWidth * 0.3, 0, kScreenWidth * 0.7,  kScreenHeight);
+    _topPresentFrame = CGRectMake(0, 0, kScreenWidth,  kScreenHeight * 0.3);
+    _bottomPresentFrame = CGRectMake(kScreenWidth * 0.1, kScreenHeight * 0.35, kScreenWidth * 0.8,  kScreenHeight * 0.3);
+    _backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+
 }
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -82,33 +79,44 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    cell.selectionStyle=UITableViewCellSelectionStyleGray;
-    cell.textLabel.text=self.styles[indexPath.row];
-    cell.textLabel.textAlignment=NSTextAlignmentCenter;
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.textLabel.text = self.styles[indexPath.row];
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    __weak typeof(self) ws=self;
-    OneViewController *oneVC=[[OneViewController alloc]init];
-    oneVC.callBackBlock=^(NSString *text){
-        ws.messageLabel.text=text;
+
+    OneViewController *oneVC = [OneViewController new];
+    __weak typeof(self) weak_self = self;
+    oneVC.callBackBlock = ^ (NSString *text){
+        __strong typeof(weak_self) self = weak_self;
+        if (!self) return;
+        self.messageLabel.text = text;
     };
-    CGRect  frame;
-    if (indexPath.row==1) {
-        frame=_leftPresentFrame;
-    }else if (indexPath.row==2) {
-        frame=_rightPresentFrame;
-    }else if (indexPath.row==3) {
-        frame=_topPresentFrame;
-    }else if (indexPath.row==4) {
-        frame=_bottomPresentFrame;
-    }else{
-        frame=CGRectMake(kScreenWidth*0.15, kScreenHeight*0.25, kScreenWidth*0.7, kScreenHeight*0.5);
+
+    CGRect  frame = CGRectZero;
+    switch (indexPath.row) {
+        case 1:{
+            frame = _leftPresentFrame;
+        }break;
+        case 2:{
+            frame = _rightPresentFrame;
+        }break;
+        case 3:{
+            frame = _topPresentFrame;
+        }break;
+        case 4:{
+            frame = _bottomPresentFrame;
+        }break;
+        default:{
+            frame = CGRectMake(kScreenWidth * 0.15, kScreenHeight * 0.25, kScreenWidth * 0.7, kScreenHeight * 0.5);
+        }break;
     }
-    
+
+    // 弹出控制器
     [self hg_presentViewController:oneVC
                       animateStyle:(HGTransitionAnimatorStyle)indexPath.row
                           delegate:self
@@ -118,16 +126,22 @@
 }
 
 #pragma mark - HGTransitionAnimatorDelegate
-- (void)transitionAnimator:(HGTransitionAnimator *)animator animateTransitionToView:(UIView *)toView duration:(NSTimeInterval)duration{
-    toView.transform=CGAffineTransformMakeScale(0.0, 1.0);
+- (void)transitionAnimator:(HGTransitionAnimator *)animator
+   animateTransitionToView:(UIView *)toView
+                  duration:(NSTimeInterval)duration{
+    
+    toView.transform = CGAffineTransformMakeScale(0.0, 1.0);
     [UIView animateWithDuration:duration animations:^{
-        toView.transform=CGAffineTransformIdentity;
+        toView.transform = CGAffineTransformIdentity;
     }];
 }
 
-- (void)transitionAnimator:(HGTransitionAnimator *)animator animateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration{
+- (void)transitionAnimator:(HGTransitionAnimator *)animator
+ animateTransitionFromView:(UIView *)fromView
+                  duration:(NSTimeInterval)duration{
+
     [UIView animateWithDuration:duration animations:^{
-        fromView.transform=CGAffineTransformMakeScale(0.00001, 1.0);
+        fromView.transform = CGAffineTransformMakeScale(0.00001, 1.0);
     }];
 }
 

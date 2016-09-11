@@ -38,11 +38,11 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 - (UIView *)coverView
 {
     if (!_coverView) {
-        self.coverView = [[UIView alloc]init];
-        self.coverView.backgroundColor = [UIColor clearColor];
+        _coverView = [[UIView alloc]init];
+        _coverView.backgroundColor = [UIColor clearColor];
         if (_response) {
-            UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close)];
-            [self.coverView addGestureRecognizer:tap];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hg_close)];
+            [_coverView addGestureRecognizer:tap];
         }
     }
     return _coverView;
@@ -75,24 +75,23 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 
 -(void)presentationTransitionDidEnd:(BOOL)completed
 {
-    if (!_response)     return  ;
+    if (!_response) return;
     if (_activeDrag) {
-        if (_animateStyle == HGTransitionAnimatorFromTopStyle   ||
-            _animateStyle == HGTransitionAnimatorFromLeftStyle  ||
-            _animateStyle == HGTransitionAnimatorFromBottomStyle)
+        if (   _animateStyle == HGTransitionAnimatorFromTopStyle
+            || _animateStyle == HGTransitionAnimatorFromLeftStyle
+            || _animateStyle == HGTransitionAnimatorFromBottomStyle)
         {
             UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
             panGestureRecognizer.minimumNumberOfTouches = 1;
             panGestureRecognizer.maximumNumberOfTouches = 1;
             [self.containerView addGestureRecognizer:panGestureRecognizer];
         }
-        
     }
 }
 
 - (void)containerViewWillLayoutSubviews
 {
-    if (_duration==0) self.coverView.backgroundColor=_backgroundColor;
+    if (_duration == 0) self.coverView.backgroundColor = _backgroundColor;
     self.coverView.frame = [UIScreen mainScreen].bounds;
     [self.containerView insertSubview:self.coverView atIndex:0];
     self.presentedView.frame = _presentFrame;
@@ -100,11 +99,11 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 
 - (void)hg_close
 {
-    if (_response){
-        if ([self.hg_delegate respondsToSelector:@selector(presentedViewBeginDismiss:)]) {
-             BOOL  animate = [self.hg_delegate presentedViewBeginDismiss:_duration];
-            [self.presentedViewController hg_dismissViewControllerAnimated:animate completion:nil]; return;
-        }
+    if (!_response) return;
+    if ([self.hg_delegate respondsToSelector:@selector(presentedViewBeginDismiss:)]) {
+         BOOL animate = [self.hg_delegate presentedViewBeginDismiss:_duration];
+        [self.presentedViewController hg_dismissViewControllerAnimated:animate completion:nil];
+    }else{
         [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -122,10 +121,10 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
     CGFloat velocityY = velocity.y - self.currentVelocity.y;
 
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle ) {
-        CGFloat dx = translation.x -self.currentTranslation.x;     //累加偏移值
+        CGFloat dx = translation.x - self.currentTranslation.x;     //累加偏移值
         if (ABS(dx) >= self.presentedView.width) dx = 0;          //防止左边出界
         self.presentedView.x += dx;
-        if (self.presentedView.x >= 0)    self.presentedView.x = 0; //防止右边出边界
+        if (self.presentedView.x >= 0) self.presentedView.x = 0; //防止右边出边界
         
         if (velocityX < -defaultVelocityX && translation.x < 0){ // 快速滑动时
             [recognizer removeTarget:self action:@selector(handlePan:)];
@@ -154,7 +153,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
             // 每次停止,需要清空记录
             self.currentVelocity = CGPointZero;
             self.currentTranslation = CGPointZero;
-            return  ;
+            return;
         }
     }
     
@@ -181,7 +180,8 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 - (void)animateWithDuration:(NSTimeInterval )duration animations:(void (^)())animations completionDismiss:(BOOL)flag
 {
     [UIView animateWithDuration:duration animations:animations completion:^(BOOL finished) {
-        if (flag) [self.presentedViewController hg_dismissViewControllerAnimated:NO completion:nil];
+        if (flag)
+            [self.presentedViewController hg_dismissViewControllerAnimated:NO completion:nil];
     }];
 }
 
