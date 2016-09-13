@@ -6,7 +6,7 @@
 //  Copyright © 2016年 haocha. All rights reserved.
 //  GitHub地址:https://github.com/zhahao/HGTransitionAnimator
 
-#import "HGTransitionAnimator.h"
+#import "HGPresentationController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param delegate                代理,如果不自定义转场动画,设置为空即可
  *  @param presentFrame            转场控制器的视图frame,相对于window的frame
  *  @param flag                    是否需要动画效果
- *  @return                        转场动画代理对象
  */
 - (void)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
                     animateStyle:(HGTransitionAnimatorStyle )style
@@ -56,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  获取负责转场的对象,在被转场对象中需要时可以获取
  */
-@property (nonatomic, strong, readonly, nullable) HGPresentationController *hg_presentationController;
+@property (nonatomic, readonly, nullable) HGPresentationController *hg_presentationController;
 
 @end
 

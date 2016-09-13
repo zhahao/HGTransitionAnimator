@@ -33,7 +33,7 @@ static NSString * ID = @"cell";
     [self.tableView setTableFooterView:emtyV];
     HGPresentationController *pc = self.hg_presentationController;
     // 激活拖拽消失手势
-    pc.activeDrag = YES;
+    pc.dragable = YES;
     pc.hg_delegate = self;
 
 }

@@ -7,7 +7,6 @@
 //
 
 #import "UIViewController+HGAnimator.h"
-#import "HGTransitionAnimator.h"
 #import <objc/runtime.h>
 
 

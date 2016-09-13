@@ -76,7 +76,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 -(void)presentationTransitionDidEnd:(BOOL)completed
 {
     if (!_response) return;
-    if (_activeDrag) {
+    if (_dragable) {
         if (   _animateStyle == HGTransitionAnimatorFromTopStyle
             || _animateStyle == HGTransitionAnimatorFromLeftStyle
             || _animateStyle == HGTransitionAnimatorFromBottomStyle)
