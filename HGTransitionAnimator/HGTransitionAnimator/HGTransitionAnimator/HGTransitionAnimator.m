@@ -180,9 +180,10 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
         case HGTransitionAnimatorHorizontalScaleStyle:{
             UPDATE_ANIMATE(fromView.transform = CGAffineTransformMakeScale(0.000001, 1.0));
         }break;
-        default:{
+        case HGTransitionAnimatorCenterStyle:{
             UPDATE_ANIMATE(fromView.transform = CGAffineTransformMakeScale(0.000001, 0.000001))
         }break;
+        default: break;
     }
 
 }
@@ -214,35 +215,35 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
             toView.y = self.relateViewYToWindow + self.relateView.height - toView.height;
         }];
     }else if (_animateStyle == HGTransitionAnimatorHiddenStyle){
-        [self toView:toView context:transitionContext actions:nil animations:^{
+        [self toView:toView context:transitionContext actions:NULL animations:^{
             toView.alpha = 1.0f;
         }];
     }else{
         CGPoint anchorPoint = CGPointZero;
         CGAffineTransform CGAffineTransformScale = CGAffineTransformMakeScale(0, 0);
 
-#define SET_POINT(_x1_,_y1_,_x2_,_y2_)\
+#define UPDATE_POINT(_x1_,_y1_,_x2_,_y2_)\
 anchorPoint = CGPointMake(_x1_, _y1_);\
 CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
 
         switch (_animateStyle) {
             case HGTransitionAnimatorVerticalScaleStyle:{
-                SET_POINT(0.5, 0.0, 1.0, 0.0)
+                UPDATE_POINT(0.5, 0.0, 1.0, 0.0)
             }break;
             case HGTransitionAnimatorHorizontalScaleStyle:{
-                SET_POINT(0.0, 0.5, 0.0, 1.0)
+                UPDATE_POINT(0.0, 0.5, 0.0, 1.0)
             }break;
             case HGTransitionAnimatorCenterStyle:{
-                SET_POINT(0.5, 0.5, 0.0, 0.0)
+                UPDATE_POINT(0.5, 0.5, 0.0, 0.0)
             }break;
             case HGTransitionAnimatorFocusTopRightStyle:{
-                SET_POINT(1.0, 0.0, 0.0, 0.0)
+                UPDATE_POINT(1.0, 0.0, 0.0, 0.0)
             }break;
             case HGTransitionAnimatorFocusTopCenterStyle:{
-                SET_POINT(0.5, 0.0, 0.0, 0.0)
+                UPDATE_POINT(0.5, 0.0, 0.0, 0.0)
             }break;
             case HGTransitionAnimatorFocusTopLeftStyle:{
-                SET_POINT(0.0, 0.0, 0.0, 0.0)
+                UPDATE_POINT(0.0, 0.0, 0.0, 0.0)
             }break;
             default: break;
         }
