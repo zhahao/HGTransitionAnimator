@@ -58,7 +58,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
     _delegate = delegate;
     _animated = animated;
     _duration = _animated ? DefaultDuration_: 0;
-    _backgroundColor = backgroundColor ? : [UIColor clearColor];
+    _backgroundColor = backgroundColor ?: [UIColor clearColor];
 
     return self;
 }
