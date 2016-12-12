@@ -1,13 +1,12 @@
 Pod::Spec.new do |s|
   s.name         = "HGTransitionAnimator"
-  s.version      = "0.0.1"
+  s.version      = "1.0.0"
   s.summary      = "控制器之间的转场动画,内部封装了10+种,只需一句代码即可使"
   s.homepage     = "https://github.com/zhahao/HGTransitionAnimator"
   s.license      = "MIT"
   s.author       = { "zhahao" => "506902638@qq.com" }
- # s.platform     = :ios
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/zhahao/HGTransitionAnimator.git", :tag => "0.0.1" }
+  s.source       = { :git => "https://github.com/zhahao/HGTransitionAnimator.git", :tag => s.version }
   s.source_files  = "HGTransitionAnimator", "HGTransitionAnimator/HGTransitionAnimator/HGTransitionAnimator/*.{h,m}"
   s.framework  = "UIKit"
 end
