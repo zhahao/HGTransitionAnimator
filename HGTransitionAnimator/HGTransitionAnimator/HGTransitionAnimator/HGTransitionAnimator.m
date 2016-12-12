@@ -120,8 +120,6 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
         UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
         [[transitionContext containerView] addSubview:toView];
         if (_animateStyle == HGTransitionAnimatorCustomStyle) { // 自定义
-            BOOL assert = self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimator:animateTransitionToView:duration:)];
-            NSAssert(assert, @"自定义样式必须实现transitionAnimator:animateTransitionToView:duration:代理方法!");
             [self.delegate transitionAnimator:self animateTransitionToView:toView duration:_duration];
             [UIView animateWithDuration:_duration animations:^{
                 coverView.backgroundColor = _backgroundColor;
@@ -136,8 +134,6 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 
         UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
         if (_animateStyle == HGTransitionAnimatorCustomStyle) { // 自定义
-            BOOL assert = self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimator:animateTransitionFromView:duration:)];
-            NSAssert(assert, @"自定义样式必须实现transitionAnimator:animateTransitionFromView:duration:代理方法!");
             [self.delegate transitionAnimator:self animateTransitionFromView:fromView duration:_duration];
             [UIView animateWithDuration:_duration animations:^{
                 coverView.backgroundColor = [UIColor clearColor];
