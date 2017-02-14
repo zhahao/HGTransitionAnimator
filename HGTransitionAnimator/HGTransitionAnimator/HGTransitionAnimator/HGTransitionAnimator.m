@@ -12,8 +12,8 @@
 #import <objc/runtime.h>
 
 
-static NSString * const HGPresentationControllerKey = @"HGPresentationControllerKey";
-const  NSTimeInterval DefaultDuration_ = 0.52;
+static char HGPresentationControllerKey;
+const  NSTimeInterval kHGAnimatorDuration = 0.52;
 
 @interface  HGTransitionAnimator()
 
@@ -57,7 +57,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
     _presentFrame = presentFrame;
     _delegate = delegate;
     _animated = animated;
-    _duration = _animated ? DefaultDuration_: 0;
+    _duration = _animated ? kHGAnimatorDuration: 0;
     _backgroundColor = backgroundColor ?: [UIColor clearColor];
 
     return self;
@@ -117,7 +117,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
 {
     UIView *coverView = self.presentationControllerCoverView;
     if (_willPresent) {
-        UIView *toView=[transitionContext viewForKey:UITransitionContextToViewKey];
+        UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
         [[transitionContext containerView] addSubview:toView];
         if (_animateStyle == HGTransitionAnimatorCustomStyle) { // 自定义
             [self.delegate transitionAnimator:self animateTransitionToView:toView duration:_duration];
@@ -132,7 +132,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
         }
     }else{
 
-        UIView *fromView=[transitionContext viewForKey:UITransitionContextFromViewKey];
+        UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
         if (_animateStyle == HGTransitionAnimatorCustomStyle) { // 自定义
             [self.delegate transitionAnimator:self animateTransitionFromView:fromView duration:_duration];
             [UIView animateWithDuration:_duration animations:^{
@@ -181,6 +181,7 @@ const  NSTimeInterval DefaultDuration_ = 0.52;
         }break;
         default: break;
     }
+#undef UPDATE_ANIMATE
 
 }
 
@@ -243,7 +244,8 @@ CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
             }break;
             default: break;
         }
-
+        
+#undef UPDATE_POINT
         toView.layer.anchorPoint = anchorPoint;
         toView.transform = CGAffineTransformScale;
 

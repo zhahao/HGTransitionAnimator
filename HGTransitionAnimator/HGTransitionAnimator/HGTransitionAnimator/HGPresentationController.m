@@ -11,24 +11,20 @@
 #import "HGTransitionAnimatorDelegate.h"
 #import "UIView+HGExtension.h"
 
-static const CGFloat defaultVelocityX = 500; // 水平滑动速度阈值
-static const CGFloat defaultVelocityY = 250; // 垂直滑动速度阈值
-static const CGFloat scale = 0.5;            // 滑动阈值节点比例
+static const CGFloat kVelocityX = 500; // 水平滑动速度阈值
+static const CGFloat kVelocityY = 250; // 垂直滑动速度阈值
+static const CGFloat kScale = 0.5;     // 滑动阈值节点比例
 
 @interface  HGPresentationController()
 
-@property (nonatomic, assign) CGPoint currentTranslation; // <- 当前滑动位置
-@property (nonatomic, assign) CGPoint currentVelocity; // <- 滑动速率
-@property (nonatomic, assign) NSTimeInterval duration;// <- 动画时间
-@property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;// <- 动画类型
-@property (nonatomic, assign) CGRect  presentFrame;// <- 记录当前的frame
-@property (nonatomic, assign) BOOL    response;// <- 背景是否响应手势
-@property (nonatomic, strong) UIColor *backgroundColor;// <- 背景色
+@property (nonatomic, assign) CGPoint currentTranslation; ///<- 当前滑动位置
+@property (nonatomic, assign) CGPoint currentVelocity; ///<- 滑动速率
+@property (nonatomic, assign) NSTimeInterval duration;///<- 动画时间
+@property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;///<- 动画类型
+@property (nonatomic, assign) CGRect  presentFrame;///<- 记录当前的frame
+@property (nonatomic, assign) BOOL    response;///<- 背景是否响应手势
+@property (nonatomic, strong) UIColor *backgroundColor;///<- 背景色
 
-@property (nonatomic, assign) CGFloat red;   // <- 背景red
-@property (nonatomic, assign) CGFloat green; // <- 背景green
-@property (nonatomic, assign) CGFloat blue;  // <- 背景blue
-@property (nonatomic, assign) CGFloat alpha; // <- 背景透明度
 
 @end
 
@@ -64,10 +60,6 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
         _backgroundColor = backgroundColor;
         _duration = duration;
         _response = response;
-        _red = _backgroundColor.red;
-        _green = _backgroundColor.green;
-        _blue = _backgroundColor.blue;
-        _alpha = _backgroundColor.alpha;
         
     }
     return self;
@@ -75,17 +67,15 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 
 -(void)presentationTransitionDidEnd:(BOOL)completed
 {
-    if (!_response) return;
-    if (_dragable) {
-        if (   _animateStyle == HGTransitionAnimatorFromTopStyle
-            || _animateStyle == HGTransitionAnimatorFromLeftStyle
-            || _animateStyle == HGTransitionAnimatorFromBottomStyle)
-        {
-            UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
-            panGestureRecognizer.minimumNumberOfTouches = 1;
-            panGestureRecognizer.maximumNumberOfTouches = 1;
-            [self.containerView addGestureRecognizer:panGestureRecognizer];
-        }
+    if (!_response || !_dragable) return;
+    if (   _animateStyle == HGTransitionAnimatorFromTopStyle
+        || _animateStyle == HGTransitionAnimatorFromLeftStyle
+        || _animateStyle == HGTransitionAnimatorFromBottomStyle)
+    {
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
+        panGestureRecognizer.minimumNumberOfTouches = 1;
+        panGestureRecognizer.maximumNumberOfTouches = 1;
+        [self.containerView addGestureRecognizer:panGestureRecognizer];
     }
 }
 
@@ -101,24 +91,23 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 {
     if (!_response) return;
     if ([self.hg_delegate respondsToSelector:@selector(presentedViewBeginDismiss:)]) {
-         BOOL animate = [self.hg_delegate presentedViewBeginDismiss:_duration];
-        [self.presentedViewController hg_dismissViewControllerAnimated:animate completion:nil];
-    }else{
-        [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
-    }
+          BOOL animate = [self.hg_delegate presentedViewBeginDismiss:_duration];
+          [self.presentedViewController hg_dismissViewControllerAnimated:animate completion:nil];
+    }else [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 - (void)handlePan:(UIPanGestureRecognizer*)recognizer
 {
-    self.coverView.backgroundColor = [UIColor colorWithRed:_red
-                                                     green:_green
-                                                      blue:_blue
-                                                     alpha:(1 - ABS(self.presentedView.x) / self.presentedView.width) * _alpha]; // 根据拖动情况改变背景色
+    CGFloat r = 0, g = 0, b = 0, a = 0;
+    [_backgroundColor getRed:&r green:&g blue:&b alpha:&a];
+    CGFloat alpha = (1 - ABS(self.presentedView.x) / self.presentedView.width) * a;
+    self.coverView.backgroundColor = [UIColor colorWithRed:r green:g blue:b alpha:alpha]; // 根据拖动情况改变背景色
     
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
-    CGPoint velocity = [recognizer velocityInView:self.containerView.superview];
-    CGFloat velocityX = velocity.x - self.currentVelocity.x;
-    CGFloat velocityY = velocity.y - self.currentVelocity.y;
+    CGPoint v = [recognizer velocityInView:self.containerView.superview];
+    CGFloat vx = v.x - self.currentVelocity.x;
+    CGFloat vy = v.y - self.currentVelocity.y;
 
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle ) {
         CGFloat dx = translation.x - self.currentTranslation.x;     //累加偏移值
@@ -126,7 +115,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
         self.presentedView.x += dx;
         if (self.presentedView.x >= 0) self.presentedView.x = 0; //防止右边出边界
         
-        if (velocityX < -defaultVelocityX && translation.x < 0){ // 快速滑动时
+        if (vx < -kVelocityX && translation.x < 0){ // 快速滑动时
             [recognizer removeTarget:self action:@selector(handlePan:)];
             [self animateWithDuration:0.32 animations:^{
                 self.presentedView.x = -self.presentedView.width;
@@ -137,14 +126,14 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
 
         if (recognizer.state == UIGestureRecognizerStateEnded) {
             // 停止滚动,判断是否要保持当前状态还消失
-            if (ABS(self.presentedView.x) >= self.presentedView.width * (1-scale)) { // 左弹效果
+            if (ABS(self.presentedView.x) >= self.presentedView.width * (1 - kScale)) { // 左弹效果
                 [self animateWithDuration:0.15 animations:^{
                     self.presentedView.x = -self.presentedView.width;
                     self.coverView.backgroundColor = [UIColor clearColor];
                 } completionDismiss:YES];
             }
             
-            if (CGRectGetMaxX(self.presentedView.frame) >= self.presentedView.width * (1-scale)) {// 右弹效果
+            if (CGRectGetMaxX(self.presentedView.frame) >= self.presentedView.width * (1 - kScale)) {// 右弹效果
                 [self animateWithDuration:0.15 animations:^{
                     self.presentedView.x = 0;
                     self.coverView.backgroundColor = _backgroundColor;
@@ -158,7 +147,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
     }
     
     if (_animateStyle == HGTransitionAnimatorFromTopStyle) {  // 从顶部出来的样式
-        if (velocityY < -defaultVelocityY && velocity.y < 0) {
+        if (vy < -kVelocityY && v.y < 0) {
             [recognizer removeTarget:self action:@selector(handlePan:)];
             [self.presentedViewController hg_dismissViewControllerAnimated:YES completion:nil];
         }
@@ -166,7 +155,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
     }
     
     if (_animateStyle == HGTransitionAnimatorFromBottomStyle) {// 从底部出来的样式
-        if (velocityY > defaultVelocityY && velocity.y > 0) {
+        if (vy > kVelocityY && v.y > 0) {
             [recognizer removeTarget:self action:@selector(handlePan:)];
             [self.presentedViewController hg_dismissViewControllerAnimated:YES completion:nil];
         }
@@ -174,7 +163,7 @@ static const CGFloat scale = 0.5;            // 滑动阈值节点比例
     }
     
     self.currentTranslation = translation;
-    self.currentVelocity = velocity;
+    self.currentVelocity = v;
 }
 
 - (void)animateWithDuration:(NSTimeInterval )duration animations:(void (^)())animations completionDismiss:(BOOL)flag

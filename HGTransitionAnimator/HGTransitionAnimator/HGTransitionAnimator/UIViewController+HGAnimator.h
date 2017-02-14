@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  自定义弹出控制器并实现转场动画,一定会在主线程里面执行
  *  用于当前控制器只有`一个`自定义转场代理对象
  *
- *  @param viewControllerToPresent 需要转场出来的控制器
+ *  @param viewControllerToPresent 需要转场出来的控制器,被self强引用
  *  @param style                   转场样式
  *  @param delegate                代理,如果不自定义转场动画,设置为空即可
  *  @param presentFrame            转场控制器的视图frame,相对于window的frame

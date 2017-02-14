@@ -9,7 +9,7 @@
 #import "UIViewController+HGAnimator.h"
 #import <objc/runtime.h>
 
-static NSString * const HGTransitionAnimatorKey = @"HGTransitionAnimatorKey";
+static char kTransitionAnimatorKey;
 
 @implementation UIViewController (HGAnimator)
 
@@ -27,8 +27,8 @@ static NSString * const HGTransitionAnimatorKey = @"HGTransitionAnimatorKey";
                                                                               delegate:delegate
                                                                               animated:flag];
     
-    objc_setAssociatedObject(self, &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    objc_setAssociatedObject(self, &HGTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &kTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &kTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     [self hg_presentViewController:viewControllerToPresent animator:animator];
     
@@ -38,18 +38,14 @@ static NSString * const HGTransitionAnimatorKey = @"HGTransitionAnimatorKey";
 {
     viewControllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
     viewControllerToPresent.transitioningDelegate = animator;
-    dispatch_main_async_safe(^{
-        [self presentViewController:viewControllerToPresent animated:YES completion:nil];
-    });
+    [self presentViewController:viewControllerToPresent animated:YES completion:nil];
 }
 - (void)hg_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
 {
     HGTransitionAnimator *animator = (HGTransitionAnimator *)self.transitioningDelegate;
     if (!flag) [animator transitionDuration:0];
-    dispatch_main_async_safe(^{
-        [self dismissViewControllerAnimated:flag completion:completion];
-    });
-    objc_setAssociatedObject([self currentPresentingViewController], &HGTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self dismissViewControllerAnimated:flag completion:completion];
+    objc_setAssociatedObject([self currentPresentingViewController], &kTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (HGPresentationController *)hg_presentationController
@@ -65,7 +61,7 @@ static NSString * const HGTransitionAnimatorKey = @"HGTransitionAnimatorKey";
         UINavigationController *nav = (UINavigationController *)self.presentingViewController;
         return  [nav.viewControllers lastObject];;
     }
-    return  self.presentingViewController;
+    return self.presentingViewController;
 }
 @end
 

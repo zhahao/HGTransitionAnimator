@@ -8,14 +8,6 @@
 
 #import "HGTransitionAnimatorDelegate.h"
 
-#ifndef dispatch_main_async_safe
-    #define dispatch_main_async_safe(block)\
-        if ([NSThread isMainThread]) {\
-            block();\
-        } else {\
-            dispatch_async(dispatch_get_main_queue(), block);\
-        }
-#endif
 
 typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 {
@@ -38,11 +30,11 @@ typedef NS_ENUM(NSInteger,HGTransitionAnimatorStyle)
 };
 
 /// 默认动画时间
-FOUNDATION_EXTERN NSTimeInterval const DefaultDuratin_;
+FOUNDATION_EXTERN NSTimeInterval const kHGAnimatorDuration;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
+NS_CLASS_AVAILABLE_IOS(8_0)  @interface HGTransitionAnimator : NSObject<UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning>
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new  NS_UNAVAILABLE;
@@ -68,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nonnull, readonly) HGPresentationController *presentationController;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 

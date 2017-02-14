@@ -15,6 +15,7 @@ static NSString * ID = @"cell";
 @interface OneViewController ()<HGPresentationControllerDelegate,UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @end
 
 @implementation OneViewController
@@ -29,8 +30,7 @@ static NSString * ID = @"cell";
 - (void)_init
 {
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:ID];
-    UIView *emtyV = [[UIView alloc]initWithFrame:CGRectZero];
-    [self.tableView setTableFooterView:emtyV];
+    [self.tableView setTableFooterView:[[UIView alloc]initWithFrame:CGRectZero]];
     HGPresentationController *pc = self.hg_presentationController;
     // 激活拖拽消失手势
     pc.dragable = YES;
@@ -54,7 +54,7 @@ static NSString * ID = @"cell";
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"第 %d 行数据",(int)indexPath.row+1];
+    cell.textLabel.text = [NSString stringWithFormat:@"第 %d 行数据",(int)indexPath.row + 1];
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [UIColor blackColor];
     cell.contentView.backgroundColor = [UIColor blackColor];
@@ -67,8 +67,7 @@ static NSString * ID = @"cell";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     NSString *text = [[[tableView cellForRowAtIndexPath:indexPath] textLabel] text];
-    self.callBackBlock(text);
-    [self hg_dismissViewControllerAnimated:YES completion:nil];
+    if(_dismiss) _dismiss(text);
 }
 
 - (void)dealloc

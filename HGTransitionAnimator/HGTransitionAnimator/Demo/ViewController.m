@@ -64,7 +64,6 @@
     _topPresentFrame = CGRectMake(0, 0, kScreenWidth,  kScreenHeight * 0.3);
     _bottomPresentFrame = CGRectMake(kScreenWidth * 0.1, kScreenHeight * 0.35, kScreenWidth * 0.8,  kScreenHeight * 0.3);
     _backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-
 }
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -90,30 +89,25 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     OneViewController *oneVC = [OneViewController new];
+    // 有循环引用
     __weak typeof(self) weak_self = self;
-    oneVC.callBackBlock = ^ (NSString *text){
+    __weak typeof(self) weak_oneVC = self;
+    oneVC.dismiss = ^ (NSString *text){
         __strong typeof(weak_self) self = weak_self;
+        __strong typeof(weak_oneVC) oneVC = weak_oneVC;
         if (!self) return;
         self.messageLabel.text = text;
+        if (!oneVC) return;
+        [oneVC hg_dismissViewControllerAnimated:YES completion:NULL];
     };
 
     CGRect  frame = CGRectZero;
     switch (indexPath.row) {
-        case 1:{
-            frame = _leftPresentFrame;
-        }break;
-        case 2:{
-            frame = _rightPresentFrame;
-        }break;
-        case 3:{
-            frame = _topPresentFrame;
-        }break;
-        case 4:{
-            frame = _bottomPresentFrame;
-        }break;
-        default:{
-            frame = CGRectMake(kScreenWidth * 0.15, kScreenHeight * 0.25, kScreenWidth * 0.7, kScreenHeight * 0.5);
-        }break;
+        case 1: frame = _leftPresentFrame; break;
+        case 2: frame = _rightPresentFrame; break;
+        case 3: frame = _topPresentFrame; break;
+        case 4: frame = _bottomPresentFrame; break;
+        default:{ frame = CGRectMake(kScreenWidth * 0.15, kScreenHeight * 0.25, kScreenWidth * 0.7, kScreenHeight * 0.5); }break;
     }
 
     // 弹出控制器

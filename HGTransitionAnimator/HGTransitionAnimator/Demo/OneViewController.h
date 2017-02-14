@@ -11,6 +11,6 @@
 @interface OneViewController : UIViewController
 
 /// 数据回调Block,也可以用通知或代理
-@property (nonatomic, copy) void (^callBackBlock)(NSString *text);
+@property (nonatomic, copy) void (^dismiss)(NSString *text);
 
 @end
