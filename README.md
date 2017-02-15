@@ -1,21 +1,16 @@
 
 # HGTransitionAnimator
-==============
-## 安装
-==============
-### CocoaPods
+## CocoaPods安装
 
-1. 在 Podfile 中添加 ` pod 'HGTransitionAnimator', '~> 0.1' `。如果安装失败,请更新本地pod库`pod repo update`。
+1. 在 Podfile 中添加 ` pod 'HGTransitionAnimator' `。如果安装失败,请更新本地pod库`pod repo update`。
 2. 执行 pod install 或 pod update。
 3. 导入`UIViewController+HGAnimator.h`
 
 
 
 ## 如何使用
-==============
 ### 导入头文件
 	#import "UIViewController+HGAnimator.h"
-
 ### Present方法
 ```
 // 使用封装的样式只需要调用这一句
@@ -100,14 +95,12 @@ OneViewController *oneVC=[[OneViewController alloc]init];
 ```
 ![(垂直压缩)](http://files.cnblogs.com/files/zhahao/%E5%9E%82%E7%9B%B4%E5%8E%8B%E7%BC%A9.gif)
 ## 系统要求
-==============
+
 该项目最低支持 `iOS 8.0` 和 `Xcode 7.0`。
 
 ## 注意
-==============
 支持`横竖屏的切换`。使用控制器管理弹出视图的好处:`面向协议编程`,使控制器与View之间的传递控制链转换成控制器与控制器之间的传递,降低了代码的耦合度并且提高了代码的复用率,这也是Apple推出转场控制器的用意。如`QQ右上角的添加`、`分享界面的底部弹出`、都可以用自带样式定义一个专属控制器,支持。目前有`11`种自带的样式,基本上可以满足日常的开发需求。如果自定义,请实现`HGTransitionAnimatorDelegate`代理方法。`如果发现bug,请issue我,如果想改进,请pull request我!`
 
 
 ## 许可证
-==============
 HGTransitionAnimator 使用 MIT 许可证，详情见 LICENSE 文件。
