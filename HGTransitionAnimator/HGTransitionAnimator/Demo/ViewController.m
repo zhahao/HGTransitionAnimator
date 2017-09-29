@@ -21,7 +21,6 @@
 @property (nonatomic, assign) CGRect topPresentFrame;
 @property (nonatomic, assign) CGRect bottomPresentFrame;
 
-@property (nonatomic, strong) OneViewController*toCtrl;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) NSMutableArray *styles;
 

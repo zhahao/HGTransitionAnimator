@@ -36,7 +36,7 @@
 /**
  *  自定义动画需要用到,在该代理方法中实现动画效果
  *
- *  @param toView   即将消失的控制器视图
+ *  @param fromView   即将消失的控制器视图
  *  @param duration 动画时间
  */
 - (void)transitionAnimator:(HGTransitionAnimator *)animator animateTransitionFromView:(UIView *)fromView duration:(NSTimeInterval)duration;

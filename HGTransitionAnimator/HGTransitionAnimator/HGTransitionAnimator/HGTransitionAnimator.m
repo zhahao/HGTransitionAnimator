@@ -17,17 +17,16 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
 
 @interface  HGTransitionAnimator()
 
-@property (nonatomic, weak)   UIView *relateView;//<-参照的View
-@property (nonatomic, assign) BOOL  willPresent;//<- 即将展示
-@property (nonatomic, assign) BOOL animated;//<- 是否动画
-@property (nonatomic, assign) CGRect presentFrame;//<- 弹出视图的的frame
+@property (nonatomic, weak)   UIView *relateView; ///<- 参照的View
+@property (nonatomic, assign) BOOL  willPresent; ///<- 即将展示
+@property (nonatomic, assign) BOOL animated; ///<- 是否动画
+@property (nonatomic, assign) CGRect presentFrame; ///<- 弹出视图的的frame
 @property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;//<- 动画样式
-@property (nonatomic, assign) NSTimeInterval duration;//<- 动画时间
-@property (nonatomic, strong) UIColor *backgroundColor;//<- 蒙版背景色
-@property (nonatomic, strong, readonly) UIView *presentationControllerCoverView;//<- 背景视图
-@property (nonatomic, assign, nullable) id <HGTransitionAnimatorDelegate> delegate;//<- 代理
+@property (nonatomic, assign) NSTimeInterval duration; ///<- 动画时间
+@property (nonatomic, strong) UIColor *backgroundColor; ///<- 蒙版背景色
+@property (nonatomic, strong, readonly) UIView *presentationControllerCoverView; ///<- 背景视图
+@property (nonatomic, assign, nullable) id <HGTransitionAnimatorDelegate> delegate; ///<- 代理
 
-// 内部方法声明
 - (CGFloat)relateViewMaxXToWindow;
 
 - (CGFloat)relateViewMaxYToWindow;
@@ -42,6 +41,7 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
 
 @implementation HGTransitionAnimator
 
+#pragma mark - public method
 -(instancetype)initWithAnimateStyle:(HGTransitionAnimatorStyle)animateStyle
                          relateView:(UIView *)relateView
                        presentFrame:(CGRect)presentFrame
@@ -57,12 +57,14 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
     _presentFrame = presentFrame;
     _delegate = delegate;
     _animated = animated;
-    _duration = _animated ? kHGAnimatorDuration: 0;
+    _duration = _animated ? kHGAnimatorDuration : 0;
     _backgroundColor = backgroundColor ?: [UIColor clearColor];
 
     return self;
 }
 
+
+#pragma mark - UIViewControllerTransitioningDelegate
 -(UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
                                                      presentingViewController:(UIViewController *)presenting
                                                          sourceViewController:(UIViewController *)source
@@ -105,6 +107,7 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
     return self;
 }
 
+#pragma mark - UIViewControllerAnimatedTransitioning
 -(NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     if(self.delegate && [self.delegate respondsToSelector:@selector(transitionDuration:)]){
@@ -146,6 +149,7 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
     }
 }
 
+#pragma mark- private method
 - (void)setupPopAnimator:(UIView *)fromView context:(id<UIViewControllerContextTransitioning>)transitionContext coverView:(UIView *)coverView
 {
 
@@ -156,16 +160,16 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
 
     switch (_animateStyle) {
         case HGTransitionAnimatorFromLeftStyle:{
-            UPDATE_ANIMATE(fromView.x = self.relateViewXToWindow - fromView.width)
+            UPDATE_ANIMATE(fromView.hg_x = self.relateViewXToWindow - fromView.hg_w)
         }break;
         case HGTransitionAnimatorFromRightStyle:{
-            UPDATE_ANIMATE(fromView.x = self.relateViewXToWindow + self.relateView.width)
+            UPDATE_ANIMATE(fromView.hg_x = self.relateViewXToWindow + self.relateView.hg_w)
         }break;
         case HGTransitionAnimatorFromTopStyle:{
-            UPDATE_ANIMATE(fromView.y = self.relateViewXToWindow - fromView.height)
+            UPDATE_ANIMATE(fromView.hg_y = self.relateViewXToWindow - fromView.hg_h)
         }break;
         case HGTransitionAnimatorFromBottomStyle:{
-            UPDATE_ANIMATE(fromView.y = self.relateViewYToWindow + self.relateView.height + fromView.height)
+            UPDATE_ANIMATE(fromView.hg_y = self.relateViewYToWindow + self.relateView.hg_h + fromView.hg_h)
         }break;
         case HGTransitionAnimatorHiddenStyle:{
             UPDATE_ANIMATE(fromView.alpha = 0.0f)
@@ -189,27 +193,27 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
 {
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle) {
         [self toView:toView context:transitionContext actions:^{
-            toView.x = self.relateViewXToWindow - toView.width;
+            toView.hg_x = self.relateViewXToWindow - toView.hg_w;
         } animations:^{
-            toView.x = self.relateViewXToWindow;
+            toView.hg_x = self.relateViewXToWindow;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromTopStyle){
         [self toView:toView context:transitionContext actions:^{
-            toView.y = self.relateViewYToWindow - toView.height;
+            toView.hg_y = self.relateViewYToWindow - toView.hg_h;
         } animations:^{
-            toView.y = self.relateViewYToWindow;
+            toView.hg_y = self.relateViewYToWindow;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromRightStyle){
         [self toView:toView context:transitionContext actions:^{
-            toView.x = self.relateViewXToWindow + self.relateViewWidthToWindow + toView.width;
+            toView.hg_x = self.relateViewXToWindow + self.relateViewWidthToWindow + toView.hg_w;
         } animations:^{
-            toView.x = self.relateViewXToWindow + self.relateView.width - toView.width;
+            toView.hg_x = self.relateViewXToWindow + self.relateView.hg_w - toView.hg_w;
         }];
     }else if (_animateStyle == HGTransitionAnimatorFromBottomStyle){
         [self toView:toView context:transitionContext actions:^{
-            toView.y = CGRectGetMaxY(toView.frame);
+            toView.hg_y = CGRectGetMaxY(toView.frame);
         } animations:^{
-            toView.y = self.relateViewYToWindow + self.relateView.height - toView.height;
+            toView.hg_y = self.relateViewYToWindow + self.relateView.hg_h - toView.hg_h;
         }];
     }else if (_animateStyle == HGTransitionAnimatorHiddenStyle){
         [self toView:toView context:transitionContext actions:NULL animations:^{
@@ -258,7 +262,6 @@ CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
     }
 }
 
-// 方法抽取
 - (void)toView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext actions:(void(^)())actions animations:(void (^)(void))animations
 {
     if (actions){
@@ -277,7 +280,6 @@ CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
     }];
 }
 
-// 方法抽取
 - (void)fromView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext animations:(void (^)(void))animations
 {
     [UIView animateWithDuration:self.duration animations:^{
@@ -300,12 +302,12 @@ CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
 
 - (CGFloat)relateViewMaxXToWindow
 {
-    return  [self relateViewXToWindow] + _relateView.width;
+    return  [self relateViewXToWindow] + _relateView.hg_w;
 }
 
 - (CGFloat)relateViewMaxYToWindow
 {
-    return  [self relateViewYToWindow] + _relateView.height;
+    return  [self relateViewYToWindow] + _relateView.hg_h;
 }
 
 - (CGFloat)relateViewXToWindow

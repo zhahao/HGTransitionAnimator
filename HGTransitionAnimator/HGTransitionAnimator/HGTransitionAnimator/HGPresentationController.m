@@ -19,11 +19,11 @@ static const CGFloat kScale = 0.5;     // 滑动阈值节点比例
 
 @property (nonatomic, assign) CGPoint currentTranslation; ///<- 当前滑动位置
 @property (nonatomic, assign) CGPoint currentVelocity; ///<- 滑动速率
-@property (nonatomic, assign) NSTimeInterval duration;///<- 动画时间
-@property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle;///<- 动画类型
-@property (nonatomic, assign) CGRect  presentFrame;///<- 记录当前的frame
-@property (nonatomic, assign) BOOL    response;///<- 背景是否响应手势
-@property (nonatomic, strong) UIColor *backgroundColor;///<- 背景色
+@property (nonatomic, assign) NSTimeInterval duration; ///<- 动画时间
+@property (nonatomic, assign) HGTransitionAnimatorStyle animateStyle; ///<- 动画类型
+@property (nonatomic, assign) CGRect  presentFrame; ///<- 记录当前的frame
+@property (nonatomic, assign) BOOL    response; ///<- 背景是否响应手势
+@property (nonatomic, strong) UIColor *backgroundColor; ///<- 背景色
 
 
 @end
@@ -101,7 +101,7 @@ static const CGFloat kScale = 0.5;     // 滑动阈值节点比例
 {
     CGFloat r = 0, g = 0, b = 0, a = 0;
     [_backgroundColor getRed:&r green:&g blue:&b alpha:&a];
-    CGFloat alpha = (1 - ABS(self.presentedView.x) / self.presentedView.width) * a;
+    CGFloat alpha = (1 - ABS(self.presentedView.hg_x) / self.presentedView.hg_w) * a;
     self.coverView.backgroundColor = [UIColor colorWithRed:r green:g blue:b alpha:alpha]; // 根据拖动情况改变背景色
     
     CGPoint translation = [recognizer translationInView:self.containerView.superview];
@@ -111,14 +111,14 @@ static const CGFloat kScale = 0.5;     // 滑动阈值节点比例
 
     if (_animateStyle == HGTransitionAnimatorFromLeftStyle ) {
         CGFloat dx = translation.x - self.currentTranslation.x;     //累加偏移值
-        if (ABS(dx) >= self.presentedView.width) dx = 0;          //防止左边出界
-        self.presentedView.x += dx;
-        if (self.presentedView.x >= 0) self.presentedView.x = 0; //防止右边出边界
+        if (ABS(dx) >= self.presentedView.hg_w) dx = 0;          //防止左边出界
+        self.presentedView.hg_x += dx;
+        if (self.presentedView.hg_x >= 0) self.presentedView.hg_x = 0; //防止右边出边界
         
         if (vx < -kVelocityX && translation.x < 0){ // 快速滑动时
             [recognizer removeTarget:self action:@selector(handlePan:)];
             [self animateWithDuration:0.32 animations:^{
-                self.presentedView.x = -self.presentedView.width;
+                self.presentedView.hg_x = -self.presentedView.hg_w;
                 self.coverView.backgroundColor = [UIColor clearColor];
             } completionDismiss:YES];
             return  ;
@@ -126,16 +126,16 @@ static const CGFloat kScale = 0.5;     // 滑动阈值节点比例
 
         if (recognizer.state == UIGestureRecognizerStateEnded) {
             // 停止滚动,判断是否要保持当前状态还消失
-            if (ABS(self.presentedView.x) >= self.presentedView.width * (1 - kScale)) { // 左弹效果
+            if (ABS(self.presentedView.hg_x) >= self.presentedView.hg_w * (1 - kScale)) { // 左弹效果
                 [self animateWithDuration:0.15 animations:^{
-                    self.presentedView.x = -self.presentedView.width;
+                    self.presentedView.hg_x = -self.presentedView.hg_w;
                     self.coverView.backgroundColor = [UIColor clearColor];
                 } completionDismiss:YES];
             }
             
-            if (CGRectGetMaxX(self.presentedView.frame) >= self.presentedView.width * (1 - kScale)) {// 右弹效果
+            if (CGRectGetMaxX(self.presentedView.frame) >= self.presentedView.hg_w * (1 - kScale)) {// 右弹效果
                 [self animateWithDuration:0.15 animations:^{
-                    self.presentedView.x = 0;
+                    self.presentedView.hg_x = 0;
                     self.coverView.backgroundColor = _backgroundColor;
                 } completionDismiss:NO];
             }
