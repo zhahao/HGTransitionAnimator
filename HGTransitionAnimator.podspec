@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "HGTransitionAnimator"
-  s.version      = "0.1.2"
+  s.version      = "0.1.3"
   s.summary      = "控制器之间的转场动画,内部封装了10+种,只需一句代码即可使"
   s.homepage     = "https://github.com/zhahao/HGTransitionAnimator"
   s.license      = "MIT"

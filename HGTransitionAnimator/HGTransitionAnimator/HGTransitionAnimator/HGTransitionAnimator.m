@@ -25,7 +25,7 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
 @property (nonatomic, assign) NSTimeInterval duration; ///<- 动画时间
 @property (nonatomic, strong) UIColor *backgroundColor; ///<- 蒙版背景色
 @property (nonatomic, strong, readonly) UIView *presentationControllerCoverView; ///<- 背景视图
-@property (nonatomic, assign, nullable) id <HGTransitionAnimatorDelegate> delegate; ///<- 代理
+@property (nonatomic, weak, nullable) id <HGTransitionAnimatorDelegate> delegate; ///<- 代理
 
 - (CGFloat)relateViewMaxXToWindow;
 
