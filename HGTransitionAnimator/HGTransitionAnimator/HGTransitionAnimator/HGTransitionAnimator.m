@@ -10,12 +10,14 @@
 #import "HGPresentationController.h"
 #import "UIView+HGExtension.h"
 #import <objc/runtime.h>
-
+#import "UIViewController+HGAnimator.h"
 
 static char HGPresentationControllerKey;
 const  NSTimeInterval kHGAnimatorDuration = 0.52;
 
 @interface  HGTransitionAnimator()
+
+@property(nonatomic, weak) UIViewController *sourceViewController;
 
 @property (nonatomic, weak)   UIView *relateView; ///<- 参照的View
 @property (nonatomic, assign) BOOL  willPresent; ///<- 即将展示
@@ -69,6 +71,7 @@ const  NSTimeInterval kHGAnimatorDuration = 0.52;
                                                      presentingViewController:(UIViewController *)presenting
                                                          sourceViewController:(UIViewController *)source
 {
+    self.sourceViewController = source;
     
     BOOL response = YES;
     if (self.delegate && [self.delegate respondsToSelector:@selector(transitionAnimatorCanResponse:)]) {
@@ -271,22 +274,34 @@ CGAffineTransformScale = CGAffineTransformMakeScale(_x2_, _y2_);\
     }else{
         view.alpha = 0.0f;
     }
-    
+        
+    if (self.invokeSourceVCLifeCycleMethods) {
+        [self.sourceViewController viewWillDisappear:YES];
+    }
     [UIView animateWithDuration:self.duration animations:^{
         if (animations) animations();
         self.presentationControllerCoverView.backgroundColor = self.backgroundColor;
     } completion:^(BOOL finished){
         [transitionContext completeTransition:YES];
+        if (self.invokeSourceVCLifeCycleMethods) {
+            [self.sourceViewController viewDidDisappear:YES];
+        }
     }];
 }
 
 - (void)fromView:(UIView *)view context:(id<UIViewControllerContextTransitioning>)transitionContext animations:(void (^)(void))animations
 {
+    if (self.invokeSourceVCLifeCycleMethods) {
+        [self.sourceViewController viewWillAppear:YES];
+    }
     [UIView animateWithDuration:self.duration animations:^{
         if (animations) animations();
         self.presentationControllerCoverView.backgroundColor = [UIColor clearColor];
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:YES];
+        if (self.invokeSourceVCLifeCycleMethods) {
+            [self.sourceViewController viewDidAppear:YES];
+        }
     }];
 }
 

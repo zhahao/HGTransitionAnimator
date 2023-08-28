@@ -59,6 +59,11 @@ NS_CLASS_AVAILABLE_IOS(8_0)  @interface HGTransitionAnimator : NSObject<UIViewCo
 /// 负责转场的对象
 @property (nonatomic, strong, nonnull, readonly) HGPresentationController *presentationController;
 
+/**
+ *  回调VC生命周期,默认NO
+ */
+@property(nonatomic, assign) BOOL invokeSourceVCLifeCycleMethods;
+
 @end
 
 NS_ASSUME_NONNULL_END

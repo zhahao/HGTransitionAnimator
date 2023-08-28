@@ -56,6 +56,27 @@
     [self setupViews];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSLog(@"%@",NSStringFromSelector(_cmd));
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    NSLog(@"%@",NSStringFromSelector(_cmd));
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    NSLog(@"%@",NSStringFromSelector(_cmd));
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    NSLog(@"%@",NSStringFromSelector(_cmd));
+}
+
 - (void)setupViews
 {
     _leftPresentFrame = CGRectMake(0, 0, kScreenWidth * 0.7,  kScreenHeight);
@@ -115,7 +136,8 @@
                           delegate:self
                       presentFrame:frame
                    backgroundColor:_backgroundColor
-                          animated:!self.animateSegment.selectedSegmentIndex];
+                          animated:!self.animateSegment.selectedSegmentIndex
+        invokeSourceVCLifeCycleMethods:YES];
 }
 
 #pragma mark - HGTransitionAnimatorDelegate

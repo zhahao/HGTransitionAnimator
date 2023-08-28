@@ -24,7 +24,18 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param delegate                代理,如果不自定义转场动画,设置为空即可
  *  @param presentFrame            转场控制器的视图frame,相对于window的frame
  *  @param flag                    是否需要动画效果
+ *  @param invokeSourceVCLifeCycleMethods                   是否执行SourceVC生命周期
  */
+- (void)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
+                    animateStyle:(HGTransitionAnimatorStyle )style
+                        delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate
+                    presentFrame:(CGRect)presentFrame
+                 backgroundColor:(nonnull UIColor *)backgroundColor
+                        animated:(BOOL)flag
+  invokeSourceVCLifeCycleMethods:(BOOL)invokeSourceVCLifeCycleMethods;
+
+
+/// 同上
 - (void)hg_presentViewController:(nonnull UIViewController *)viewControllerToPresent
                     animateStyle:(HGTransitionAnimatorStyle )style
                         delegate:(nullable id <HGTransitionAnimatorDelegate>)delegate

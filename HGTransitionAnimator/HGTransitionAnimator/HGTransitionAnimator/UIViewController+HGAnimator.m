@@ -19,6 +19,7 @@ static char kTransitionAnimatorKey;
                     presentFrame:(CGRect)presentFrame
                  backgroundColor:(UIColor *)backgroundColor
                         animated:(BOOL)flag
+  invokeSourceVCLifeCycleMethods:(BOOL)invokeSourceVCLifeCycleMethods
 {
     HGTransitionAnimator *animator = [[HGTransitionAnimator alloc]initWithAnimateStyle:style
                                                                             relateView:self.view
@@ -26,6 +27,7 @@ static char kTransitionAnimatorKey;
                                                                        backgroundColor:backgroundColor
                                                                               delegate:delegate
                                                                               animated:flag];
+    animator.invokeSourceVCLifeCycleMethods = invokeSourceVCLifeCycleMethods;
     
     objc_setAssociatedObject(self, &kTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &kTransitionAnimatorKey, animator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -34,12 +36,22 @@ static char kTransitionAnimatorKey;
     
 }
 
+- (void)hg_presentViewController:(UIViewController *)viewControllerToPresent
+                    animateStyle:(HGTransitionAnimatorStyle)style
+                        delegate:(id<HGTransitionAnimatorDelegate>)delegate
+                    presentFrame:(CGRect)presentFrame
+                 backgroundColor:(UIColor *)backgroundColor
+                        animated:(BOOL)flag {
+    [self hg_presentViewController:viewControllerToPresent animateStyle:style delegate:delegate presentFrame:presentFrame backgroundColor:backgroundColor animated:flag invokeSourceVCLifeCycleMethods:NO];
+}
+
 - (void)hg_presentViewController:(UIViewController *)viewControllerToPresent animator:(HGTransitionAnimator *)animator
 {
     viewControllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
     viewControllerToPresent.transitioningDelegate = animator;
     [self presentViewController:viewControllerToPresent animated:YES completion:nil];
 }
+
 - (void)hg_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
 {
     HGTransitionAnimator *animator = (HGTransitionAnimator *)self.transitioningDelegate;

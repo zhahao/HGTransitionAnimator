@@ -167,7 +167,7 @@
 				TargetAttributes = {
 					6666A7561CFAB144007C3F79 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 9DQDXHFVAC;
+						DevelopmentTeam = W5YH99WE8A;
 					};
 				};
 			};
@@ -176,6 +176,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -333,7 +334,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 9DQDXHFVAC;
+				DEVELOPMENT_TEAM = W5YH99WE8A;
 				INFOPLIST_FILE = HGTransitionAnimator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -346,7 +347,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 9DQDXHFVAC;
+				DEVELOPMENT_TEAM = W5YH99WE8A;
 				INFOPLIST_FILE = HGTransitionAnimator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
