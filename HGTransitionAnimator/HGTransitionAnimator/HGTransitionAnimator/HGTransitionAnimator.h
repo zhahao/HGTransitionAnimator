@@ -64,6 +64,10 @@ NS_CLASS_AVAILABLE_IOS(8_0)  @interface HGTransitionAnimator : NSObject<UIViewCo
  */
 @property(nonatomic, assign) BOOL invokeSourceVCLifeCycleMethods;
 
+/// 发起转场的VC
+@property(nonatomic, weak, readonly) UIViewController *sourceViewController;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

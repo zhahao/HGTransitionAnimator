@@ -54,10 +54,21 @@ static char kTransitionAnimatorKey;
 
 - (void)hg_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
 {
-    HGTransitionAnimator *animator = (HGTransitionAnimator *)self.transitioningDelegate;
-    if (!flag) [animator transitionDuration:0];
-    [self dismissViewControllerAnimated:flag completion:completion];
-    objc_setAssociatedObject([self currentPresentingViewController], &kTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    HGTransitionAnimator *animator = (HGTransitionAnimator *)self.presentedViewController.transitioningDelegate;
+    
+    if ([animator isKindOfClass:[HGTransitionAnimator class]] && !flag) {
+        [animator transitionDuration:0];
+    }
+    
+    [self dismissViewControllerAnimated:flag completion:^{
+        if (completion) {
+            completion();
+        }
+        
+        if ([animator isKindOfClass:[HGTransitionAnimator class]]) {
+            objc_setAssociatedObject(animator.sourceViewController, &kTransitionAnimatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+    }];
 }
 
 - (HGPresentationController *)hg_presentationController
@@ -67,14 +78,6 @@ static char kTransitionAnimatorKey;
     return animator.presentationController;
 }
 
-- (UIViewController *)currentPresentingViewController
-{
-    if ([self.presentingViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *nav = (UINavigationController *)self.presentingViewController;
-        return  [nav.viewControllers lastObject];;
-    }
-    return self.presentingViewController;
-}
 @end
 
 
